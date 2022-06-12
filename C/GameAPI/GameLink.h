@@ -1114,7 +1114,7 @@ typedef struct {
     bool32 (*ForeachConfig)(String *textInfo);
     bool32 (*ForeachConfigCategory)(String *textInfo);
 
-    Object *(*GetObject)(const char *name);
+    void *(*FindObject)(const char *name);
 
     // Achievements
     void (*RegisterAchievement)(const char *identifier, const char *name, const char *desc);
@@ -1127,7 +1127,7 @@ typedef struct {
 
     // StateMachine
     void (*StateMachineRun)(void *state);
-    void (*RegisterStateHook)(void *state, bool32 priority);
+    void (*RegisterStateHook)(void *state, void *hook, bool32 priority);
 } ModFunctionTable;
 #endif
 
@@ -1630,6 +1630,8 @@ extern APIFunctionTable API;
 #endif
 #if RETRO_USE_MOD_LOADER
 extern ModFunctionTable Mod;
+
+extern const char *modID;
 #endif
 
 extern RSDKSceneInfo *SceneInfo;

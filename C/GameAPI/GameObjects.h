@@ -19,8 +19,4 @@ DLLExport void LinkGameLogicDLL(EngineInfo *info);
 DLLExport void LinkGameLogicDLL(EngineInfo info);
 #endif
 
-#if RETRO_USE_MOD_LOADER
-DLLExport bool32 LinkModLogic(EngineInfo *info, const char *id);
-#endif
-
 #endif //! GAMEOBJECTS_H

@@ -10,6 +10,8 @@ APIFunctionTable API;
 #endif
 #if RETRO_USE_MOD_LOADER
 ModFunctionTable Mod;
+
+const char *modID = ":Unknown Mod ID:";
 #endif
 
 RSDKSceneInfo *SceneInfo = NULL;
@@ -43,8 +45,6 @@ GlobalVariables *globals;
 // -------------------------
 // LINK GAME/MOD LOGIC
 // -------------------------
-
-void InitGameLogic(void);
 
 #if MANIA_USE_PLUS
 void LinkGameLogicDLL(EngineInfo *info)
@@ -101,26 +101,5 @@ void LinkGameLogicDLL(EngineInfo info)
     AnalogStickInfoL = info.stickInfoL;
     TouchInfo        = info.touchInfo;
     ScreenInfo       = info.screenInfo;
-}
-#endif
-
-#if RETRO_USE_MOD_LOADER
-#define ADD_PUBLIC_FUNC(func) Mod.AddPublicFunction(#func, (void *)(func))
-
-void InitModAPI(void);
-
-bool32 LinkModLogic(EngineInfo *info, const char *id)
-{
-#if MANIA_USE_PLUS
-    LinkGameLogicDLL(info);
-#else
-    LinkGameLogicDLL(*info);
-#endif
-
-    globals = Mod.GetGlobals();
-
-    InitModAPI();
-
-    return true;
 }
 #endif
