@@ -11,6 +11,8 @@ APIFunctionTable API;
 #if RETRO_USE_MOD_LOADER
 ModFunctionTable Mod;
 
+DLLExport ModVersionInfo modInfo = { RETRO_REVISION, GAME_VERSION, RETRO_MOD_LOADER_VER };
+
 const char *modID = ":Unknown Mod ID:";
 #endif
 
