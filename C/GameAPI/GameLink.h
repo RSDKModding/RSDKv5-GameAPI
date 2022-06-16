@@ -1090,6 +1090,8 @@ typedef struct {
                            void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void),
                            void (*editorDraw)(void), void (*editorLoad)(void), void (*serialize)(void), const char *inherited);
     void *RegisterObject_STD;
+    void (*RegisterObjectHook)(Object **staticVars, const char *staticName);
+    void *(*FindObject)(const char *name);
     void *(*GetGlobals)(void);
     void (*Super)(int32 classID, ModSuper callback, void *data);
 
@@ -1109,20 +1111,21 @@ typedef struct {
     // Mod Settings
     bool32 (*GetSettingsBool)(const char *id, const char *key, bool32 fallback);
     int32 (*GetSettingsInteger)(const char *id, const char *key, int32 fallback);
+    float (*GetSettingsFloat)(const char *id, const char *key, float fallback);
     void (*GetSettingsString)(const char *id, const char *key, String *result, const char *fallback);
     void (*SetSettingsBool)(const char *key, bool32 val);
     void (*SetSettingsInteger)(const char *key, int32 val);
+    void (*SetSettingsFloat)(const char *key, float val);
     void (*SetSettingsString)(const char *key, String *val);
     void (*SaveSettings)(void);
 
     // Config
     bool32 (*GetConfigBool)(const char *key, bool32 fallback);
     int32 (*GetConfigInteger)(const char *key, int32 fallback);
+    float (*GetConfigFloat)(const char *key, float fallback);
     void (*GetConfigString)(const char *key, String *result, const char *fallback);
-    bool32 (*ForeachConfig)(String *textInfo);
-    bool32 (*ForeachConfigCategory)(String *textInfo);
-
-    void *(*FindObject)(const char *name);
+    bool32 (*ForeachConfig)(String *string);
+    bool32 (*ForeachConfigCategory)(String *string);
 
     // Achievements
     void (*RegisterAchievement)(const char *identifier, const char *name, const char *desc);
@@ -1134,8 +1137,8 @@ typedef struct {
     void (*LoadShader)(const char *shaderName, bool32 linear);
 
     // StateMachine
-    void (*StateMachineRun)(void *state);
-    void (*RegisterStateHook)(void *state, void *hook, bool32 priority);
+    void (*StateMachineRun)(void (*state)(void));
+    void (*RegisterStateHook)(void (*state)(void), bool32 (*hook)(bool32 skippedState), bool32 priority);
 } ModFunctionTable;
 #endif
 
@@ -1567,6 +1570,8 @@ typedef struct {
     Mod.RegisterObject((Object **)&object, #object, sizeof(Entity##object), sizeof(Object##object), object##_Update, object##_LateUpdate,            \
                        object##_StaticUpdate, object##_Draw, object##_Create, object##_StageLoad, object##_EditorDraw, object##_EditorLoad,          \
                        object##_Serialize, inherit)
+
+#define MOD_REGISTER_OBJECT_HOOK(object) Mod.RegisterObjectHook((Object **)&object, #object)
 #endif
 
 #if RETRO_REV02
