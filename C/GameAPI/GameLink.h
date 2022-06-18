@@ -1279,7 +1279,7 @@ typedef struct {
     void (*ForceHardReset)(bool32 shouldHardReset);
 #endif
     bool32 (*CheckValidScene)(void);
-    int32 (*CheckStageFolder)(const char *folderName);
+    int32 (*CheckSceneFolder)(const char *folderName);
     int32 (*LoadScene)(void);
     int32 (*FindObject)(const char *name);
 
@@ -1572,6 +1572,8 @@ typedef struct {
                        object##_Serialize, inherit)
 
 #define MOD_REGISTER_OBJECT_HOOK(object) Mod.RegisterObjectHook((Object **)&object, #object)
+
+#define GET_PUBLIC_FUNC(modID, name, returnType, ...) returnType (*name)(__VA_ARGS__) = Mod.GetPublicFunction(modID, #name)
 #endif
 
 #if RETRO_REV02
