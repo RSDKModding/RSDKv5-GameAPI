@@ -166,6 +166,7 @@ typedef enum {
 // GLOBAL VARIABLES
 // =========================
 
+#ifndef GAME_NO_GLOBALS
 typedef struct {
     int32 gameMode;
     int32 playerID; // active character IDs (usually leader & sidekick)
@@ -238,6 +239,7 @@ typedef struct {
 } GlobalVariables;
 
 extern GlobalVariables *globals;
+#endif
 
 // =========================
 // GAME HELPERS

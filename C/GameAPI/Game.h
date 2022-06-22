@@ -55,7 +55,9 @@
 // -------------------------
 
 #include "GameLink.h"
+#ifndef GAME_NO_VARIABLES
 #include "GameVariables.h"
+#endif
 #include "GameObjects.h"
 
 #endif //! GAME_H

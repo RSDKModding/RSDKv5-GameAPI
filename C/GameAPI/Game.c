@@ -42,7 +42,9 @@ RSDKScreenInfo *ScreenInfo = NULL;
 // GAME VARIABLES
 // -------------------------
 
+#ifndef GAME_NO_GLOBALS
 GlobalVariables *globals;
+#endif
 
 // -------------------------
 // LINK GAME/MOD LOGIC
