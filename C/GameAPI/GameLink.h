@@ -97,6 +97,10 @@ typedef struct {
 } Vector2;
 
 typedef struct {
+#if RETRO_REV0U
+    // used for languages such as beeflang that always have vfTables in classes
+    void *vfTable;
+#endif
     Vector2 position;
     Vector2 scale;
     Vector2 velocity;
@@ -105,10 +109,10 @@ typedef struct {
     int32 alpha;
     int32 rotation;
     int32 groundVel;
-    int32 depth;
+    int32 zdepth;
     uint16 group;
     uint16 classID;
-    bool32 inBounds;
+    bool32 inRange;
     bool32 isPermanent;
     bool32 tileCollisions;
     bool32 interaction;
@@ -118,14 +122,14 @@ typedef struct {
     uint8 filter;
 #endif
     uint8 direction;
-    uint8 drawOrder;
+    uint8 drawGroup;
     uint8 collisionLayers;
     uint8 collisionPlane;
     uint8 collisionMode;
     uint8 drawFX;
     uint8 inkEffect;
     uint8 visible;
-    uint8 activeScreens;
+    uint8 onScreen;
 } Entity;
 
 typedef struct {
@@ -137,7 +141,37 @@ typedef struct {
     uint16 classID;                                                                                                                                  \
     uint8 active;
 
-#if RETRO_REV02
+#if RETRO_REV0U
+#define RSDK_ENTITY                                                                                                                                  \
+    void *vfTable;                                                                                                                                   \
+    Vector2 position;                                                                                                                                \
+    Vector2 scale;                                                                                                                                   \
+    Vector2 velocity;                                                                                                                                \
+    Vector2 updateRange;                                                                                                                             \
+    int32 angle;                                                                                                                                     \
+    int32 alpha;                                                                                                                                     \
+    int32 rotation;                                                                                                                                  \
+    int32 groundVel;                                                                                                                                 \
+    int32 zdepth;                                                                                                                                    \
+    uint16 group;                                                                                                                                    \
+    uint16 classID;                                                                                                                                  \
+    bool32 inRange;                                                                                                                                  \
+    bool32 isPermanent;                                                                                                                              \
+    bool32 tileCollisions;                                                                                                                           \
+    bool32 interaction;                                                                                                                              \
+    bool32 onGround;                                                                                                                                 \
+    uint8 active;                                                                                                                                    \
+    uint8 filter;                                                                                                                                    \
+    uint8 direction;                                                                                                                                 \
+    uint8 drawGroup;                                                                                                                                 \
+    uint8 collisionLayers;                                                                                                                           \
+    uint8 collisionPlane;                                                                                                                            \
+    uint8 collisionMode;                                                                                                                             \
+    uint8 drawFX;                                                                                                                                    \
+    uint8 inkEffect;                                                                                                                                 \
+    uint8 visible;                                                                                                                                   \
+    uint8 onScreen;
+#elif RETRO_REV02
 #define RSDK_ENTITY                                                                                                                                  \
     Vector2 position;                                                                                                                                \
     Vector2 scale;                                                                                                                                   \
@@ -147,10 +181,10 @@ typedef struct {
     int32 alpha;                                                                                                                                     \
     int32 rotation;                                                                                                                                  \
     int32 groundVel;                                                                                                                                 \
-    int32 depth3D;                                                                                                                                   \
+    int32 zdepth;                                                                                                                                    \
     uint16 group;                                                                                                                                    \
     uint16 classID;                                                                                                                                  \
-    bool32 inBounds;                                                                                                                                 \
+    bool32 inRange;                                                                                                                                  \
     bool32 isPermanent;                                                                                                                              \
     bool32 tileCollisions;                                                                                                                           \
     bool32 interaction;                                                                                                                              \
@@ -158,14 +192,14 @@ typedef struct {
     uint8 active;                                                                                                                                    \
     uint8 filter;                                                                                                                                    \
     uint8 direction;                                                                                                                                 \
-    uint8 drawOrder;                                                                                                                                 \
+    uint8 drawGroup;                                                                                                                                 \
     uint8 collisionLayers;                                                                                                                           \
     uint8 collisionPlane;                                                                                                                            \
     uint8 collisionMode;                                                                                                                             \
     uint8 drawFX;                                                                                                                                    \
     uint8 inkEffect;                                                                                                                                 \
     uint8 visible;                                                                                                                                   \
-    uint8 activeScreens;
+    uint8 onScreen;
 #else
 #define RSDK_ENTITY                                                                                                                                  \
     Vector2 position;                                                                                                                                \
@@ -176,24 +210,24 @@ typedef struct {
     int32 alpha;                                                                                                                                     \
     int32 rotation;                                                                                                                                  \
     int32 groundVel;                                                                                                                                 \
-    int32 depth3D;                                                                                                                                   \
+    int32 zdepth;                                                                                                                                    \
     uint16 group;                                                                                                                                    \
     uint16 classID;                                                                                                                                  \
-    bool32 inBounds;                                                                                                                                 \
+    bool32 inRange;                                                                                                                                  \
     bool32 isPermanent;                                                                                                                              \
     bool32 tileCollisions;                                                                                                                           \
     bool32 interaction;                                                                                                                              \
     bool32 onGround;                                                                                                                                 \
     uint8 active;                                                                                                                                    \
     uint8 direction;                                                                                                                                 \
-    uint8 drawOrder;                                                                                                                                 \
+    uint8 drawGroup;                                                                                                                                 \
     uint8 collisionLayers;                                                                                                                           \
     uint8 collisionPlane;                                                                                                                            \
     uint8 collisionMode;                                                                                                                             \
     uint8 drawFX;                                                                                                                                    \
     uint8 inkEffect;                                                                                                                                 \
     uint8 visible;                                                                                                                                   \
-    uint8 activeScreens;
+    uint8 onScreen;
 #endif
 
 #define ENTITY_SIZE (sizeof(Entity) + (0x100 * sizeof(void *)))
@@ -347,10 +381,8 @@ typedef struct {
     // uint16 *frameBuffer;
     uint16 frameBuffer[SCREEN_XMAX * SCREEN_YSIZE];
     Vector2 position;
-    int32 width;
-    int32 height;
-    int32 centerX;
-    int32 centerY;
+    Vector2 size;
+    Vector2 center;
     int32 pitch;
     int32 clipBound_X1;
     int32 clipBound_Y1;
@@ -378,6 +410,11 @@ typedef struct {
     RSDKUnknownInfo *unknownInfo;
 
     RSDKScreenInfo *screenInfo;
+
+#if RETRO_REV0U
+    // only for origins, not technically needed for v5U if standalone I think
+    void *hedgehogLink;
+#endif
 
 #if RETRO_USE_MOD_LOADER
     void *modTable;
@@ -468,8 +505,8 @@ typedef struct {
 } ScanlineInfo;
 
 typedef struct {
-    uint8 behaviour;
-    uint8 drawLayer[4];
+    uint8 type;
+    uint8 drawGroup[4];
     uint8 widthShift;
     uint8 heightShift;
     uint16 width;
@@ -489,6 +526,29 @@ typedef struct {
     uint16 *layout;
     uint8 *lineScroll;
 } TileLayer;
+
+#if RETRO_REV0U
+typedef struct {
+    Vector2 position;
+    bool32 collided;
+    uint8 angle;
+} CollisionSensor;
+
+typedef struct {
+    uint8 floorMasks[TILE_SIZE];
+    uint8 lWallMasks[TILE_SIZE];
+    uint8 roofMasks[TILE_SIZE];
+    uint8 rWallMasks[TILE_SIZE];
+} CollisionMask;
+
+typedef struct {
+    uint8 floorAngle;
+    uint8 lWallAngle;
+    uint8 rWallAngle;
+    uint8 roofAngle;
+    uint8 flag;
+} TileInfo;
+#endif
 
 typedef struct {
     uint8 idPS4;     // achievement ID (PS4)
@@ -643,23 +703,23 @@ typedef enum {
 
 #if RETRO_REV02
 typedef enum {
-    DBVAR_UNKNOWN, // unused (in Sonic Mania)
-    DBVAR_BOOL,    // unused (in Sonic Mania)
-    DBVAR_UINT8,   // used (in Sonic Mania)
-    DBVAR_UINT16,  // unused (in Sonic Mania)
-    DBVAR_UINT32,  // used (in Sonic Mania)
-    DBVAR_UINT64,  // unimplemented in RSDKv5
-    DBVAR_INT8,    // unused (in Sonic Mania)
-    DBVAR_INT16,   // unused (in Sonic Mania)
-    DBVAR_INT32,   // unused (in Sonic Mania)
-    DBVAR_INT64,   // unimplemented in RSDKv5
-    DBVAR_FLOAT,   // unused (in Sonic Mania)
+    DBVAR_UNKNOWN,
+    DBVAR_BOOL,
+    DBVAR_UINT8,
+    DBVAR_UINT16,
+    DBVAR_UINT32,
+    DBVAR_UINT64, // unimplemented in RSDKv5
+    DBVAR_INT8,
+    DBVAR_INT16,
+    DBVAR_INT32,
+    DBVAR_INT64, // unimplemented in RSDKv5
+    DBVAR_FLOAT,
     DBVAR_DOUBLE,  // unimplemented in RSDKv5
     DBVAR_VECTOR2, // unimplemented in RSDKv5
     DBVAR_VECTOR3, // unimplemented in RSDKv5
     DBVAR_VECTOR4, // unimplemented in RSDKv5
-    DBVAR_COLOR,   // unused (in Sonic Mania)
-    DBVAR_STRING,  // unused (in Sonic Mania)
+    DBVAR_COLOR,
+    DBVAR_STRING,
     DBVAR_HASHMD5, // unimplemented in RSDKv5
 } DBVarTypes;
 
@@ -689,7 +749,7 @@ typedef enum {
     ACTIVE_DISABLED = 0xFF,
 } ActiveFlags;
 
-typedef enum { ROTSTYLE_NONE, ROTSTYLE_FULL, ROTFLAG_45DEG, ROTSTYLE_90DEG, ROTSTYLE_180DEG, ROTSTYLE_STATICFRAMES } RotationSyles;
+typedef enum { ROTSTYLE_NONE, ROTSTYLE_FULL, ROTSTYLE_45DEG, ROTSTYLE_90DEG, ROTSTYLE_180DEG, ROTSTYLE_STATICFRAMES } RotationSyles;
 
 typedef enum {
     LAYER_HSCROLL,
@@ -712,6 +772,14 @@ typedef enum {
     C_RIGHT,
     C_BOTTOM,
 } CSides;
+
+typedef enum {
+    TILECOLLISION_NONE,
+    TILECOLLISION_DOWN,
+#if RETRO_REV0U
+    TILECOLLISION_UP
+#endif
+} TileCollisionModes;
 
 typedef enum {
     S3D_WIREFRAME,
@@ -1056,13 +1124,14 @@ typedef enum {
 
 #if RETRO_USE_MOD_LOADER
 typedef enum {
-    MODCB_GAME_STARTUP,
-    MODCB_STAGELOAD,
+    MODCB_ONGAMESTARTUP,
+    MODCB_ONSTATICLOAD,
+    MODCB_ONSTAGELOAD,
     MODCB_ONUPDATE,
     MODCB_ONLATEUPDATE,
     MODCB_ONSTATICUPDATE,
     MODCB_ONDRAW,
-    MODCB_STAGEUNLOAD,
+    MODCB_ONSTAGEUNLOAD,
     MODCB_ONSHADERLOAD,
     MODCB_ONVIDEOSKIPCB,
     MODCB_ONSCANLINECB,
@@ -1075,6 +1144,9 @@ typedef enum {
     SUPER_DRAW,
     SUPER_CREATE,
     SUPER_STAGELOAD,
+#if RETRO_REV0U
+    SUPER_STATICLOAD,
+#endif
     SUPER_EDITORDRAW,
     SUPER_EDITORLOAD,
     SUPER_SERIALIZE
@@ -1089,11 +1161,18 @@ typedef enum {
 // Mod Table
 typedef struct {
     // Registration & Core
-    void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size);
-    void (*RegisterObject)(Object **staticVars, Object **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
-                           uint32 modClassSize, void (*update)(), void (*lateUpdate)(), void (*staticUpdate)(), void (*draw)(),
-                           void (*create)(void *), void (*stageLoad)(), void (*editorDraw)(), void (*editorLoad)(), void (*serialize)(),
+#if RETRO_REV0U
+    void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size, void (*initCB)(void *globals));
+    void (*RegisterObject)(Object **staticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize, void (*update)(void),
+                           void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void),
+                           void (*editorDraw)(void), void (*editorLoad)(void), void (*serialize)(void), void (*staticLoad)(void *staticVars),
                            const char *inherited);
+#else
+    void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size);
+    void (*RegisterObject)(Object **staticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize, void (*update)(void),
+                           void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void),
+                           void (*editorDraw)(void), void (*editorLoad)(void), void (*serialize)(void), const char *inherited);
+#endif
     void *RegisterObject_STD;
     void (*RegisterObjectHook)(Object **staticVars, const char *staticName);
     void *(*FindObject)(const char *name);
@@ -1134,7 +1213,7 @@ typedef struct {
 
     // Achievements
     void (*RegisterAchievement)(const char *identifier, const char *name, const char *desc);
-    void (*GetAchievementInfo)(uint32 id, String *name, String *description, String *identifer, bool32 *achieved);
+    void (*GetAchievementInfo)(uint32 id, String *name, String *description, String *identifier, bool32 *achieved);
     int32 (*GetAchievementIndexByID)(const char *identifier);
     int32 (*GetAchievementCount)(void);
 
@@ -1155,6 +1234,9 @@ typedef struct {
     bool32 (*GetConfirmButtonFlip)(void);
     void (*ExitGame)(void);
     void (*LaunchManual)(void);
+#if RETRO_REV0U
+    int32 (*GetDefaultGamepadType)(void);
+#endif
     bool32 (*IsOverlayEnabled)(uint32 inputID);
     bool32 (*CheckDLC)(int32 dlc);
 #if MANIA_USE_EGS
@@ -1249,33 +1331,40 @@ typedef struct {
 // Function Table
 typedef struct {
     // Registration
+#if RETRO_REV0U
+    void (*RegisterGlobalVariables)(void **globals, int32 size, void (*initCB)(void *globals));
+    void (*RegisterObject)(Object **staticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize, void (*update)(void),
+                           void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void),
+                           void (*editorDraw)(void), void (*editorLoad)(void), void (*serialize)(void), void (*staticLoad)(void *staticVars));
+#else
     void (*RegisterGlobalVariables)(void **globals, int32 size);
     void (*RegisterObject)(Object **staticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize, void (*update)(void),
                            void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void),
                            void (*editorDraw)(void), void (*editorLoad)(void), void (*serialize)(void));
+#endif
 #if RETRO_REV02
     void (*RegisterStaticVariables)(void **varClass, const char *name, uint32 classSize);
 #endif
 
     // Entities & Objects
     bool32 (*GetActiveEntities)(uint16 group, Entity **entity);
-    bool32 (*GetEntities)(uint16 classID, Entity **entity);
+    bool32 (*GetAllEntities)(uint16 classID, Entity **entity);
     void (*BreakForeachLoop)(void);
     void (*SetEditableVar)(uint8 type, const char *name, uint8 classID, int32 storeOffset);
     void *(*GetEntity)(uint16 slot);
     int32 (*GetEntitySlot)(void *entity);
     int32 (*GetEntityCount)(uint16 classID, bool32 isActive);
-    int32 (*GetDrawListRef)(uint8 drawGroup, uint16 entitySlot);
-    void *(*GetDrawListRefPtr)(uint8 drawGroup, uint16 entitySlot);
-    void (*ResetEntityPtr)(void *entity, uint16 classID, void *data);
+    int32 (*GetDrawListRefSlot)(uint8 drawGroup, uint16 entitySlot);
+    void *(*GetDrawListRef)(uint8 drawGroup, uint16 entitySlot);
+    void (*ResetEntity)(void *entity, uint16 classID, void *data);
     void (*ResetEntitySlot)(uint16 slot, uint16 classID, void *data);
     Entity *(*CreateEntity)(uint16 classID, void *data, int32 x, int32 y);
     void (*CopyEntity)(void *destEntity, void *srcEntity, bool32 clearSrcEntity);
     bool32 (*CheckOnScreen)(void *entity, Vector2 *range);
     bool32 (*CheckPosOnScreen)(Vector2 *position, Vector2 *range);
-    void (*AddDrawListRef)(uint8 drawGroup, uint16 entityID);
-    void (*SwapDrawListEntries)(uint8 drawGroup, uint16 startSlotID, uint16 endSlotID, uint16 count);
-    void (*SetDrawLayerProperties)(uint8 drawGroup, bool32 sorted, void (*callback)(void));
+    void (*AddDrawListRef)(uint8 drawGroup, uint16 entitySlot);
+    void (*SwapDrawListEntries)(uint8 drawGroup, uint16 slot1, uint16 slot2, uint16 count);
+    void (*SetDrawGroupProperties)(uint8 drawGroup, bool32 sorted, void (*hookCB)(void));
 
     // Scene Management
     void (*SetScene)(const char *categoryName, const char *sceneName);
@@ -1352,7 +1441,7 @@ typedef struct {
     int32 (*SetScreenSize)(uint8 screenID, uint16 width, uint16 height);
     void (*SetClipBounds)(uint8 screenID, int32 x1, int32 y1, int32 x2, int32 y2);
 #if RETRO_REV02
-    void (*SetScreenRenderVertices)(uint8 startVert2P_S1, uint8 startVert2P_S2, uint8 startVert3P_S1, uint8 startVert3P_S2, uint8 startVert3P_S3);
+    void (*SetScreenVertices)(uint8 startVert2P_S1, uint8 startVert2P_S2, uint8 startVert3P_S1, uint8 startVert3P_S2, uint8 startVert3P_S3);
 #endif
 
     // Spritesheets
@@ -1385,7 +1474,7 @@ typedef struct {
     void (*DrawCircleOutline)(int32 x, int32 y, int32 innerRadius, int32 outerRadius, uint32 color, int32 alpha, InkEffects inkEffect,
                               bool32 screenRelative);
     void (*DrawFace)(Vector2 *verticies, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, InkEffects inkEffect);
-    void (*DrawBlendedFace)(Vector2 *verticies, color *vertColors, int32 vertCount, int32 alpha, InkEffects inkEffect);
+    void (*DrawBlendedFace)(Vector2 *vertices, color *vertColors, int32 vertCount, int32 alpha, InkEffects inkEffect);
     void (*DrawSprite)(Animator *animator, Vector2 *position, bool32 screenRelative);
     void (*DrawDeformedSprite)(uint16 sheet, InkEffects inkEffect, bool32 screenRelative);
     void (*DrawText)(Animator *animator, Vector2 *position, String *info, int32 startFrame, int32 endFrame, int32 align, int32 spacing, void *unused,
@@ -1393,20 +1482,23 @@ typedef struct {
     void (*DrawTile)(uint16 *tileInfo, int32 countX, int32 countY, Vector2 *position, Vector2 *offset, bool32 screenRelative);
     void (*CopyTile)(uint16 dest, uint16 src, uint16 count);
     void (*DrawAniTiles)(uint16 sheetID, uint16 tileIndex, uint16 srcX, uint16 srcY, uint16 width, uint16 height);
+#if RETRO_REV0U
+    void (*DrawDynamicAniTiles)(Animator *animator, uint16 tileIndex);
+#endif
     void (*FillScreen)(uint32 color, int32 alphaR, int32 alphaG, int32 alphaB);
 
     // Meshes & 3D Scenes
     uint16 (*LoadMesh)(const char *filename, uint8 scope);
     uint16 (*Create3DScene)(const char *identifier, uint16 faceCount, uint8 scope);
-    void (*Prepare3DScene)(uint16 index);
-    void (*SetDiffuseColor)(uint16 index, int32 x, int32 y, int32 z);
-    void (*SetDiffuseIntensity)(uint16 index, int32 x, int32 y, int32 z);
-    void (*SetSpecularIntensity)(uint16 index, int32 x, int32 y, int32 z);
+    void (*Prepare3DScene)(uint16 sceneIndex);
+    void (*SetDiffuseColor)(uint16 sceneIndex, int32 x, int32 y, int32 z);
+    void (*SetDiffuseIntensity)(uint16 sceneIndex, int32 x, int32 y, int32 z);
+    void (*SetSpecularIntensity)(uint16 sceneIndex, int32 x, int32 y, int32 z);
     void (*AddModelTo3DScene)(uint16 modelFrames, uint16 sceneIndex, uint8 drawMode, Matrix *matWorld, Matrix *matNormal, color color);
     void (*SetModelAnimation)(uint16 modelFrames, Animator *animator, int16 speed, uint8 loopIndex, bool32 forceApply, uint16 frameID);
     void (*AddMeshFrameTo3DScene)(uint16 modelFrames, uint16 sceneIndex, Animator *animator, uint8 drawMode, Matrix *matWorld, Matrix *matNormal,
                                   color color);
-    void (*Draw3DScene)(uint16 index);
+    void (*Draw3DScene)(uint16 sceneIndex);
 
     // Sprite Animations & Frames
     uint16 (*LoadSpriteAnimation)(const char *path, Scopes scope);
@@ -1426,8 +1518,8 @@ typedef struct {
     int32 (*GetTileLayerID)(const char *name);
     TileLayer *(*GetTileLayer)(int32 layerID);
     void (*GetLayerSize)(uint16 layer, Vector2 *size, bool32 usePixelUnits);
-    uint16 (*GetTileInfo)(uint16 layer, int32 x, int32 y);
-    void (*SetTileInfo)(uint16 layer, int32 x, int32 y, uint16 tile);
+    uint16 (*GetTile)(uint16 layer, int32 x, int32 y);
+    void (*SetTile)(uint16 layer, int32 x, int32 y, uint16 tile);
     int32 (*CopyTileLayer)(uint16 dstLayerID, int32 dstStartX, int32 dstStartY, uint16 srcLayerID, int32 srcStartX, int32 srcStartY, int32 countX,
                            int32 countY);
     void (*ProcessParallax)(TileLayer *TileLayer);
@@ -1443,15 +1535,35 @@ typedef struct {
     bool32 (*ObjectTileGrip)(void *entity, uint16 collisionLayers, uint8 collisionMode, uint8 collisionPlane, int32 xOffset, int32 yOffset,
                              int32 tolerance);
     void (*ProcessObjectMovement)(void *entity, Hitbox *outer, Hitbox *inner);
-    int32 (*GetTileAngle)(uint16 tileID, uint8 cPlane, uint8 cMode);
-    void (*SetTileAngle)(uint16 tileID, uint8 cPlane, uint8 cMode, uint8 angle);
-    uint8 (*GetTileFlags)(uint16 tileID, uint8 cPlane);
-    void (*SetTileFlags)(uint16 tileID, uint8 cPlane, uint8 flags);
+#if RETRO_REV0U
+    void (*SetupCollisionConfig)(int32 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
+                                 uint8 roofAngleTolerance);
+    void (*SetPathGripSensors)(CollisionSensor *sensors); // expects 5 sensors
+    void (*FindFloorPosition)(CollisionSensor *sensor);
+    void (*FindLWallPosition)(CollisionSensor *sensor);
+    void (*FindRoofPosition)(CollisionSensor *sensor);
+    void (*FindRWallPosition)(CollisionSensor *sensor);
+    void (*FloorCollision)(CollisionSensor *sensor);
+    void (*LWallCollision)(CollisionSensor *sensor);
+    void (*RoofCollision)(CollisionSensor *sensor);
+    void (*RWallCollision)(CollisionSensor *sensor);
+#endif
+    int32 (*GetTileAngle)(uint16 tile, uint8 cPlane, uint8 cMode);
+    void (*SetTileAngle)(uint16 tile, uint8 cPlane, uint8 cMode, uint8 angle);
+    uint8 (*GetTileFlags)(uint16 tile, uint8 cPlane);
+    void (*SetTileFlags)(uint16 tile, uint8 cPlane, uint8 flag);
+#if RETRO_REV0U
+    void (*CopyCollisionMask)(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode);
+    void (*GetCollisionInfo)(CollisionMask **masks, TileInfo **tileInfo);
+#endif
 
     // Audio
     int32 (*GetSfx)(const char *path);
     int32 (*PlaySfx)(uint16 sfx, int32 loopPoint, int32 priority);
     void (*StopSfx)(uint16 sfx);
+#if RETRO_REV0U
+    void (*StopAllSfx)(void);
+#endif
     int32 (*PlayStream)(const char *filename, uint32 channel, uint32 startPos, uint32 loopPoint, bool32 loadASync);
     void (*SetChannelAttributes)(uint8 channel, float volume, float pan, float speed);
     void (*StopChannel)(uint32 channel);
@@ -1467,19 +1579,19 @@ typedef struct {
 
     // Input
 #if RETRO_REV02
-    int32 (*ControllerIDForInputID)(uint8 controllerID);
-    int32 (*MostRecentActiveControllerID)(bool32 confirmOnly, bool32 unassignedOnly, uint32 maxInactiveTimer);
-    int32 (*GetControllerType)(uint32 inputID);
-    int32 (*GetAssignedControllerID)(uint32 inputID);
+    int32 (*GetInputDeviceID)(uint8 controllerID);
+    int32 (*GetFilteredInputDeviceID)(bool32 confirmOnly, bool32 unassignedOnly, uint32 maxInactiveTimer);
+    int32 (*GetInputDeviceType)(uint32 inputID);
+    int32 (*IsInputDeviceAssigned)(uint32 inputID);
     int32 (*GetInputUnknown)(uint32 inputID);
     int32 (*InputUnknown1)(uint32 inputID, int32 unknown1, int32 unknown2);
     int32 (*InputUnknown2)(uint32 inputID, int32 unknown1, int32 unknown2);
     int32 (*GetControllerUnknown)(void);
     int32 (*ControllerUnknown1)(uint8 controllerID, int32 unknown1, int32 unknown2);
     int32 (*ControllerUnknown2)(uint8 controllerID, int32 unknown1, int32 unknown2);
-    void (*AssignControllerID)(uint8 controllerID, uint32 inputID);
-    bool32 (*ControllerIsAssigned)(uint8 controllerID);
-    void (*ResetControllerAssignments)(void);
+    void (*AssignInputSlotToDevice)(uint8 controllerID, uint32 inputID);
+    bool32 (*IsInputSlotAssigned)(uint8 controllerID);
+    void (*ResetInputSlotAssignments)(void);
 #endif
 #if !RETRO_REV02
     void (*GetUnknownInputValue)(int32 controllerID, int32 type, int32 *value);
@@ -1491,14 +1603,14 @@ typedef struct {
 
     // Printing (Rev02)
 #if RETRO_REV02
-    void (*PrintLog)(PrintModes printType, const char *message, ...);
-    void (*PrintText)(PrintModes printType, const char *message);
-    void (*PrintString)(PrintModes printType, String *message);
-    void (*PrintUInt32)(PrintModes printType, const char *message, uint32 i);
-    void (*PrintInt32)(PrintModes printType, const char *message, int32 i);
-    void (*PrintFloat)(PrintModes printType, const char *message, float f);
-    void (*PrintVector2)(PrintModes printType, const char *message, int32 x, int32 y);
-    void (*PrintHitbox)(PrintModes printType, const char *message, Hitbox *hitbox);
+    void (*PrintLog)(PrintModes mode, const char *message, ...);
+    void (*PrintText)(PrintModes mode, const char *message);
+    void (*PrintString)(PrintModes mode, String *message);
+    void (*PrintUInt32)(PrintModes mode, const char *message, uint32 i);
+    void (*PrintInt32)(PrintModes mode, const char *message, int32 i);
+    void (*PrintFloat)(PrintModes mode, const char *message, float f);
+    void (*PrintVector2)(PrintModes mode, const char *message, Vector2 vec);
+    void (*PrintHitbox)(PrintModes mode, const char *message, Hitbox hitbox);
 #endif
 
     // Editor
@@ -1514,6 +1626,12 @@ typedef struct {
     // Printing (Rev01)
 #if !RETRO_REV02
     void (*PrintMessage)(void *message, uint8 type);
+#endif
+
+#if RETRO_REV0U
+    // Origins Extras
+    void (*NotifyCallback)(int32 callbackID, int32 param1, int32 param2, int32 param3);
+    void (*SetGameFinished)(void);
 #endif
 } RSDKFunctionTable;
 
@@ -1560,14 +1678,40 @@ typedef struct {
 
 #define RSDK_DRAWING_OVERLAY(isDrawingOverlay) SceneInfo->debugMode = isDrawingOverlay
 
+#if RETRO_REV0U
+#define RSDK_REGISTER_OBJECT(object)                                                                                                                 \
+    RSDK.RegisterObject((Object **)&object, #object, sizeof(Entity##object), sizeof(Object##object), object##_Update, object##_LateUpdate,           \
+                        object##_StaticUpdate, object##_Draw, object##_Create, object##_StageLoad, object##_EditorDraw, object##_EditorLoad,         \
+                        object##_Serialize, NULL)
+
+#define RSDK_REGISTER_OBJECT_STATICLOAD(object)                                                                                                      \
+    RSDK.RegisterObject((Object **)&object, #object, sizeof(Entity##object), sizeof(Object##object), object##_Update, object##_LateUpdate,           \
+                        object##_StaticUpdate, object##_Draw, object##_Create, object##_StageLoad, object##_EditorDraw, object##_EditorLoad,         \
+                        object##_Serialize, object##_StaticLoad)
+#else
 #define RSDK_REGISTER_OBJECT(object)                                                                                                                 \
     RSDK.RegisterObject((Object **)&object, #object, sizeof(Entity##object), sizeof(Object##object), object##_Update, object##_LateUpdate,           \
                         object##_StaticUpdate, object##_Draw, object##_Create, object##_StageLoad, object##_EditorDraw, object##_EditorLoad,         \
                         object##_Serialize)
+#endif
+
+#else
+
+#if RETRO_REV0U
+#define RSDK_REGISTER_OBJECT(object)                                                                                                                 \
+    RSDK.RegisterObject((Object **)&object, #object, sizeof(Entity##object), sizeof(Object##object), object##_Update, object##_LateUpdate,           \
+                        object##_StaticUpdate, object##_Draw, object##_Create, object##_StageLoad, NULL, NULL, object##_Serialize, NULL)
+
+#define RSDK_REGISTER_OBJECT_STATICLOAD(object)                                                                                                      \
+    RSDK.RegisterObject((Object **)&object, #object, sizeof(Entity##object), sizeof(Object##object), object##_Update, object##_LateUpdate,           \
+                        object##_StaticUpdate, object##_Draw, object##_Create, object##_StageLoad, NULL, NULL, object##_Serialize,                   \
+                        object##_StaticLoad)
 #else
 #define RSDK_REGISTER_OBJECT(object)                                                                                                                 \
     RSDK.RegisterObject((Object **)&object, #object, sizeof(Entity##object), sizeof(Object##object), object##_Update, object##_LateUpdate,           \
                         object##_StaticUpdate, object##_Draw, object##_Create, object##_StageLoad, NULL, NULL, object##_Serialize)
+#endif
+
 #endif
 
 #if RETRO_USE_MOD_LOADER
@@ -1626,14 +1770,14 @@ typedef struct {
     while (RSDK.GetActiveEntities(type->classID, (Entity **)&entityOut))
 #define foreach_all(type, entityOut)                                                                                                                 \
     Entity##type *entityOut = NULL;                                                                                                                  \
-    while (RSDK.GetEntities(type->classID, (Entity **)&entityOut))
+    while (RSDK.GetAllEntities(type->classID, (Entity **)&entityOut))
 
 #define foreach_active_group(group, entityOut)                                                                                                       \
     Entity *entityOut = NULL;                                                                                                                        \
     while (RSDK.GetActiveEntities(group, (Entity **)&entityOut))
 #define foreach_all_group(group, entityOut)                                                                                                          \
     Entity *entityOut = NULL;                                                                                                                        \
-    while (RSDK.GetEntities(group, (Entity **)&entityOut))
+    while (RSDK.GetAllEntities(group, (Entity **)&entityOut))
 
 #if RETRO_USE_MOD_LOADER
 #define foreach_config(text)                                                                                                                         \
@@ -1651,7 +1795,7 @@ typedef struct {
     RSDK.BreakForeachLoop();                                                                                                                         \
     return
 
-#define destroyEntity(entity)   RSDK.ResetEntityPtr(entity, TYPE_BLANK, NULL)
+#define destroyEntity(entity)   RSDK.ResetEntity(entity, TYPE_BLANK, NULL)
 #define destroyEntitySlot(slot) RSDK.ResetEntitySlot(slot, TYPE_BLANK, NULL)
 
 #if RETRO_INCLUDE_EDITOR
