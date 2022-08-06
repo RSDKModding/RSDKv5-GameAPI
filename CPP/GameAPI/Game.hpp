@@ -21,7 +21,7 @@
 // GAME LOGIC
 // -------------------------
 
-#include "RSDKv5.hpp"
+#include "RSDKv5/RSDKv5.hpp"
 #include "GameVariables.hpp"
 #include "GameObjects.hpp"
 

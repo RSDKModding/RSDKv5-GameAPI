@@ -13,11 +13,9 @@
 // GAME VARIABLES
 // -------------------------
 
-#ifndef GAME_NO_GLOBALS
-GlobalVariables::Constructor c;
+// GlobalVariables::Constructor c;
 
-GlobalVariables *globals = nullptr;
-#endif
+// GlobalVariables *globals = nullptr;
 
 void **registerGlobals    = nullptr;
 int32 registerGlobalsSize = 0;
@@ -40,7 +38,7 @@ void RegisterGlobals(void **globals, int32 size)
 #endif
 
 #if RETRO_REV0U
-#ifndef GAME_NO_GLOBALS
+/*
 void GlobalVariables::Init(void *g)
 {
     GlobalVariables *globals = (GlobalVariables *)g;
@@ -49,7 +47,7 @@ void GlobalVariables::Init(void *g)
 
     // Global Variable Initialization Goes Here!
 }
-#endif
+*/
 #endif
 
 // -------------------------
@@ -132,13 +130,16 @@ void LinkGameLogicDLL(RSDK::EngineInfo info)
 #if RETRO_USE_MOD_LOADER
 DLLExport RSDK::ModVersionInfo modInfo = { RETRO_REVISION, GAME_VERSION, RETRO_MOD_LOADER_VER };
 
-bool32 LinkModLogic(RSDK::EngineInfo *info, const char *modID)
+bool32 InitModLogic(RSDK::EngineInfo *info, const char *modID)
 {
 #if RETRO_REV02
     LinkGameLogicDLL(info);
 #else
     LinkGameLogicDLL(*info);
 #endif
+
+    RSDK::Mod::modID = modID;
+
     return true;
 }
 #endif

@@ -152,7 +152,6 @@ enum PlayModes {
 #define NotifyCallback(callback, param1, param2, param3)
 #endif
 
-#ifndef GAME_NO_GLOBALS
 // =========================
 // GLOBAL VARIABLES
 // =========================
@@ -167,21 +166,22 @@ void RegisterGlobals(void **globals, int32 size, void (*initCB)(void *globals));
 void RegisterGlobals(void **globals, int32 size);
 #endif
 
-#ifndef GAME_NO_GLOBALS
+// Globals Example
+/*
+
 // forward declare
 struct GlobalVariables;
 
 extern GlobalVariables *globals;
 
-// Use this if you're rolling your own stuff in v5
 struct GlobalVariables {
     struct Constructor {
         Constructor()
         {
 #if RETRO_REV0U
-            RegisterGlobals((void **)&globals, sizeof(GlobalVariables), &GlobalVariables::Init);
+            // RegisterGlobals((void **)&globals, sizeof(GlobalVariables), &GlobalVariables::Init);
 #else
-            RegisterGlobals((void **)&globals, sizeof(GlobalVariables));
+            // RegisterGlobals((void **)&globals, sizeof(GlobalVariables));
 #endif
         }
     };
@@ -195,7 +195,7 @@ struct GlobalVariables {
     // Your Variables Go Here
 };
 #endif
-#endif
+*/
 
 // Use this if you're hooking onto Sonic Mania
 struct ManiaGlobalVariables {

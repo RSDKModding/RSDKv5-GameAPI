@@ -11,8 +11,6 @@
 // OBJECTS
 // -------------------------
 
-#include "RSDKv5.hpp"
-
 extern "C" {
 DLLExport void LinkGameLogicDLL(RSDK::EngineInfo *info);
 
@@ -22,7 +20,7 @@ DLLExport extern int32 RSDKRevision;
 #if RETRO_USE_MOD_LOADER
 DLLExport extern RSDK::ModVersionInfo modInfo;
 
-DLLExport bool32 LinkModLogic(RSDK::EngineInfo *info, const char *modID);
+bool32 InitModLogic(RSDK::EngineInfo *info, const char *modID);
 #endif
 }
 
