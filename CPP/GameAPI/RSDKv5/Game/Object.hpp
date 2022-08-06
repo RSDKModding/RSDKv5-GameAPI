@@ -185,7 +185,6 @@ struct GameObject {
         {
             return RSDKTable->CheckObjectCollisionPlatform(this, thisHitbox, other, otherHitbox, setPos);
         }
-
     };
 
     static inline Entity *Create(void *data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(0, data, x, y); }
@@ -204,17 +203,13 @@ struct GameObject {
     static inline Entity *Get(uint16 slot) { return (Entity *)RSDKTable->GetEntity(slot); }
     template <typename T> static inline T *Get(uint16 slot) { return (T *)RSDKTable->GetEntity(slot); }
 
-    template <typename T> static inline int32 Count(bool32 isActive = false)
-    {
-        return RSDKTable->GetEntityCount(T::sVars->classID, isActive);
-    }
+    template <typename T> static inline int32 Count(bool32 isActive = false) { return RSDKTable->GetEntityCount(T::sVars->classID, isActive); }
 
     static inline void Copy(Entity *dst, Entity *src, bool32 clearSrc) { RSDKTable->CopyEntity(dst, src, clearSrc); }
     static inline void Copy(void *dst, void *src, bool32 clearSrc) { RSDKTable->CopyEntity(dst, src, clearSrc); }
 
     static inline void Reset(int32 slot, uint32 type, void *data) { RSDKTable->ResetEntitySlot(slot, type, data); }
     static inline void Reset(int32 slot, uint32 type, int32 data) { RSDKTable->ResetEntitySlot(slot, type, intToVoid(data)); }
-
 
     template <typename T> static inline std::list<T *> GetEntities(ForeachTypes type)
     {
@@ -310,6 +305,8 @@ struct ObjectRegistration {
     uint32 staticClassSize;
 
 #if RETRO_USE_MOD_LOADER
+    void **modStaticVars;
+    uint32 modStaticClassSize;
     const char *inherit;
     bool32 isModded;
 #endif
@@ -327,7 +324,7 @@ template <typename E> static inline typename E::Static *RegisterObject(typename 
     if (registerObjectListCount < 0x400) {
         ObjectRegistration *object = &registerObjectList[registerObjectListCount++];
         memset(object, 0, sizeof(ObjectRegistration));
-        object->name               = name;
+        object->name = name;
 
         if (&E::Update != &GameObject::Entity::Update)
             object->update = E::_Update;
@@ -356,7 +353,7 @@ template <typename E> static inline typename E::Static *RegisterObject(typename 
 #endif
 
 #if RETRO_REV0U
-        if (((void (**)(void *))&E::StaticLoad) != ((void (**)(void *))&GameObject::Entity::StaticLoad))
+        if (((void (**)(void *)) & E::StaticLoad) != ((void (**)(void *)) & GameObject::Entity::StaticLoad))
             object->staticLoad = (void (*)(void *))E::StaticLoad;
 #endif
 
@@ -436,7 +433,9 @@ template <typename E> static inline typename E::Static *RegisterStaticVars(typen
 #if RETRO_USE_MOD_LOADER
 namespace Mod
 {
-template <typename E> static inline typename E::Static *RegisterObject(typename E::Static **sVars, const char *name)
+template <typename E>
+static inline typename E::Static *RegisterObject(typename E::Static **sVars, typename E::ModStatic **modSVars, const char *name,
+                                                 const char *inherit = "")
 {
     if (registerObjectListCount < 0x400) {
         ObjectRegistration *object = &registerObjectList[registerObjectListCount++];
@@ -470,27 +469,36 @@ template <typename E> static inline typename E::Static *RegisterObject(typename 
 #endif
 
 #if RETRO_REV0U
-        if (((void (**)(void *))&E::StaticLoad) != ((void (**)(void *))&GameObject::Entity::StaticLoad))
+        if (((void (**)(void *)) & E::StaticLoad) != ((void (**)(void *)) & GameObject::Entity::StaticLoad))
             object->staticLoad = (void (*)(void *))E::StaticLoad;
 #endif
 
         if (&E::Serialize != &GameObject::Entity::Serialize)
             object->serialize = E::Serialize;
 
-        object->staticVars      = (void **)sVars;
-        object->entityClassSize = sizeof(E);
-        object->staticClassSize = sizeof(typename E::Static);
+        object->staticVars         = (void **)sVars;
+        object->modStaticVars      = (void **)modSVars;
+        object->entityClassSize    = sizeof(E);
+        object->staticClassSize    = sizeof(typename E::Static);
+        object->modStaticClassSize = sizeof(typename E::ModStatic);
 
         object->isModded = true;
-        object->inherit  = "";
+        object->inherit  = inherit;
     }
-    *sVars = nullptr;
+    *sVars    = nullptr;
+    *modSVars = nullptr;
 
     return nullptr;
 }
 } // namespace Mod
 
-#define MOD_REGISTER_OBJECT(obj) obj::Static *obj::sVars = RSDK::Mod::RegisterObject<obj>(&obj::sVars, #obj);
+#define MOD_DECLARE(obj)                                                                                                                             \
+    static ModStatic *modSVars;                                                                                                                      \
+    RSDK_DECLARE(obj)
+
+#define MOD_REGISTER_OBJECT(obj)                                                                                                                     \
+    obj::Static *obj::sVars       = RSDK::Mod::RegisterObject<obj>(&obj::sVars, &obj::modSVars, #obj);                                               \
+    obj::ModStatic *obj::modSVars = nullptr;
 
 #define MOD_REGISTER_OBJECT_HOOK(obj) obj::Static *obj::sVars = RSDK::Mod::RegisterObjectHook<obj>(&obj::sVars, #obj);
 

@@ -101,16 +101,17 @@ enum GameLanguages {
 struct ModFunctionTable {
     // Registration & Core
 #if RETRO_REV0U
-    void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size, void (*initCB)(void *globals));
-    void (*RegisterObject)(void **staticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize, void (*update)(void),
-                           void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void),
-                           void (*editorDraw)(void), void (*editorLoad)(void), void (*serialize)(void), void (*staticLoad)(void *staticVars),
-                           const char *inherited);
+    void (*RegisterGlobals)(const char* globalsPath, void** globals, uint32 size, void (*initCB)(void* globals));
+    void (*RegisterObject)(void** staticVars, void** modStaticVars, const char* name, uint32 entityClassSize, uint32 staticClassSize,
+        uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
+        void (*create)(void*), void (*stageLoad)(void), void (*editorDraw)(void), void (*editorLoad)(void),
+        void (*serialize)(void), void (*staticLoad)(void* staticVars), const char* inherited);
 #else
-    void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size);
-    void (*RegisterObject)(void **staticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize, void (*update)(void),
-                           void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void),
-                           void (*editorDraw)(void), void (*editorLoad)(void), void (*serialize)(void), const char *inherited);
+    void (*RegisterGlobals)(const char* globalsPath, void** globals, uint32 size);
+    void (*RegisterObject)(void** staticVars, void** modStaticVars, const char* name, uint32 entityClassSize, uint32 staticClassSize,
+        uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
+        void (*create)(void*), void (*stageLoad)(void), void (*editorDraw)(void), void (*editorLoad)(void),
+        void (*serialize)(void), const char* inherited);
 #endif
     void *RegisterObject_STD;
     void (*RegisterObjectHook)(void **staticVars, const char *staticName);
