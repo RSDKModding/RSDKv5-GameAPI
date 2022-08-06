@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\RSDKv5">
+      <UniqueIdentifier>{da65a3e0-57d0-4fca-b114-de5113ceb14e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RSDKv5\API">
+      <UniqueIdentifier>{ed8fe64e-ea07-4bf0-bc2a-54e09740c825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RSDKv5\Audio">
+      <UniqueIdentifier>{1a32ed58-b887-4a12-a514-12db798b5e6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RSDKv5\Debugging">
+      <UniqueIdentifier>{e3e67da2-26de-4cba-95d9-7c1993f20e3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RSDKv5\Essentials">
+      <UniqueIdentifier>{3c87ecb4-93c1-462e-8904-e44b0ea21f55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RSDKv5\Game">
+      <UniqueIdentifier>{c9fe3e2f-ffa8-4c6e-a6d3-75c1a3d705a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RSDKv5\Graphics">
+      <UniqueIdentifier>{768ac48c-3298-48ca-85bd-f1a47eb411d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RSDKv5\Input">
+      <UniqueIdentifier>{072cf439-e87d-4e6f-bdd7-b80c3a4d6afa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RSDKv5\Math">
+      <UniqueIdentifier>{1a3f5f42-82ab-4720-a0c1-d055677e2885}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{6da34df8-f6c5-48d1-b6c8-f3c08ceb3fe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Objects">
+      <UniqueIdentifier>{6fb37fa4-0a94-47d6-877b-47549c78c087}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RSDKv5\API\Achievements.hpp">
+      <Filter>Source Files\RSDKv5\API</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\API\Leaderboards.hpp">
+      <Filter>Source Files\RSDKv5\API</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\API\Stats.hpp">
+      <Filter>Source Files\RSDKv5\API</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Audio\Audio.hpp">
+      <Filter>Source Files\RSDKv5\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Debugging\Dev.hpp">
+      <Filter>Source Files\RSDKv5\Debugging</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Essentials\String.hpp">
+      <Filter>Source Files\RSDKv5\Essentials</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Game\Collision.hpp">
+      <Filter>Source Files\RSDKv5\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Game\Object.hpp">
+      <Filter>Source Files\RSDKv5\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Game\Stage.hpp">
+      <Filter>Source Files\RSDKv5\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Game\StateMachine.hpp">
+      <Filter>Source Files\RSDKv5\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Graphics\Animator.hpp">
+      <Filter>Source Files\RSDKv5\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Graphics\Graphics.hpp">
+      <Filter>Source Files\RSDKv5\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Graphics\Layer.hpp">
+      <Filter>Source Files\RSDKv5\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Graphics\Mesh.hpp">
+      <Filter>Source Files\RSDKv5\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Graphics\Sprite.hpp">
+      <Filter>Source Files\RSDKv5\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Graphics\Video.hpp">
+      <Filter>Source Files\RSDKv5\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Input\Input.hpp">
+      <Filter>Source Files\RSDKv5\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Math\FixedPoint.hpp">
+      <Filter>Source Files\RSDKv5\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Math\Math.hpp">
+      <Filter>Source Files\RSDKv5\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Math\Matrix.hpp">
+      <Filter>Source Files\RSDKv5\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Math\Vector2.hpp">
+      <Filter>Source Files\RSDKv5\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\EngineAPI.hpp">
+      <Filter>Source Files\RSDKv5</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\RSDKv5.hpp">
+      <Filter>Source Files\RSDKv5</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Types.hpp">
+      <Filter>Source Files\RSDKv5</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.hpp">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects.hpp">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameVariables.hpp">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\API\Mod.hpp">
+      <Filter>Source Files\RSDKv5\API</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\API\UserStorage.hpp">
+      <Filter>Source Files\RSDKv5\API</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\API\API.hpp">
+      <Filter>Source Files\RSDKv5\API</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\API\RichPresence.hpp">
+      <Filter>Source Files\RSDKv5\API</Filter>
+    </ClInclude>
+    <ClInclude Include="RSDKv5\Game\ForEach.hpp">
+      <Filter>Source Files\RSDKv5\Game</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

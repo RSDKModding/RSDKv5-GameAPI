@@ -1,10 +1,18 @@
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 
-// =====================================================================
-// Project: RSDKv5 Modding API (C)
-// By: Rubberduckycooly & RMGRich
-// =====================================================================
+typedef signed char int8;
+typedef unsigned char uint8;
+typedef signed short int16;
+typedef unsigned short uint16;
+typedef signed int int32;
+typedef unsigned int uint32;
+typedef signed long long int64;
+typedef unsigned long long uint64;
+
+typedef uint32 bool32;
+typedef uint32 color;
+
+
 
 // -------------------------
 // ENGINE VERSIONS
@@ -25,6 +33,10 @@
 // enabling this will add the RSDKv5U funcs and allow this to run properly on that engine ver
 #define RETRO_REV0U (RETRO_REVISION >= 3)
 
+#ifndef RETRO_USE_EGS
+#define RETRO_USE_EGS (RETRO_REV02 && 0)
+#endif
+
 // Controls whether EditorLoad & EditorDraw should be included in the final product or not
 // This is a copy of what the original game likely had, as the original game does not include EditorLoad or EditorDraw funcs for any objects
 #ifndef RETRO_INCLUDE_EDITOR
@@ -35,33 +47,14 @@
 #define RETRO_USE_MOD_LOADER (1)
 #endif
 
+#if RETRO_USE_MOD_LOADER
 #define RETRO_MOD_LOADER_VER (1)
-
-// -------------------------
-// GAME VERSIONS
-// -------------------------
-
-#define VER_100 (0) // 1.00 (initial console release)
-#define VER_103 (3) // 1.03 (PC release/console patch)
-#define VER_105 (5) // 1.04/1.05
-#define VER_106 (6) // 1.06 (steam denuvo removal update)
-#define VER_107 (7) // 1.07 (EGS/Origin releases)
-
-#ifndef GAME_VERSION
-#define GAME_VERSION VER_106
 #endif
 
-#define MANIA_USE_PLUS (GAME_VERSION >= VER_105)
-#define MANIA_USE_EGS  (GAME_VERSION == VER_107)
-
-// -------------------------
-// GAME LOGIC
-// -------------------------
-
-#include "GameLink.h"
-#ifndef GAME_NO_VARIABLES
-#include "GameVariables.h"
+// used to manage standalone (RSDKv5.exe & Game.dll) and combined (Game.exe) modes
+#ifndef RETRO_STANDALONE
+#define RETRO_STANDALONE (1)
 #endif
-#include "GameObjects.h"
 
-#endif //! GAME_H
+#include "EngineAPI.hpp"
+
