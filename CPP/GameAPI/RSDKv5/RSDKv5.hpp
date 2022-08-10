@@ -2,6 +2,10 @@
 // If this file isn't included first, there will definitely be many errors.
 #pragma once
 
+// Silence "offset of non standard type" warning
+// I don't care about it
+#pragma GCC diagnostic ignored "-Winvalid-offsetof"
+
 // main tree path:
 #include "API/Mod.hpp"
 #include "Math/Math.hpp"
