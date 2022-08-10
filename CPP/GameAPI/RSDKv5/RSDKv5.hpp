@@ -2,9 +2,11 @@
 // If this file isn't included first, there will definitely be many errors.
 #pragma once
 
+#ifndef _MSC_VER
 // Silence "offset of non standard type" warning
 // I don't care about it
 #pragma GCC diagnostic ignored "-Winvalid-offsetof"
+#endif
 
 // main tree path:
 #include "API/Mod.hpp"
