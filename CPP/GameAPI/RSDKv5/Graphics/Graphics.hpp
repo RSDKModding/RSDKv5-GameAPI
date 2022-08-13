@@ -195,8 +195,8 @@ inline void SetVideoSetting(VideoSettingsValues id, int32 value) { RSDKTable->Se
 inline void UpdateWindow() { RSDKTable->UpdateWindow(); }
 
 // Entities & Objects
-inline int32 GetDrawListRefSlot(uint8 drawGroup, uint16 entitySlot) { return RSDKTable->GetDrawListRefSlot(drawGroup, entitySlot); }
-inline void *GetDrawListRef(uint8 drawGroup, uint16 entitySlot) { return RSDKTable->GetDrawListRef(drawGroup, entitySlot); }
+inline int32 GetDrawListRefSlot(uint8 drawGroup, uint16 listPos) { return RSDKTable->GetDrawListRefSlot(drawGroup, listPos); }
+inline void *GetDrawListRef(uint8 drawGroup, uint16 listPos) { return RSDKTable->GetDrawListRef(drawGroup, listPos); }
 template <typename T> inline T *GetDrawListRef(uint8 drawGroup, uint16 entitySlot) { return (T *)RSDKTable->GetDrawListRef(drawGroup, entitySlot); }
 inline void AddDrawListRef(uint8 drawGroup, uint16 entitySlot) { RSDKTable->AddDrawListRef(drawGroup, entitySlot); }
 inline void SwapDrawListEntries(uint8 drawGroup, uint16 slot1, uint16 slot2, uint16 count)

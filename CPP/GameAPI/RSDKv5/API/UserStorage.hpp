@@ -23,8 +23,8 @@ namespace Storage
 {
 
 // load user file from game dir
-inline int32 LoadFile(const char *fileName, void *buffer, uint32 size) { return RSDKTable->LoadUserFile(fileName, buffer, size); }
-inline int32 SaveFile(const char *fileName, void *buffer, uint32 size) { return RSDKTable->SaveUserFile(fileName, buffer, size); }
+inline bool32 LoadFile(const char *fileName, void *buffer, uint32 size) { return RSDKTable->LoadUserFile(fileName, buffer, size); }
+inline bool32 SaveFile(const char *fileName, void *buffer, uint32 size) { return RSDKTable->SaveUserFile(fileName, buffer, size); }
 
 #if RETRO_REV02
 // load user file from user dir (e.g. cloud saves or etc)

@@ -101,17 +101,17 @@ enum GameLanguages {
 struct ModFunctionTable {
     // Registration & Core
 #if RETRO_REV0U
-    void (*RegisterGlobals)(const char* globalsPath, void** globals, uint32 size, void (*initCB)(void* globals));
-    void (*RegisterObject)(void** staticVars, void** modStaticVars, const char* name, uint32 entityClassSize, uint32 staticClassSize,
-        uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
-        void (*create)(void*), void (*stageLoad)(void), void (*editorDraw)(void), void (*editorLoad)(void),
-        void (*serialize)(void), void (*staticLoad)(void* staticVars), const char* inherited);
+    void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size, void (*initCB)(void *globals));
+    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
+                           uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
+                           void (*create)(void *), void (*stageLoad)(void), void (*editorDraw)(void), void (*editorLoad)(void),
+                           void (*serialize)(void), void (*staticLoad)(void *staticVars), const char *inherited);
 #else
-    void (*RegisterGlobals)(const char* globalsPath, void** globals, uint32 size);
-    void (*RegisterObject)(void** staticVars, void** modStaticVars, const char* name, uint32 entityClassSize, uint32 staticClassSize,
-        uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
-        void (*create)(void*), void (*stageLoad)(void), void (*editorDraw)(void), void (*editorLoad)(void),
-        void (*serialize)(void), const char* inherited);
+    void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size);
+    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
+                           uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
+                           void (*create)(void *), void (*stageLoad)(void), void (*editorDraw)(void), void (*editorLoad)(void),
+                           void (*serialize)(void), const char *inherited);
 #endif
     void *RegisterObject_STD;
     void (*RegisterObjectHook)(void **staticVars, const char *staticName);
@@ -180,7 +180,7 @@ struct APIFunctionTable {
 #if RETRO_REV0U
     int32 (*GetDefaultGamepadType)(void);
 #endif
-    bool32 (*IsOverlayEnabled)(uint32 inputID);
+    bool32 (*IsOverlayEnabled)(uint32 deviceID);
     bool32 (*CheckDLC)(int32 dlc);
 #if RETRO_USE_EGS
     bool32 (*SetupExtensionOverlay)(void);
@@ -291,14 +291,14 @@ struct RSDKFunctionTable {
 
     // Entities & Objects
     bool32 (*GetActiveEntities)(uint16 group, void **entity);
-    bool32 (*GetEntities)(uint16 classID, void **entity);
+    bool32 (*GetAllEntities)(uint16 classID, void **entity);
     void (*BreakForeachLoop)(void);
     void (*SetEditableVar)(uint8 type, const char *name, uint8 classID, int32 storeOffset);
     void *(*GetEntity)(uint16 slot);
     int32 (*GetEntitySlot)(void *entity);
     int32 (*GetEntityCount)(uint16 classID, bool32 isActive);
-    int32 (*GetDrawListRefSlot)(uint8 drawGroup, uint16 entitySlot);
-    void *(*GetDrawListRef)(uint8 drawGroup, uint16 entitySlot);
+    int32 (*GetDrawListRefSlot)(uint8 drawGroup, uint16 listPos);
+    void *(*GetDrawListRef)(uint8 drawGroup, uint16 listPos);
     void (*ResetEntity)(void *entity, uint16 classID, void *data);
     void (*ResetEntitySlot)(uint16 slot, uint16 classID, void *data);
     void *(*CreateEntity)(uint16 classID, void *data, int32 x, int32 y);
@@ -317,7 +317,7 @@ struct RSDKFunctionTable {
 #endif
     bool32 (*CheckValidScene)(void);
     int32 (*CheckSceneFolder)(const char *folderName);
-    int32 (*LoadScene)(void);
+    void (*LoadScene)(void);
     int32 (*FindObject)(const char *name);
 
     // Cameras
@@ -359,11 +359,11 @@ struct RSDKFunctionTable {
     void (*SetIdentityMatrix)(Matrix *matrix);
     void (*MatrixMultiply)(Matrix *dest, Matrix *matrixA, Matrix *matrixB);
     void (*MatrixTranslateXYZ)(Matrix *matrix, int32 x, int32 y, int32 z, bool32 setIdentity);
-    void (*MatrixScaleXYZ)(Matrix *matrix, int32 scaleX, int32 scaleY, int32 scaleZ);
+    void (*MatrixScaleXYZ)(Matrix *matrix, int32 x, int32 y, int32 z);
     void (*MatrixRotateX)(Matrix *matrix, int32 angle);
     void (*MatrixRotateY)(Matrix *matrix, int32 angle);
     void (*MatrixRotateZ)(Matrix *matrix, int32 angle);
-    void (*MatrixRotateXYZ)(Matrix *matrix, int32 angleX, int32 angleY, int32 angleZ);
+    void (*MatrixRotateXYZ)(Matrix *matrix, int32 x, int32 y, int32 z);
     void (*MatrixInverse)(Matrix *dest, Matrix *matrix);
     void (*MatrixCopy)(Matrix *matDest, Matrix *matSrc);
 
@@ -388,7 +388,7 @@ struct RSDKFunctionTable {
 #endif
 
     // Spritesheets
-    int16 (*LoadSpriteSheet)(const char *path, Scopes scope);
+    uint16 (*LoadSpriteSheet)(const char *filePath, Scopes scope);
 
     // Palettes & Colors
 #if RETRO_REV02
@@ -407,7 +407,7 @@ struct RSDKFunctionTable {
     void (*RotatePalette)(uint8 bankID, uint8 startIndex, uint8 endIndex, bool32 right);
     void (*SetLimitedFade)(uint8 destBankID, uint8 srcBankA, uint8 srcBankB, int16 blendAmount, int32 startIndex, int32 endIndex);
 #if RETRO_REV02
-    void (*BlendColors)(uint8 destBankID, uint32 *srcColorsA, uint32 *srcColorsB, int32 blendAmount, int32 startIndex, int32 count);
+    void (*BlendColors)(uint8 destBankID, color *srcColorsA, color *srcColorsB, int32 blendAmount, int32 startIndex, int32 count);
 #endif
 
     // Drawing
@@ -416,13 +416,13 @@ struct RSDKFunctionTable {
     void (*DrawCircle)(int32 x, int32 y, int32 radius, uint32 color, int32 alpha, int32 inkEffect, bool32 screenRelative);
     void (*DrawCircleOutline)(int32 x, int32 y, int32 innerRadius, int32 outerRadius, uint32 color, int32 alpha, int32 inkEffect,
                               bool32 screenRelative);
-    void (*DrawFace)(Vector2 *verticies, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, int32 inkEffect);
-    void (*DrawBlendedFace)(Vector2 *verticies, color *vertColors, int32 vertCount, int32 alpha, int32 inkEffect);
+    void (*DrawFace)(Vector2 *vertices, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, int32 inkEffect);
+    void (*DrawBlendedFace)(Vector2 *vertices, color *vertColors, int32 vertCount, int32 alpha, int32 inkEffect);
     void (*DrawSprite)(Animator *animator, Vector2 *position, bool32 screenRelative);
-    void (*DrawDeformedSprite)(uint16 sheet, int32 inkEffect, bool32 screenRelative);
-    void (*DrawText)(Animator *animator, Vector2 *position, String *info, int32 startFrame, int32 endFrame, int32 align, int32 spacing, void *unused,
-                     Vector2 *charOffsets, bool32 screenRelative);
-    void (*DrawTile)(uint16 *tileInfo, int32 countX, int32 countY, Vector2 *position, Vector2 *offset, bool32 screenRelative);
+    void (*DrawDeformedSprite)(uint16 sheetID, int32 inkEffect, bool32 screenRelative);
+    void (*DrawText)(Animator *animator, Vector2 *position, String *string, int32 startFrame, int32 endFrame, int32 align, int32 spacing,
+                     void *unused, Vector2 *charOffsets, bool32 screenRelative);
+    void (*DrawTile)(uint16 *tiles, int32 countX, int32 countY, Vector2 *position, Vector2 *offset, bool32 screenRelative);
     void (*CopyTile)(uint16 dest, uint16 src, uint16 count);
     void (*DrawAniTiles)(uint16 sheetID, uint16 tileIndex, uint16 srcX, uint16 srcY, uint16 width, uint16 height);
 #if RETRO_REV0U
@@ -444,17 +444,17 @@ struct RSDKFunctionTable {
     void (*Draw3DScene)(uint16 sceneIndex);
 
     // Sprite Animations & Frames
-    uint16 (*LoadSpriteAnimation)(const char *path, Scopes scope);
-    uint16 (*CreateSpriteAnimation)(const char *filename, uint32 frameCount, uint32 listCount, Scopes scope);
+    uint16 (*LoadSpriteAnimation)(const char *filePath, Scopes scope);
+    uint16 (*CreateSpriteAnimation)(const char *filePath, uint32 frameCount, uint32 listCount, Scopes scope);
     void (*SetSpriteAnimation)(uint16 aniFrames, uint16 listID, Animator *animator, bool32 forceApply, int16 frameID);
     void (*EditSpriteAnimation)(uint16 aniFrames, uint16 listID, const char *name, int32 frameOffset, uint16 frameCount, int16 speed, uint8 loopIndex,
                                 uint8 rotationStyle);
-    void (*SetSpriteString)(uint16 aniFrames, uint16 listID, String *info);
+    void (*SetSpriteString)(uint16 aniFrames, uint16 listID, String *string);
     uint16 (*FindSpriteAnimation)(uint16 aniFrames, const char *name);
     SpriteFrame *(*GetFrame)(uint16 aniFrames, uint16 listID, int32 frameID);
     Hitbox *(*GetHitbox)(Animator *animator, uint8 hitboxID);
     int16 (*GetFrameID)(Animator *animator);
-    int32 (*GetStringWidth)(uint16 aniFrames, uint16 listID, String *info, int32 startIndex, int32 length, int32 spacing);
+    int32 (*GetStringWidth)(uint16 aniFrames, uint16 listID, String *string, int32 startIndex, int32 length, int32 spacing);
     void (*ProcessAnimation)(Animator *animator);
 
     // Tile Layers
@@ -465,12 +465,12 @@ struct RSDKFunctionTable {
     void (*SetTile)(uint16 layer, int32 x, int32 y, uint16 tile);
     int32 (*CopyTileLayer)(uint16 dstLayerID, int32 dstStartX, int32 dstStartY, uint16 srcLayerID, int32 srcStartX, int32 srcStartY, int32 countX,
                            int32 countY);
-    void (*ProcessParallax)(TileLayer *TileLayer);
+    void (*ProcessParallax)(TileLayer *tileLayer);
     ScanlineInfo *(*GetScanlines)(void);
 
     // Object & Tile Collisions
     bool32 (*CheckObjectCollisionTouchBox)(void *thisEntity, Hitbox *thisHitbox, void *otherEntity, Hitbox *otherHitbox);
-    bool32 (*CheckObjectCollisionTouchCircle)(void *thisEntity, int32 thisOffset, void *otherEntity, int32 otherOffset);
+    bool32 (*CheckObjectCollisionTouchCircle)(void *thisEntity, int32 thisRadius, void *otherEntity, int32 otherRadius);
     uint8 (*CheckObjectCollisionBox)(void *thisEntity, Hitbox *thisHitbox, void *otherEntity, Hitbox *otherHitbox, bool32 setPos);
     bool32 (*CheckObjectCollisionPlatform)(void *thisEntity, Hitbox *thisHitbox, void *otherEntity, Hitbox *otherHitbox, bool32 setPos);
     bool32 (*ObjectTileCollision)(void *entity, uint16 collisionLayers, uint8 collisionMode, uint8 collisionPlane, int32 xOffset, int32 yOffset,
@@ -491,10 +491,10 @@ struct RSDKFunctionTable {
     void (*RoofCollision)(CollisionSensor *sensor);
     void (*RWallCollision)(CollisionSensor *sensor);
 #endif
-    int32 (*GetTileAngle)(uint16 tileID, uint8 cPlane, uint8 cMode);
-    void (*SetTileAngle)(uint16 tileID, uint8 cPlane, uint8 cMode, uint8 angle);
-    uint8 (*GetTileFlags)(uint16 tileID, uint8 cPlane);
-    void (*SetTileFlags)(uint16 tileID, uint8 cPlane, uint8 flag);
+    int32 (*GetTileAngle)(uint16 tile, uint8 cPlane, uint8 cMode);
+    void (*SetTileAngle)(uint16 tile, uint8 cPlane, uint8 cMode, uint8 angle);
+    uint8 (*GetTileFlags)(uint16 tile, uint8 cPlane);
+    void (*SetTileFlags)(uint16 tile, uint8 cPlane, uint8 flag);
 #if RETRO_REV0U
     void (*CopyCollisionMask)(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode);
     void (*GetCollisionInfo)(CollisionMask **masks, TileInfo **tileInfo);
@@ -517,15 +517,15 @@ struct RSDKFunctionTable {
     uint32 (*GetChannelPos)(uint32 channel);
 
     // Videos & "HD Images"
-    void (*LoadVideo)(const char *filename, double startDelay, bool32 (*skipCallback)(void));
-    bool32 (*LoadImage)(const char *filename, double displayLength, double speed, bool32 (*skipCallback)(void));
+    bool32 (*LoadVideo)(const char *filename, double startDelay, bool32 (*skipCallback)(void));
+    bool32 (*LoadImage)(const char *filename, double displayLength, double fadeSpeed, bool32 (*skipCallback)(void));
 
     // Input
 #if RETRO_REV02
-    int32 (*GetInputDeviceID)(uint8 inputSlot);
-    int32 (*GetFilteredInputDeviceID)(bool32 confirmOnly, bool32 unassignedOnly, uint32 maxInactiveTimer);
+    uint32 (*GetInputDeviceID)(uint8 inputSlot);
+    uint32 (*GetFilteredInputDeviceID)(bool32 confirmOnly, bool32 unassignedOnly, uint32 maxInactiveTimer);
     int32 (*GetInputDeviceType)(uint32 deviceID);
-    int32 (*IsInputDeviceAssigned)(uint32 deviceID);
+    bool32 (*IsInputDeviceAssigned)(uint32 deviceID);
     int32 (*GetInputDeviceUnknown)(uint32 deviceID);
     int32 (*InputDeviceUnknown1)(uint32 deviceID, int32 unknown1, int32 unknown2);
     int32 (*InputDeviceUnknown2)(uint32 deviceID, int32 unknown1, int32 unknown2);
@@ -541,8 +541,8 @@ struct RSDKFunctionTable {
 #endif
 
     // User File Management
-    int32 (*LoadUserFile)(const char *filename, void *buffer, uint32 size); // load user file from exe dir
-    int32 (*SaveUserFile)(const char *fileName, void *buffer, uint32 size); // save user file to exe dir
+    bool32 (*LoadUserFile)(const char *fileName, void *buffer, uint32 size); // load user file from exe dir
+    bool32 (*SaveUserFile)(const char *fileName, void *buffer, uint32 size); // save user file to exe dir
 
     // Printing (Rev02)
 #if RETRO_REV02
@@ -727,7 +727,6 @@ struct ScreenInfo {
     int32 clipBound_Y2;
     int32 waterDrawPos;
 };
-
 
 struct EngineInfo {
 #if RETRO_REV02

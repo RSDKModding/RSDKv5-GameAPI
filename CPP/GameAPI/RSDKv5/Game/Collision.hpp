@@ -40,8 +40,8 @@ struct CollisionSensor {
 struct CollisionMask {
     uint8 floorMasks[TILE_SIZE];
     uint8 lWallMasks[TILE_SIZE];
-    uint8 roofMasks[TILE_SIZE];
     uint8 rWallMasks[TILE_SIZE];
+    uint8 roofMasks[TILE_SIZE];
 };
 
 struct TileInfo {

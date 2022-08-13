@@ -50,13 +50,13 @@ enum InputDeviceAPIs {
 
 
 #if RETRO_REV02
-inline int32 GetInputDeviceID(uint8 controllerID) { return RSDKTable->GetInputDeviceID(controllerID); }
-inline int32 GetFilteredInputDeviceID(bool32 confirmOnly, bool32 unassignedOnly, uint32 maxInactiveTimer)
+inline uint32 GetInputDeviceID(uint8 controllerID) { return RSDKTable->GetInputDeviceID(controllerID); }
+inline uint32 GetFilteredInputDeviceID(bool32 confirmOnly, bool32 unassignedOnly, uint32 maxInactiveTimer)
 {
     return RSDKTable->GetFilteredInputDeviceID(confirmOnly, unassignedOnly, maxInactiveTimer);
 }
 inline int32 GetInputDeviceType(uint32 deviceID) { return RSDKTable->GetInputDeviceType(deviceID); }
-inline int32 IsInputDeviceAssigned(uint32 deviceID) { return RSDKTable->IsInputDeviceAssigned(deviceID); }
+inline bool32 IsInputDeviceAssigned(uint32 deviceID) { return RSDKTable->IsInputDeviceAssigned(deviceID); }
 inline int32 GetInputDeviceUnknown(uint32 deviceID) { return RSDKTable->GetInputDeviceUnknown(deviceID); }
 inline int32 InputDeviceUnknown1(uint32 deviceID, int32 unknown1, int32 unknown2)
 {

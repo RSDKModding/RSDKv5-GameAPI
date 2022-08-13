@@ -219,7 +219,7 @@ struct GameObject {
 
         T *entity = nullptr;
         if (type == FOR_ALL_ENTITIES) {
-            while (RSDKTable->GetEntities(group, (void **)&entity)) list.push_back(entity);
+            while (RSDKTable->GetAllEntities(group, (void **)&entity)) list.push_back(entity);
         }
         else if (type == FOR_ACTIVE_ENTITIES) {
             while (RSDKTable->GetActiveEntities(group, (void **)&entity)) list.push_back(entity);
@@ -234,7 +234,7 @@ struct GameObject {
 
         T *entity = nullptr;
         if (type == FOR_ALL_ENTITIES) {
-            while (RSDKTable->GetEntities(group, (void **)&entity)) list.push_back(entity);
+            while (RSDKTable->GetAllEntities(group, (void **)&entity)) list.push_back(entity);
         }
         else if (type == FOR_ACTIVE_ENTITIES) {
             while (RSDKTable->GetActiveEntities(group, (void **)&entity)) list.push_back(entity);
@@ -249,7 +249,7 @@ struct GameObject {
 
         Entity *entity = nullptr;
         if (type == FOR_ALL_ENTITIES) {
-            while (RSDKTable->GetEntities(GROUP_ALL, (void **)&entity)) list.push_back(entity);
+            while (RSDKTable->GetAllEntities(GROUP_ALL, (void **)&entity)) list.push_back(entity);
         }
         else if (type == FOR_ACTIVE_ENTITIES) {
             while (RSDKTable->GetActiveEntities(GROUP_ALL, (void **)&entity)) list.push_back(entity);
@@ -264,7 +264,7 @@ struct GameObject {
 
         Entity *entity = nullptr;
         if (type == FOR_ALL_ENTITIES) {
-            while (RSDKTable->GetEntities(group, (void **)&entity)) list.push_back(entity);
+            while (RSDKTable->GetAllEntities(group, (void **)&entity)) list.push_back(entity);
         }
         else if (type == FOR_ACTIVE_ENTITIES) {
             while (RSDKTable->GetActiveEntities(group, (void **)&entity)) list.push_back(entity);
