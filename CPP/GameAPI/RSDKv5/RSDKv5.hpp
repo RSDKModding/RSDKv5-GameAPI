@@ -11,6 +11,7 @@
 // main tree path:
 #include "API/Mod.hpp"
 #include "Math/Math.hpp"
+#include "Math/Matrix.hpp"
 #include "Game/Object.hpp"
 #include "Graphics/Sprite.hpp"
 #include "Essentials/String.hpp"

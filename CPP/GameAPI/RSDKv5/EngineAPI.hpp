@@ -716,10 +716,8 @@ struct ScreenInfo {
     // uint16 *frameBuffer;
     uint16 frameBuffer[1280 * 240];
     Vector2 position;
-    int32 width;
-    int32 height;
-    int32 centerX;
-    int32 centerY;
+    Vector2 size;
+    Vector2 center;
     int32 pitch;
     int32 clipBound_X1;
     int32 clipBound_Y1;

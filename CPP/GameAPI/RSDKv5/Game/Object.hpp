@@ -146,7 +146,7 @@ struct GameObject {
         inline void Destroy() { RSDKTable->ResetEntity(this, 0, nullptr); }
 
         inline void Reset(uint32 type, void *data) { RSDKTable->ResetEntity(this, type, data); }
-        inline void Reset(uint32 type, int32 data) { RSDKTable->ResetEntity(this, type, intToVoid(data)); }
+        inline void Reset(uint32 type, int32 data) { RSDKTable->ResetEntity(this, type, INT_TO_VOID(data)); }
 
         void Copy(Entity *dst, bool32 clearThis) { RSDKTable->CopyEntity(dst, this, clearThis); }
 
@@ -188,7 +188,7 @@ struct GameObject {
     };
 
     static inline Entity *Create(void *data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(0, data, x, y); }
-    static inline Entity *Create(int32 data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(0, intToVoid(data), x, y); }
+    static inline Entity *Create(int32 data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(0, INT_TO_VOID(data), x, y); }
 
     template <typename T> static inline T *Create(void *data, int32 x, int32 y)
     {
@@ -197,7 +197,7 @@ struct GameObject {
 
     template <typename T> static inline T *Create(int32 data, int32 x, int32 y)
     {
-        return (T *)RSDKTable->CreateEntity(T::sVars->classID, intToVoid(data), x, y);
+        return (T *)RSDKTable->CreateEntity(T::sVars->classID, INT_TO_VOID(data), x, y);
     }
 
     static inline Entity *Get(uint16 slot) { return (Entity *)RSDKTable->GetEntity(slot); }
@@ -209,7 +209,7 @@ struct GameObject {
     static inline void Copy(void *dst, void *src, bool32 clearSrc) { RSDKTable->CopyEntity(dst, src, clearSrc); }
 
     static inline void Reset(int32 slot, uint32 type, void *data) { RSDKTable->ResetEntitySlot(slot, type, data); }
-    static inline void Reset(int32 slot, uint32 type, int32 data) { RSDKTable->ResetEntitySlot(slot, type, intToVoid(data)); }
+    static inline void Reset(int32 slot, uint32 type, int32 data) { RSDKTable->ResetEntitySlot(slot, type, INT_TO_VOID(data)); }
 
     template <typename T> static inline std::list<T *> GetEntities(ForeachTypes type)
     {
@@ -389,7 +389,7 @@ template <typename E> static inline typename E::Static *RegisterStaticVars(typen
 #define RSDK_REGISTER_OBJECT(obj) obj::Static *obj::sVars = RSDK::RegisterObject<obj>(&obj::sVars, #obj);
 
 #if RETRO_REV02
-#define RSDK_REGISTER_STATIC_VARS(staticVars) staticVars::Static *staticVars::sVars = RSDK::RegisterStaticVars<obj>(&staticVars::sVars, #staticVars);
+#define RSDK_REGISTER_STATIC_VARS(stVars) stVars::Static *stVars::sVars = RSDK::RegisterStaticVars<stVars>(&stVars::sVars, #stVars);
 #endif
 
 #define RSDK_EDITABLE_VAR(object, type, var) sVars->EditableVar(type, #var, offsetof(object, var))
