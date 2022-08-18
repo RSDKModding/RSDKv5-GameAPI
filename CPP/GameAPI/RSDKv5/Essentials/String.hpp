@@ -67,9 +67,9 @@ public:
     inline void LoadStrings(const char *filepath) { RSDKTable->LoadStringList(this, filepath, 16); }
     inline bool32 Split(String *list, int32 startID, int32 count) { return RSDKTable->SplitStringList(list, this, startID, count); }
 
-    uint16 *chars;
-    uint16 length;
-    uint16 size;
+    uint16 *chars = nullptr;
+    uint16 length = 0;
+    uint16 size = 0;
 };
 
 } // namespace RSDK
