@@ -18,7 +18,7 @@ inline std::list<String> GetIDs()
 {
     std::list<String> list;
 
-    String string;
+    String string{};
     while (modTable->ForeachModID(&string)) {
         String copy;
         copy.chars  = string.chars;
@@ -40,7 +40,7 @@ inline std::list<String> Get()
 {
     std::list<String> list;
 
-    String string;
+    String string{};
     while (modTable->ForeachConfig(&string)) {
         String copy;
         copy.chars  = string.chars;
@@ -57,7 +57,7 @@ inline std::list<String> GetCategories()
 {
     std::list<String> list;
 
-    String string;
+    String string{};
     while (modTable->ForeachConfigCategory(&string)) {
         String copy;
         copy.chars  = string.chars;
