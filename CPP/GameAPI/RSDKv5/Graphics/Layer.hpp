@@ -107,11 +107,10 @@ struct SceneLayer {
     static inline TileLayer *GetTileLayer(const char* name) { return RSDKTable->GetTileLayer(RSDKTable->GetTileLayerID(name)); }
     static inline TileLayer *GetTileLayer(int32 id) { return RSDKTable->GetTileLayer(id); }
 
-    static inline int32 Copy(SceneLayer dstLayer, int32 dstStartX, int32 dstStartY, SceneLayer srcLayer, int32 srcStartX, int32 srcStartY,
-                                      int32 countX,
-                               int32 countY)
+    static inline void Copy(SceneLayer dstLayer, int32 dstStartX, int32 dstStartY, SceneLayer srcLayer, int32 srcStartX, int32 srcStartY,
+                            int32 countX, int32 countY)
     {
-        return RSDKTable->CopyTileLayer(dstLayer.id, dstStartX, dstStartY, srcLayer.id, srcStartX, srcStartY, countX, countY);
+        RSDKTable->CopyTileLayer(dstLayer.id, dstStartX, dstStartY, srcLayer.id, srcStartX, srcStartY, countX, countY);
     }
 };
 
