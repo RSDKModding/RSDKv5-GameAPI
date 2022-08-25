@@ -50,13 +50,15 @@ inline void Print(PrintModes severity, const char *message, ...)
     vsprintf_s(buffer, message, args);
     RSDKTable->PrintLog(severity, buffer);
 };
-inline void Print(PrintModes severity, String *text) { RSDKTable->PrintString(severity, text); }
-inline void Print(PrintModes severity, const char *message, uint32 integer) { RSDKTable->PrintUInt32(severity, message, integer); };
-inline void Print(PrintModes severity, const char *message, int32 integer) { RSDKTable->PrintInt32(severity, message, integer); }
-inline void Print(PrintModes severity, const char *message, float f) { RSDKTable->PrintFloat(severity, message, f); };
-inline void Print(PrintModes severity, const char *message, int32 x, int32 y) { RSDKTable->PrintVector2(severity, message, Vector2(x, y)); };
-inline void Print(PrintModes severity, const char *message, Vector2 *vec) { RSDKTable->PrintVector2(severity, message, *vec); };
-inline void Print(PrintModes severity, const char *message, Hitbox *hitbox) { RSDKTable->PrintHitbox(severity, message, *hitbox); }
+inline void PrintString(PrintModes severity, String *string) { RSDKTable->PrintString(severity, string); }
+inline void PrintUInt32(PrintModes severity, const char *message, uint32 integer) { RSDKTable->PrintUInt32(severity, message, integer); }
+inline void PrintInt32(PrintModes severity, const char *message, int32 integer) { RSDKTable->PrintInt32(severity, message, integer); }
+inline void PrintFloat(PrintModes severity, const char *message, float f) { RSDKTable->PrintFloat(severity, message, f); }
+inline void PrintVector2(PrintModes severity, const char *message, int32 x, int32 y) { RSDKTable->PrintVector2(severity, message, Vector2(x, y)); }
+inline void PrintVector2(PrintModes severity, const char *message, Vector2 *vec) { RSDKTable->PrintVector2(severity, message, *vec); }
+inline void PrintVector2(PrintModes severity, const char *message, Vector2 vec) { RSDKTable->PrintVector2(severity, message, vec); }
+inline void PrintHitbox(PrintModes severity, const char *message, Hitbox *hitbox) { RSDKTable->PrintHitbox(severity, message, *hitbox); }
+inline void PrintHitbox(PrintModes severity, const char *message, Hitbox hitbox) { RSDKTable->PrintHitbox(severity, message, hitbox); }
 
 inline void ClearViewableVariables() { RSDKTable->ClearViewableVariables(); }
 inline void AddViewableVariable(const char *name, void *value, ViewableVarTypes type, int32 min, int32 max)
