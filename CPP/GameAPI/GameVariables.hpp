@@ -17,13 +17,14 @@ enum GameModes {
 #define isMainGameMode() (globals->gameMode == MODE_MANIA || globals->gameMode == MODE_ENCORE)
 
 enum PlayerIDs {
-    ID_NONE     = 0x00,
-    ID_SONIC    = 0x01,
-    ID_TAILS    = 0x02,
-    ID_KNUCKLES = 0x04,
-    // Aren't properly implemeneted, but their ids are still here
-    ID_MIGHTY   = 0x08,
-    ID_RAY      = 0x10,
+    ID_NONE     = 0 << 0,
+    ID_SONIC    = 1 << 0,
+    ID_TAILS    = 1 << 1,
+    ID_KNUCKLES = 1 << 2,
+    // #if MANIA_USE_PLUS
+    ID_MIGHTY = 1 << 3,
+    ID_RAY    = 1 << 4,
+    // #endif
 
     ID_TAILS_ASSIST    = ID_TAILS << 8,
     ID_KNUCKLES_ASSIST = ID_KNUCKLES << 8, // custom-added, can be used to check if "& knux" is active
@@ -32,6 +33,11 @@ enum PlayerIDs {
 
 #define GET_CHARACTER_ID(playerNum)            (((globals->playerID >> (8 * ((playerNum)-1))) & 0xFF))
 #define CHECK_CHARACTER_ID(characterID, plrID) (((globals->playerID >> (8 * ((plrID)-1))) & 0xFF) == (characterID))
+
+// #if MANIA_USE_PLUS
+#define GET_STOCK_ID(stockNum)                (((globals->stock >> (8 * ((stockNum)-1))) & 0xFF))
+#define CHECK_STOCK_ID(characterID, stockNum) (((globals->stock >> (8 * ((stockNum)-1))) & 0xFF) == (characterID))
+// #endif
 
 enum ItemModes { ITEMS_FIXED, ITEMS_RANDOM, ITEMS_TELEPORT };
 
@@ -84,8 +90,8 @@ enum ReservedEntities {
 };
 
 enum GameCheats {
-    SECRET_RICKYMODE        = 1 << 0,
-    SECRET_SUPERDASH        = 1 << 1,
+    SECRET_RICKYMODE = 1 << 0,
+    SECRET_SUPERDASH = 1 << 1,
 };
 
 enum NotifyCallbackIDs {
@@ -249,7 +255,7 @@ struct ManiaGlobalVariables {
     int32 continues;
     int32 initCoolBonus;
     int32 coolBonus[4];
-// #if MANIA_USE_PLUS
+    // #if MANIA_USE_PLUS
     int32 replayWriteBuffer[0x40000];
     int32 replayReadBuffer[0x40000];
     int32 replayTempWBuffer[0x40000];
@@ -266,7 +272,7 @@ struct ManiaGlobalVariables {
     int32 superMusicEnabled;
     int32 lastHasPlus;
     int32 hasPlusInitial;
-// #endif
+    // #endif
 };
 
 // =========================

@@ -20,13 +20,13 @@ typedef enum {
 typedef enum { MEDIA_DEMO } CategoryIDS;
 
 typedef enum {
-    ID_NONE     = 0x00,
-    ID_SONIC    = 0x01,
-    ID_TAILS    = 0x02,
-    ID_KNUCKLES = 0x04,
+    ID_NONE     = 0 << 0,
+    ID_SONIC    = 1 << 0,
+    ID_TAILS    = 1 << 1,
+    ID_KNUCKLES = 1 << 2,
 #if MANIA_USE_PLUS
-    ID_MIGHTY = 0x08,
-    ID_RAY    = 0x10,
+    ID_MIGHTY = 1 << 3,
+    ID_RAY    = 1 << 4,
 #endif
     ID_TAILS_ASSIST    = ID_TAILS << 8,
     ID_KNUCKLES_ASSIST = ID_KNUCKLES << 8, // custom-added, can be used to check if "& knux" is active
@@ -35,6 +35,11 @@ typedef enum {
 
 #define GET_CHARACTER_ID(playerNum)            (((globals->playerID >> (8 * ((playerNum)-1))) & 0xFF))
 #define CHECK_CHARACTER_ID(characterID, plrID) (((globals->playerID >> (8 * ((plrID)-1))) & 0xFF) == (characterID))
+
+#if MANIA_USE_PLUS
+#define GET_STOCK_ID(stockNum)                (((globals->stock >> (8 * ((stockNum)-1))) & 0xFF))
+#define CHECK_STOCK_ID(characterID, stockNum) (((globals->stock >> (8 * ((stockNum)-1))) & 0xFF) == (characterID))
+#endif
 
 typedef enum { ITEMS_FIXED, ITEMS_RANDOM, ITEMS_TELEPORT } ItemModes;
 
