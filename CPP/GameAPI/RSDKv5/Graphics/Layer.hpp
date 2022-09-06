@@ -47,6 +47,8 @@ struct Tile {
         id |= (solid & 3) << 14;
     }
 
+    static inline void Copy(uint16 dst, uint16 src, uint16 count = 1) { RSDKTable->CopyTile(dst, src, count); }
+
     inline int32 GetAngle(uint8 cPlane, uint8 cMode) { return RSDKTable->GetTileAngle(id, cPlane, cMode); }
     inline void SetAngle(uint8 cPlane, uint8 cMode, uint8 angle) { return RSDKTable->SetTileAngle(id, cPlane, cMode, angle); }
     inline uint8 GetFlags(uint8 cPlane) { return RSDKTable->GetTileFlags(id, cPlane); }

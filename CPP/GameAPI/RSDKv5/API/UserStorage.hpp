@@ -53,6 +53,27 @@ inline bool32 GetNoSave() { return APITable->GetNoSave(); }
 struct UserDB {
     UserDB() {}
 
+    enum VarTypes {
+        Unknown,
+        Bool,
+        UInt8,
+        UInt16,
+        UInt32,
+        UInt64, // unimplemented in RSDKv5
+        Int8,
+        Int16,
+        Int32,
+        Int64, // unimplemented in RSDKv5
+        Float,
+        Double,  // unimplemented in RSDKv5
+        Vector2, // unimplemented in RSDKv5
+        Vector3, // unimplemented in RSDKv5
+        Vector4, // unimplemented in RSDKv5
+        Color,
+        String,
+        HashMD5, // unimplemented in RSDKv5
+    };
+
     uint16 id;
 
     // Management
@@ -75,8 +96,9 @@ struct UserDB {
 
     // Sorting
     inline void SetupSorting() { APITable->SetupUserDBRowSorting(id); }
+    inline void Sort(int32 type, const char* name, bool32 sortAscending) { APITable->SortDBRows(id, type, name, sortAscending); }
     inline bool32 RowsChanged() { return APITable->GetUserDBRowsChanged(id); }
-    inline void AddSortFilter(int32 type, const char *name, void *value) { APITable->AddRowSortFilter(id, type, name, value); }
+    inline void AddSortFilter(VarTypes type, const char *name, void *value) { APITable->AddRowSortFilter(id, type, name, value); }
     inline int32 SortedRowCount() { return APITable->GetSortedUserDBRowCount(id); }
     inline int32 GetSortedRowID(uint16 row) { return APITable->GetSortedUserDBRowID(id, row); }
 
@@ -92,8 +114,8 @@ struct UserDB {
     }
 
     // Values
-    inline void SetValue(int32 row, int32 type, const char *name, void *value) { APITable->SetUserDBValue(id, row, type, name, value); }
-    inline void GetValue(int32 row, int32 type, const char *name, void *value) { APITable->GetUserDBValue(id, row, type, name, value); }
+    inline void SetValue(int32 row, VarTypes type, const char *name, void *value) { APITable->SetUserDBValue(id, row, type, name, value); }
+    inline void GetValue(int32 row, VarTypes type, const char *name, void *value) { APITable->GetUserDBValue(id, row, type, name, value); }
 };
 
 #endif
