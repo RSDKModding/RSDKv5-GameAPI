@@ -5,7 +5,7 @@
 // -------------------------
 
 RSDKFunctionTable RSDK;
-#if MANIA_USE_PLUS
+#if RETRO_REV02
 APIFunctionTable API;
 #endif
 #if RETRO_USE_MOD_LOADER
@@ -19,20 +19,20 @@ const char *modID = ":Unknown Mod ID:";
 RSDKSceneInfo *SceneInfo = NULL;
 
 RSDKGameInfo *GameInfo = NULL;
-#if MANIA_USE_PLUS
+#if RETRO_REV02
 RSDKSKUInfo *SKU = NULL;
 #endif
 
 RSDKControllerState *ControllerInfo = NULL;
 RSDKAnalogState *AnalogStickInfoL   = NULL; // should be called "AnalogStickInfo" for Pre-Plus but its easier to be consistent this way
-#if MANIA_USE_PLUS
+#if RETRO_REV02
 RSDKAnalogState *AnalogStickInfoR = NULL;
 RSDKTriggerState *TriggerInfoL    = NULL;
 RSDKTriggerState *TriggerInfoR    = NULL;
 #endif
 RSDKTouchInfo *TouchInfo = NULL;
 
-#if MANIA_USE_PLUS
+#if RETRO_REV02
 RSDKUnknownInfo *UnknownInfo = NULL;
 #endif
 
@@ -42,7 +42,7 @@ RSDKScreenInfo *ScreenInfo = NULL;
 // GAME VARIABLES
 // -------------------------
 
-#ifndef GAME_NO_GLOBALS
+#if (GAME_IS_MANIA || GAME_IS_S3) && !defined(GAME_NO_GLOBALS)
 GlobalVariables *globals;
 #endif
 
@@ -50,7 +50,7 @@ GlobalVariables *globals;
 // LINK GAME/MOD LOGIC
 // -------------------------
 
-#if MANIA_USE_PLUS
+#if RETRO_REV02 
 void LinkGameLogicDLL(EngineInfo *info)
 {
     memset(&API, 0, sizeof(APIFunctionTable));

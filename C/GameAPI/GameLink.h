@@ -1880,18 +1880,18 @@ extern const char *modID;
 
 extern RSDKSceneInfo *SceneInfo;
 extern RSDKGameInfo *GameInfo;
-#if MANIA_USE_PLUS
+#if RETRO_REV02
 extern RSDKSKUInfo *SKU;
 #endif
 extern RSDKControllerState *ControllerInfo;
 extern RSDKAnalogState *AnalogStickInfoL;
-#if MANIA_USE_PLUS
+#if RETRO_REV02
 extern RSDKAnalogState *AnalogStickInfoR;
 extern RSDKTriggerState *TriggerInfoL;
 extern RSDKTriggerState *TriggerInfoR;
 #endif
 extern RSDKTouchInfo *TouchInfo;
-#if MANIA_USE_PLUS
+#if RETRO_REV02
 extern RSDKUnknownInfo *UnknownInfo;
 #endif
 extern RSDKScreenInfo *ScreenInfo;

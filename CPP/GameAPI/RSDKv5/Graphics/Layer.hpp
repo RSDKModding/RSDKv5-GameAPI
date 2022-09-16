@@ -19,6 +19,7 @@ struct ScrollInfo {
 struct Tile {
     uint16 id;
 
+    Tile() { id = 0xFFFF; }
     Tile(uint16 id) { this->id = id; }
 
     inline uint16 Index() { return id & 0x3FF; }
