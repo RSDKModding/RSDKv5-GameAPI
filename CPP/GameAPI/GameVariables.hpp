@@ -652,10 +652,14 @@ struct S3GlobalVariables {
 // GAME HELPERS
 // =========================
 
+#if GAME_IS_MANIA || GAME_IS_S3
+
 #if MANIA_USE_PLUS || GAME_IS_S3
 #define isMainGameMode() (globals->gameMode == MODE_MANIA || globals->gameMode == MODE_ENCORE)
 #else
 #define isMainGameMode() (globals->gameMode == MODE_NOSAVE || globals->gameMode == MODE_MANIA)
+#endif
+
 #endif
 
 #endif //! GAME_VARIABLES_H
