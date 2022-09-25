@@ -52,6 +52,8 @@ struct Animator {
 
 #if RETRO_REV0U
     inline void DrawAniTiles(uint16 tileID) { RSDKTable->DrawDynamicAniTiles(this, tileID); }
+#elif RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
+    inline void DrawAniTiles(uint16 tileID) { modTable->DrawDynamicAniTiles(this, tileID); }
 #endif
 };
 } // namespace RSDK

@@ -148,8 +148,8 @@ struct ModFunctionTable {
     int32 (*GetConfigInteger)(const char *key, int32 fallback);
     float (*GetConfigFloat)(const char *key, float fallback);
     void (*GetConfigString)(const char *key, String *result, const char *fallback);
-    bool32 (*ForeachConfig)(String *string);
-    bool32 (*ForeachConfigCategory)(String *string);
+    bool32 (*ForeachConfig)(String *config);
+    bool32 (*ForeachConfigCategory)(String *category);
 
     // Achievements
     void (*RegisterAchievement)(const char *identifier, const char *name, const char *desc);
@@ -167,6 +167,55 @@ struct ModFunctionTable {
     bool32 (*HandleRunState_HighPriority)(void *state);
     // runs all low priority state hooks hooked to the address of 'state'
     void (*HandleRunState_LowPriority)(void *state, bool32 skipState);
+
+#if RETRO_MOD_LOADER_VER >= 2
+    // Mod Settings (Part 2)
+    bool32 (*ForeachSetting)(const char *id, String *setting);
+    bool32 (*ForeachSettingCategory)(const char *id, String *category);
+
+    // Files
+    bool32 (*ExcludeFile)(const char *id, const char *path);
+    bool32 (*ExcludeAllFiles)(const char *id);
+    bool32 (*ReloadFile)(const char *id, const char *path);
+    bool32 (*ReloadAllFiles)(const char *id);
+
+    // Graphics
+    void *(*GetSpriteAnimation)(uint16 id);
+    void *(*GetSpriteSurface)(uint16 id);
+    uint16 *(*GetPaletteBank)(uint8 id);
+    uint8 *(*GetActivePaletteBuffer)(void);
+    void (*GetRGB32To16Buffer)(uint16 **rgb32To16_R, uint16 **rgb32To16_G, uint16 **rgb32To16_B);
+    uint16 *(*GetBlendLookupTable)(void);
+    uint16 *(*GetSubtractLookupTable)(void);
+    uint16 *(*GetTintLookupTable)(void);
+    color (*GetMaskColor)(void);
+    void *(*GetScanEdgeBuffer)(void);
+    void *(*GetCamera)(uint8 id);
+    void *(*GetShader)(uint8 id);
+    void *(*GetModel)(uint16 id);
+    void *(*GetScene3D)(uint16 id);
+    void (*DrawDynamicAniTiles)(Animator *animator, uint16 tileIndex);
+
+    // Audio
+    void *(*GetSfx)(uint16 id);
+    void *(*GetChannel)(uint8 id);
+
+    // Objects/Entities
+    bool32 (*GetGroupEntities)(uint16 group, void **entity);
+
+    // Collision
+    void (*SetPathGripSensors)(CollisionSensor *sensors); // expects 5 sensors
+    void (*FindFloorPosition)(CollisionSensor *sensor);
+    void (*FindLWallPosition)(CollisionSensor *sensor);
+    void (*FindRoofPosition)(CollisionSensor *sensor);
+    void (*FindRWallPosition)(CollisionSensor *sensor);
+    void (*FloorCollision)(CollisionSensor *sensor);
+    void (*LWallCollision)(CollisionSensor *sensor);
+    void (*RoofCollision)(CollisionSensor *sensor);
+    void (*RWallCollision)(CollisionSensor *sensor);
+    void (*CopyCollisionMask)(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode);
+    void (*GetCollisionInfo)(CollisionMask **masks, TileInfo **tileInfo);
+#endif
 };
 #endif
 

@@ -48,6 +48,9 @@ enum VarTypes {
 enum ForeachTypes {
     FOR_ALL_ENTITIES,
     FOR_ACTIVE_ENTITIES,
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
+    FOR_GROUP_ENTITIES,
+#endif
 };
 
 enum ForeachGroups {
@@ -185,6 +188,10 @@ struct GameObject {
         {
             return RSDKTable->CheckObjectCollisionPlatform(this, thisHitbox, other, otherHitbox, setPos);
         }
+
+#if RETRO_USE_MOD_LOADER
+        inline void Super(int32 callback, void *data = nullptr) { modTable->Super(this->classID, callback, data); }
+#endif
     };
 
     static inline Entity *Create(void *data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(0, data, x, y); }
@@ -239,6 +246,11 @@ struct GameObject {
         else if (type == FOR_ACTIVE_ENTITIES) {
             while (RSDKTable->GetActiveEntities(group, (void **)&entity)) list.push_back(entity);
         }
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
+        else if (type == FOR_GROUP_ENTITIES) {
+            while (modTable->GetGroupEntities(group, (void **)&entity)) list.push_back(entity);
+        }
+#endif
 
         return list;
     }
@@ -254,6 +266,11 @@ struct GameObject {
         else if (type == FOR_ACTIVE_ENTITIES) {
             while (RSDKTable->GetActiveEntities(GROUP_ALL, (void **)&entity)) list.push_back(entity);
         }
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
+        else if (type == FOR_GROUP_ENTITIES) {
+            while (modTable->GetGroupEntities(GROUP_ALL, (void **)&entity)) list.push_back(entity);
+        }
+#endif
 
         return list;
     }

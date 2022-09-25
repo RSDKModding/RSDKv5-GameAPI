@@ -35,7 +35,9 @@
 #define RETRO_USE_MOD_LOADER (1)
 #endif
 
-#define RETRO_MOD_LOADER_VER (1)
+#ifndef RETRO_MOD_LOADER_VER
+#define RETRO_MOD_LOADER_VER (2)
+#endif
 
 // -------------------------
 // GAME TYPE
