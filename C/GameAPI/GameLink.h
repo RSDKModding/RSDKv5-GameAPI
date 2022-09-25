@@ -1873,8 +1873,8 @@ typedef struct {
 #define INIT_ENTITY(entity)                                                                                                                          \
     (entity)->active        = ACTIVE_BOUNDS;                                                                                                         \
     (entity)->visible       = false;                                                                                                                 \
-    (entity)->updateRange.x = 0x800000;                                                                                                              \
-    (entity)->updateRange.y = 0x800000;
+    (entity)->updateRange.x = TO_FIXED(128);                                                                                                         \
+    (entity)->updateRange.y = TO_FIXED(128);
 
 #define foreach_active(type, entityOut)                                                                                                              \
     Entity##type *entityOut = NULL;                                                                                                                  \
@@ -1883,16 +1883,22 @@ typedef struct {
     Entity##type *entityOut = NULL;                                                                                                                  \
     while (RSDK.GetAllEntities(type->classID, (void **)&entityOut))
 
-#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
+#define foreach_active_type(type, entityOut)                                                                                                         \
+    Entity *entityOut = NULL;                                                                                                                        \
+    while (RSDK.GetActiveEntities(type, (void **)&entityOut))
+
+#define foreach_all_type(type, entityOut)                                                                                                            \
+    Entity *entityOut = NULL;                                                                                                                        \
+    while (RSDK.GetAllEntities(type, (void **)&entityOut))
+
+#if RETRO_USE_MOD_LOADER
+
+#if RETRO_MOD_LOADER_VER >= 2
 #define foreach_active_group(group, entityOut)                                                                                                       \
     Entity *entityOut = NULL;                                                                                                                        \
     while (Mod.GetGroupEntities(group, (void **)&entityOut))
-#define foreach_all_group(group, entityOut)                                                                                                          \
-    Entity *entityOut = NULL;                                                                                                                        \
-    while (RSDK.GetAllEntities(group, (void **)&entityOut))
 #endif
 
-#if RETRO_USE_MOD_LOADER
 #define foreach_config(text)                                                                                                                         \
     String *text = NULL;                                                                                                                             \
     while (Mod.ForeachConfig(&text))
