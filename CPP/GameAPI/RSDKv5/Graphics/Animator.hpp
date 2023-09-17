@@ -17,22 +17,30 @@ struct Animator {
     uint8 loopIndex;
     uint8 rotationStyle;
 
-    void inline SetAnimation(SpriteAnimation &spriteAni, uint16 listID, bool32 forceApply, uint16 frameID)
+#if RETRO_MOD_LOADER_VER >= 2
+    void inline SetAnimation(SpriteAnimation &spriteAni, uint16 listID, bool32 forceApply, int32 frameID)
+#else
+    void inline SetAnimation(SpriteAnimation &spriteAni, uint16 listID, bool32 forceApply, int16 frameID)
+#endif
     {
         RSDKTable->SetSpriteAnimation(spriteAni.aniFrames, listID, this, forceApply, frameID);
     }
 
-    void inline SetAnimation(SpriteAnimation *spriteAni, uint16 listID, bool32 forceApply, uint16 frameID)
+#if RETRO_MOD_LOADER_VER >= 2
+    void inline SetAnimation(SpriteAnimation *spriteAni, uint16 listID, bool32 forceApply, int32 frameID)
+#else
+    void inline SetAnimation(SpriteAnimation *spriteAni, uint16 listID, bool32 forceApply, int16 frameID)
+#endif
     {
         RSDKTable->SetSpriteAnimation(spriteAni ? spriteAni->aniFrames : -1, listID, this, forceApply, frameID);
     }
 
-    void inline SetAnimation(Graphics::Mesh &mesh, int16 speed, uint8 loopIndex, bool32 forceApply, uint16 frameID)
+    void inline SetAnimation(Graphics::Mesh &mesh, int16 speed, uint8 loopIndex, bool32 forceApply, int16 frameID)
     {
         RSDKTable->SetModelAnimation(mesh.id, this, speed, loopIndex, forceApply, frameID);
     }
 
-    void inline SetAnimation(Graphics::Mesh *mesh, int16 speed, uint8 loopIndex, bool32 forceApply, uint16 frameIDD)
+    void inline SetAnimation(Graphics::Mesh *mesh, int16 speed, uint8 loopIndex, bool32 forceApply, int16 frameID)
     {
         RSDKTable->SetModelAnimation(mesh ? mesh->id : -1, this, speed, loopIndex, forceApply, frameID);
     }
