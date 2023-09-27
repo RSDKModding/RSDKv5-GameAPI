@@ -106,7 +106,9 @@
 // -------------------------
 
 #include "RSDKv5/RSDKv5.hpp"
+#ifndef GAME_NO_VARIABLES
 #include "GameVariables.hpp"
+#endif
 #include "GameObjects.hpp"
 
 #endif //! GAME_H

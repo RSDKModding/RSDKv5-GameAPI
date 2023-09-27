@@ -59,9 +59,9 @@ struct Scene3D {
     inline void SetDiffuseIntensity(int32 x, int32 y, int32 z) { RSDKTable->SetDiffuseIntensity(id, x, y, z); }
     inline void SetSpecularIntensity(int32 x, int32 y, int32 z) { RSDKTable->SetSpecularIntensity(id, x, y, z); }
 
-    inline void AddModel(Mesh &modelFrames, DrawTypes drawMode, Matrix *matWorld, Matrix *matNormal, color color)
+    inline void AddModel(Mesh &modelFrames, DrawTypes drawMode, Matrix *matWorld, Matrix *matView, color color)
     {
-        RSDKTable->AddModelTo3DScene(modelFrames.id, id, drawMode, matWorld, matNormal, color);
+        RSDKTable->AddModelTo3DScene(modelFrames.id, id, drawMode, matWorld, matView, color);
     }
     inline void AddMesh(Mesh &modelFrames, Animator *animator, DrawTypes drawMode, Matrix *matWorld, Matrix *matNormal, color color)
     {

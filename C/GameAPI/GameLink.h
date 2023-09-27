@@ -38,17 +38,25 @@ typedef uint32 color;
 // CONSTANTS
 // -------------------------
 
-#define SCREEN_XMAX    (1280)
-#define SCREEN_YSIZE   (240)
+#ifndef SCREEN_XMAX
+#define SCREEN_XMAX (1280)
+#endif
+
+#ifndef SCREEN_YSIZE
+#define SCREEN_YSIZE (240)
+#endif
+
 #define SCREEN_YCENTER (SCREEN_YSIZE / 2)
 
 #define LAYER_COUNT     (8)
 #define DRAWGROUP_COUNT (16)
 
+#ifndef SCREEN_COUNT
 #if RETRO_REV02
 #define SCREEN_COUNT (4)
 #else
 #define SCREEN_COUNT (2)
+#endif
 #endif
 
 #define PLAYER_COUNT (4)
@@ -121,7 +129,7 @@ typedef struct {
     uint16 classID;
     bool32 inRange;
     bool32 isPermanent;
-    bool32 tileCollisions;
+    int32 tileCollisions;
     bool32 interaction;
     bool32 onGround;
     uint8 active;
@@ -237,7 +245,13 @@ typedef struct {
     uint8 onScreen;
 #endif
 
-#define ENTITY_SIZE (sizeof(Entity) + (0x100 * sizeof(void *)))
+typedef struct {
+    RSDK_ENTITY
+    void *data[0x100];
+#if RETRO_REV0U
+    void *unknown;
+#endif
+} EntityBase;
 
 #if RETRO_REV02
 #define Unknown_pausePress  UnknownInfo->pausePress
@@ -271,8 +285,8 @@ typedef struct {
 #endif
 
 typedef struct {
-    char engineInfo[0x40];
-    char gameSubname[0x100];
+    char gameTitle[0x40];
+    char gameSubtitle[0x100];
     char version[0x10];
 #if !RETRO_REV02
     uint8 platform;
@@ -329,13 +343,13 @@ typedef struct {
     InputState keySelect;
 
     // Rev01 hasn't split these into different structs yet
-#if !RETRO_REV02
-    InputState bumperL;
-    InputState bumperR;
+#if RETRO_REV01
+    InputState keyBumperL;
+    InputState keyBumperR;
     InputState keyTriggerL;
     InputState keyTriggerR;
-    InputState stickL;
-    InputState stickR;
+    InputState keyStickL;
+    InputState keyStickR;
 #endif
 } RSDKControllerState;
 
@@ -557,6 +571,25 @@ typedef struct {
 } TileInfo;
 #endif
 
+#if RETRO_REV02
+typedef enum {
+    LEADERBOARD_LOAD_INIT,
+    LEADERBOARD_LOAD_PREV,
+    LEADERBOARD_LOAD_NEXT,
+} LeaderboardLoadTypes;
+
+typedef struct {
+    int32 start;
+    int32 length;
+} LeaderboardAvail;
+
+typedef struct {
+    uint8 statID;
+    const char *name;
+    void *data[64];
+} StatInfo;
+#endif
+
 typedef struct {
     uint8 idPS4;     // achievement ID (PS4)
     int32 idUnknown; // achievement ID (unknown platform)
@@ -572,11 +605,6 @@ typedef struct {
 } LeaderboardID;
 
 typedef struct {
-    int32 start;
-    int32 length;
-} LeaderboardAvail;
-
-typedef struct {
     String username;
 #if RETRO_REV02
     String userID;
@@ -586,12 +614,6 @@ typedef struct {
     bool32 isUser;
     int32 status;
 } LeaderboardEntry;
-
-typedef struct {
-    uint8 statID;
-    const char *name;
-    void *data[64];
-} StatInfo;
 
 // -------------------------
 // ENUMS
@@ -781,10 +803,10 @@ typedef enum {
 } CSides;
 
 typedef enum {
-    TILECOLLISION_NONE,
-    TILECOLLISION_DOWN,
+    TILECOLLISION_NONE, // no tile collisions
+    TILECOLLISION_DOWN, // downwards tile collisions
 #if RETRO_REV0U
-    TILECOLLISION_UP
+    TILECOLLISION_UP, // upwards tile collisions
 #endif
 } TileCollisionModes;
 
@@ -1160,6 +1182,7 @@ typedef enum {
 // -------------------------
 // FUNCTION TABLES
 // -------------------------
+
 #if RETRO_USE_MOD_LOADER
 // Mod Table
 typedef struct {
@@ -1359,8 +1382,7 @@ typedef struct {
 
     // User File Management
     void (*LoadUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status)); // load user file from game dir
-    void (*SaveUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status),
-                         bool32 compressed);                                  // save user file to game dir
+    void (*SaveUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status), bool32 compressed); // save user file to game dir
     void (*DeleteUserFile)(const char *name, void (*callback)(int32 status)); // delete user file from game dir
 
     // User DBs
@@ -1503,7 +1525,7 @@ typedef struct {
 #endif
 
     // Spritesheets
-    uint16 (*LoadSpriteSheet)(const char *filePath, int32 scope);
+    uint16 (*LoadSpriteSheet)(const char *filePath, uint8 scope);
 
     // Palettes & Colors
 #if RETRO_REV02
@@ -1535,8 +1557,8 @@ typedef struct {
     void (*DrawBlendedFace)(Vector2 *vertices, color *vertColors, int32 vertCount, int32 alpha, int32 inkEffect);
     void (*DrawSprite)(Animator *animator, Vector2 *position, bool32 screenRelative);
     void (*DrawDeformedSprite)(uint16 sheetID, int32 inkEffect, bool32 screenRelative);
-    void (*DrawText)(Animator *animator, Vector2 *position, String *string, int32 startFrame, int32 endFrame, int32 align, int32 spacing,
-                     void *unused, Vector2 *charOffsets, bool32 screenRelative);
+    void (*DrawText)(Animator *animator, Vector2 *position, String *string, int32 endFrame, int32 textLength, int32 align, int32 spacing, void *unused,
+                     Vector2 *charOffsets, bool32 screenRelative);
     void (*DrawTile)(uint16 *tiles, int32 countX, int32 countY, Vector2 *position, Vector2 *offset, bool32 screenRelative);
     void (*CopyTile)(uint16 dest, uint16 src, uint16 count);
     void (*DrawAniTiles)(uint16 sheetID, uint16 tileIndex, uint16 srcX, uint16 srcY, uint16 width, uint16 height);
@@ -1552,15 +1574,15 @@ typedef struct {
     void (*SetDiffuseColor)(uint16 sceneIndex, uint8 x, uint8 y, uint8 z);
     void (*SetDiffuseIntensity)(uint16 sceneIndex, uint8 x, uint8 y, uint8 z);
     void (*SetSpecularIntensity)(uint16 sceneIndex, uint8 x, uint8 y, uint8 z);
-    void (*AddModelTo3DScene)(uint16 modelFrames, uint16 sceneIndex, uint8 drawMode, Matrix *matWorld, Matrix *matNormal, color color);
+    void (*AddModelTo3DScene)(uint16 modelFrames, uint16 sceneIndex, uint8 drawMode, Matrix *matWorld, Matrix *matView, color color);
     void (*SetModelAnimation)(uint16 modelFrames, Animator *animator, int16 speed, uint8 loopIndex, bool32 forceApply, int16 frameID);
-    void (*AddMeshFrameTo3DScene)(uint16 modelFrames, uint16 sceneIndex, Animator *animator, uint8 drawMode, Matrix *matWorld, Matrix *matNormal,
+    void (*AddMeshFrameTo3DScene)(uint16 modelFrames, uint16 sceneIndex, Animator *animator, uint8 drawMode, Matrix *matWorld, Matrix *matView,
                                   color color);
     void (*Draw3DScene)(uint16 sceneIndex);
 
     // Sprite Animations & Frames
-    uint16 (*LoadSpriteAnimation)(const char *filePath, int32 scope);
-    uint16 (*CreateSpriteAnimation)(const char *filePath, uint32 frameCount, uint32 listCount, int32 scope);
+    uint16 (*LoadSpriteAnimation)(const char *filePath, uint8 scope);
+    uint16 (*CreateSpriteAnimation)(const char *filePath, uint32 frameCount, uint32 listCount, uint8 scope);
 #if RETRO_MOD_LOADER_VER >= 2
     void (*SetSpriteAnimation)(uint16 aniFrames, uint16 listID, Animator *animator, bool32 forceApply, int32 frameID);
 #else
@@ -1583,7 +1605,7 @@ typedef struct {
     uint16 (*GetTile)(uint16 layer, int32 x, int32 y);
     void (*SetTile)(uint16 layer, int32 x, int32 y, uint16 tile);
     void (*CopyTileLayer)(uint16 dstLayerID, int32 dstStartX, int32 dstStartY, uint16 srcLayerID, int32 srcStartX, int32 srcStartY, int32 countX,
-                          int32 countY);
+                           int32 countY);
     void (*ProcessParallax)(TileLayer *tileLayer);
     ScanlineInfo *(*GetScanlines)(void);
 
@@ -1727,7 +1749,6 @@ typedef struct {
         RSDK.SetEditableVar(type, buffer, (uint8)object->classID, offsetof(Entity##object, var) + sizeof(arrType) * i);                              \
     }
 
-#if RETRO_INCLUDE_EDITOR
 // Some extra precaution to prevent crashes in editor
 #define RSDK_ACTIVE_VAR(object, var)                                                                                                                 \
     if (object) {                                                                                                                                    \
@@ -1738,6 +1759,7 @@ typedef struct {
     }
 #define RSDK_ENUM_VAR(name, var) RSDK.AddVarEnumValue(name)
 
+#if GAME_INCLUDE_EDITOR
 #define RSDK_DRAWING_OVERLAY(isDrawingOverlay) SceneInfo->debugMode = isDrawingOverlay
 
 #if RETRO_REV0U
@@ -1788,7 +1810,7 @@ typedef struct {
                        create, stageLoad, editorDraw, editorLoad, serialize, NULL, inherit)
 
 #define MOD_REGISTER_OBJ_OVERLOAD(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorDraw, editorLoad, serialize)              \
-    MOD_REGISTER_OBJECT(object, #object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorDraw, editorLoad, serialize)
+    MOD_REGISTER_OBJECT(object, #object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorDraw, editorLoad, serialize, NULL)
 
 #define MOD_REGISTER_OBJ_OVERLOAD_NOCLASS(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorDraw, editorLoad, serialize)      \
     Mod.RegisterObject(NULL, NULL, #object, sizeof(Entity##object), 0, 0, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorDraw,     \
@@ -1932,7 +1954,7 @@ typedef struct {
 #define destroyEntity(entity)   RSDK.ResetEntity(entity, TYPE_BLANK, NULL)
 #define destroyEntitySlot(slot) RSDK.ResetEntitySlot(slot, TYPE_BLANK, NULL)
 
-#if RETRO_INCLUDE_EDITOR
+#if GAME_INCLUDE_EDITOR
 #define showGizmos() (SceneInfo->listPos == SceneInfo->entitySlot || SceneInfo->effectGizmo)
 #endif
 

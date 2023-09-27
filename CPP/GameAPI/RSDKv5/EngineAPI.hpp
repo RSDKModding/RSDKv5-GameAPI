@@ -438,7 +438,7 @@ struct RSDKFunctionTable {
 #endif
 
     // Spritesheets
-    uint16 (*LoadSpriteSheet)(const char *filePath, int32 scope);
+    uint16 (*LoadSpriteSheet)(const char *filePath, uint8 scope);
 
     // Palettes & Colors
 #if RETRO_REV02
@@ -470,8 +470,8 @@ struct RSDKFunctionTable {
     void (*DrawBlendedFace)(Vector2 *vertices, color *vertColors, int32 vertCount, int32 alpha, int32 inkEffect);
     void (*DrawSprite)(Animator *animator, Vector2 *position, bool32 screenRelative);
     void (*DrawDeformedSprite)(uint16 sheetID, int32 inkEffect, bool32 screenRelative);
-    void (*DrawText)(Animator *animator, Vector2 *position, String *string, int32 startFrame, int32 endFrame, int32 align, int32 spacing,
-                     void *unused, Vector2 *charOffsets, bool32 screenRelative);
+    void (*DrawText)(Animator *animator, Vector2 *position, String *string, int32 endFrame, int32 textLength, int32 align, int32 spacing, void *unused,
+                     Vector2 *charOffsets, bool32 screenRelative);
     void (*DrawTile)(uint16 *tiles, int32 countX, int32 countY, Vector2 *position, Vector2 *offset, bool32 screenRelative);
     void (*CopyTile)(uint16 dest, uint16 src, uint16 count);
     void (*DrawAniTiles)(uint16 sheetID, uint16 tileIndex, uint16 srcX, uint16 srcY, uint16 width, uint16 height);
@@ -487,15 +487,15 @@ struct RSDKFunctionTable {
     void (*SetDiffuseColor)(uint16 sceneIndex, uint8 x, uint8 y, uint8 z);
     void (*SetDiffuseIntensity)(uint16 sceneIndex, uint8 x, uint8 y, uint8 z);
     void (*SetSpecularIntensity)(uint16 sceneIndex, uint8 x, uint8 y, uint8 z);
-    void (*AddModelTo3DScene)(uint16 modelFrames, uint16 sceneIndex, uint8 drawMode, Matrix *matWorld, Matrix *matNormal, color color);
+    void (*AddModelTo3DScene)(uint16 modelFrames, uint16 sceneIndex, uint8 drawMode, Matrix *matWorld, Matrix *matView, color color);
     void (*SetModelAnimation)(uint16 modelFrames, Animator *animator, int16 speed, uint8 loopIndex, bool32 forceApply, int16 frameID);
-    void (*AddMeshFrameTo3DScene)(uint16 modelFrames, uint16 sceneIndex, Animator *animator, uint8 drawMode, Matrix *matWorld, Matrix *matNormal,
+    void (*AddMeshFrameTo3DScene)(uint16 modelFrames, uint16 sceneIndex, Animator *animator, uint8 drawMode, Matrix *matWorld, Matrix *matView,
                                   color color);
     void (*Draw3DScene)(uint16 sceneIndex);
 
     // Sprite Animations & Frames
-    uint16 (*LoadSpriteAnimation)(const char *filePath, int32 scope);
-    uint16 (*CreateSpriteAnimation)(const char *filePath, uint32 frameCount, uint32 listCount, int32 scope);
+    uint16 (*LoadSpriteAnimation)(const char *filePath, uint8 scope);
+    uint16 (*CreateSpriteAnimation)(const char *filePath, uint32 frameCount, uint32 listCount, uint8 scope);
 #if RETRO_MOD_LOADER_VER >= 2
     void (*SetSpriteAnimation)(uint16 aniFrames, uint16 listID, Animator *animator, bool32 forceApply, int32 frameID);
 #else
@@ -518,7 +518,7 @@ struct RSDKFunctionTable {
     uint16 (*GetTile)(uint16 layer, int32 x, int32 y);
     void (*SetTile)(uint16 layer, int32 x, int32 y, uint16 tile);
     void (*CopyTileLayer)(uint16 dstLayerID, int32 dstStartX, int32 dstStartY, uint16 srcLayerID, int32 srcStartX, int32 srcStartY, int32 countX,
-                          int32 countY);
+                           int32 countY);
     void (*ProcessParallax)(TileLayer *tileLayer);
     ScanlineInfo *(*GetScanlines)(void);
 
@@ -685,8 +685,8 @@ struct UnknownInfo {
 };
 
 struct GameInfo {
-    char engineInfo[0x40];
-    char gameSubname[0x100];
+    char gameTitle[0x40];
+    char gameSubtitle[0x100];
     char version[0x10];
 };
 
@@ -712,12 +712,12 @@ struct ControllerState {
 
     // Rev01 hasn't split these into different structs yet
 #if RETRO_REV01
-    InputState bumperL;
-    InputState bumperR;
+    InputState keyBumperL;
+    InputState keyBumperR;
     InputState keyTriggerL;
     InputState keyTriggerR;
-    InputState stickL;
-    InputState stickR;
+    InputState keyStickL;
+    InputState keyStickR;
 #endif
 };
 

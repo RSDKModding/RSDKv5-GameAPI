@@ -16,6 +16,8 @@ DLLExport ModVersionInfo modInfo = { RETRO_REVISION, GAME_VERSION, RETRO_MOD_LOA
 const char *modID = ":Unknown Mod ID:";
 #endif
 
+int32 RSDKRevision = RETRO_REVISION;
+
 RSDKSceneInfo *SceneInfo = NULL;
 
 RSDKGameInfo *GameInfo = NULL;
