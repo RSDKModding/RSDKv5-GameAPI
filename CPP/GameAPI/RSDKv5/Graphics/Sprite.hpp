@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Types.hpp"
+#include "../EngineAPI.hpp"
 
 namespace RSDK
 {
@@ -59,7 +60,8 @@ struct SpriteAnimation {
     inline SpriteFrame *GetFrame(int32 animID, int32 frameID) { return RSDKTable->GetFrame(aniFrames, animID, frameID); }
 
     inline bool32 Matches(SpriteAnimation &other) { return this->aniFrames == other.aniFrames; }
-    inline bool32 Matches(SpriteAnimation *other) { 
+    inline bool32 Matches(SpriteAnimation *other)
+    {
         if (other)
             return this->aniFrames == other->aniFrames;
         else

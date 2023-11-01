@@ -5,6 +5,8 @@
 // GAME ENUMS
 // =========================
 
+#include "RSDKv5/RSDKv5.hpp"
+
 #define PLAYER_COUNT (4)
 
 #ifndef GAME_NO_VARIABLES
@@ -373,7 +375,7 @@ void RegisterGlobals(void **globals, int32 size);
 #ifndef GAME_NO_GLOBALS
 // Globals Example
 
-#if !GAME_IS_MANIA && !GAME_IS_S3
+#if !GAME_IS_MANIA && !GAME_IS_S3 && !defined(GAME_NO_VARIABLES)
 // forward declare
 struct GlobalVariables;
 
@@ -400,7 +402,6 @@ struct GlobalVariables {
     // Your Variables Go Here
 };
 #endif
-
 
 #if GAME_IS_MANIA
 // Use this if you're hooking onto Sonic Mania

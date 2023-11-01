@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Types.hpp"
+#include "../Essentials/String.hpp"
 
 namespace RSDK
 {

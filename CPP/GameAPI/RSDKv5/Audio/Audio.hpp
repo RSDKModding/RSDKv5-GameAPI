@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Types.hpp"
+#include "../EngineAPI.hpp"
 
 #define CHANNEL_COUNT (0x10)
 
@@ -24,7 +25,7 @@ struct Channel {
     {
         return RSDKTable->PlayStream(filename, id, startPos, loopPoint, loadASync);
     }
-    
+
     uint8 id;
 };
 

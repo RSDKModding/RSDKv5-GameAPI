@@ -12,8 +12,6 @@ typedef unsigned long long uint64;
 typedef uint32 bool32;
 typedef uint32 color;
 
-
-
 // -------------------------
 // ENGINE VERSIONS
 // -------------------------
@@ -55,6 +53,3 @@ typedef uint32 color;
 #ifndef RETRO_STANDALONE
 #define RETRO_STANDALONE (1)
 #endif
-
-#include "EngineAPI.hpp"
-

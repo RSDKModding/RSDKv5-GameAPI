@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Types.hpp"
+#include "../EngineAPI.hpp"
 
 #define TILE_SIZE (16)
 
@@ -26,9 +27,7 @@ struct CollisionSensor {
 
 #if RETRO_REV0U
     // expects an array of 5 sensors
-    static inline void SetPathGripSensors(CollisionSensor *sensors) { 
-        RSDKTable->SetPathGripSensors(sensors);
-    };
+    static inline void SetPathGripSensors(CollisionSensor *sensors) { RSDKTable->SetPathGripSensors(sensors); };
 
     inline void FindFloorPosition() { RSDKTable->FindFloorPosition(this); }
     inline void FindLWallPosition() { RSDKTable->FindLWallPosition(this); }

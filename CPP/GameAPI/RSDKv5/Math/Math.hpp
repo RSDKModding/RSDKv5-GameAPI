@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Types.hpp"
+#include "../EngineAPI.hpp"
 
 #define MIN(a, b)                      ((a) < (b) ? (a) : (b))
 #define MAX(a, b)                      ((a) > (b) ? (a) : (b))
@@ -17,12 +18,12 @@
 
 #define UNUSED(x) (void)x
 
-#define TO_FIXED(x)   ((x) << 16)
-#define FROM_FIXED(x) ((x) >> 16)
-
 // floating point variants
 #define TO_FIXED_F(x)   ((x)*65536.0)
 #define FROM_FIXED_F(x) ((x) / 65536.0)
+
+#define TO_FIXED(x)   ((int)TO_FIXED_F(x))
+#define FROM_FIXED(x) ((int)FROM_FIXED_F(x))
 
 namespace RSDK
 {

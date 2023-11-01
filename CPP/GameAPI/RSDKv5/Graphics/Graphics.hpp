@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Types.hpp"
+#include "../EngineAPI.hpp"
+#include "Sprite.hpp"
 
 #define SCREEN_XMAX    (1280)
 #define SCREEN_YSIZE   (240)
@@ -161,7 +163,7 @@ inline void DrawDeformedSprite(SpriteSheet sheet, int32 inkEffect, bool32 screen
 
 inline void DrawTile(Tile *tiles, int32 countX, int32 countY, Vector2 *position, Vector2 *offset, bool32 screenRelative)
 {
-    RSDKTable->DrawTile((uint16*)tiles, countX, countY, position, offset, screenRelative);
+    RSDKTable->DrawTile((uint16 *)tiles, countX, countY, position, offset, screenRelative);
 }
 
 inline void CopyTile(uint16 dest, uint16 src, uint16 count) { RSDKTable->CopyTile(dest, src, count); }
