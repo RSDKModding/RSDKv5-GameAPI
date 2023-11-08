@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Types.hpp"
+#include "RSDKv5/Graphics/Graphics.hpp"
 
 #include <stdio.h>
 #include <cstring>
@@ -768,7 +769,7 @@ struct TouchInfo {
 
 struct ScreenInfo {
     // uint16 *frameBuffer;
-    uint16 frameBuffer[1280 * 240];
+    uint16 frameBuffer[SCREEN_XMAX * SCREEN_YSIZE];
     Vector2 position;
     Vector2 size;
     Vector2 center;
