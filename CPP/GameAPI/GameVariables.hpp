@@ -48,8 +48,6 @@ enum ManiaPlayerIDs {
 
 enum ManiaItemModes { ITEMS_FIXED, ITEMS_RANDOM, ITEMS_TELEPORT };
 
-enum ManiaSaveSlots { NO_SAVE_SLOT = 255 };
-
 enum ManiaPlaneFilterTypes {
     PLANEFILTER_NONE,
     PLANEFILTER_AL, // - Plane A, Low Layer
@@ -74,6 +72,8 @@ enum ManiaMedalMods {
 enum ManiaCategoryIDS { MEDIA_DEMO };
 
 enum ManiaScreenSplit { FORCE_SPLIT };
+
+enum ManiaSaveSlots { NO_SAVE_SLOT = 255 };
 #endif
 #endif
 

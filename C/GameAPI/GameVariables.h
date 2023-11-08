@@ -43,8 +43,6 @@ typedef enum {
 #endif
 
 typedef enum { ITEMS_FIXED, ITEMS_RANDOM, ITEMS_TELEPORT } ManiaItemModes;
-
-typedef enum { NO_SAVE_SLOT = 255 } ManiaSaveSlots;
 #endif
 
 #if GAME_IS_MANIA
