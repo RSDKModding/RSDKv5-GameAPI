@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Essentials/String.hpp"
 #include <list>
 
 #if RETRO_USE_MOD_LOADER
@@ -37,7 +37,7 @@ inline std::list<String> GetIDs()
 namespace Settings
 {
 
-inline std::list<String> Get(const char* id)
+inline std::list<String> Get(const char *id)
 {
     std::list<String> list;
 

@@ -1,8 +1,8 @@
+#pragma once
+
 #include "Types.hpp"
 
-#include <cstdarg>
 #include <stdio.h>
-#include <cmath>
 #include <cstring>
 
 namespace RSDK

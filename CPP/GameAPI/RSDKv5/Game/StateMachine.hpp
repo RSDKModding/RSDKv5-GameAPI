@@ -1,6 +1,11 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Types.hpp"
+#include "Object.hpp"
+
+#if __clang__
+#pragma clang diagnostic ignored "-Wmicrosoft-cast"
+#endif
 
 namespace RSDK
 {
@@ -19,7 +24,6 @@ template <typename E> static inline void *ToGenericPtr(void (E::*ptr)())
     return u.out;
 }
 
-
 template <typename T> struct StateMachine {
 
     enum Priorities {
@@ -29,7 +33,7 @@ template <typename T> struct StateMachine {
 
     inline void Init()
     {
-        state    = NULL;
+        state    = nullptr;
         timer    = 0;
         unknown1 = 0;
         unknown2 = 0;
@@ -130,7 +134,7 @@ template <typename T> struct StateMachine {
             u.in = state;
 
             bool32 skipState = modTable->HandleRunState_HighPriority(u.out);
-            
+
             if (!skipState)
                 (((T *)self)->*state)();
 
@@ -142,7 +146,7 @@ template <typename T> struct StateMachine {
     }
 
     inline bool32 Matches(void (T::*other)()) { return state == other; }
-    template <typename E> inline bool32 Matches(void (E::*other)()) { return state == (void (T::*)())other; }
+    template <typename E> inline bool32 Matches(void (E::*other)()) { return state == (void(T::*)())other; }
 
     inline void Copy(StateMachine<T> *other)
     {

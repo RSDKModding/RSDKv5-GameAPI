@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Types.hpp"
+#include "../EngineAPI.hpp"
 
 #if RETRO_USE_MOD_LOADER
 
@@ -111,7 +112,7 @@ inline bool32 ExcludeFile(const char *id, const char *path) { return modTable->E
 inline bool32 ExcludeAllFiles(const char *id) { return modTable->ExcludeAllFiles(id); }
 inline bool32 ReloadFile(const char *id, const char *path) { return modTable->ReloadFile(id, path); }
 inline bool32 ReloadAllFiles(const char *id) { return modTable->ReloadAllFiles(id); }
-}
+} // namespace Files
 
 namespace Engine
 {
@@ -143,7 +144,7 @@ inline void RegisterStateHook(void (*state)(), bool32 (*hook)(bool32 skippedStat
     modTable->RegisterStateHook(state, hook, priority);
 }
 
-extern const char* modID;
+extern const char *modID;
 
 } // namespace Mod
 

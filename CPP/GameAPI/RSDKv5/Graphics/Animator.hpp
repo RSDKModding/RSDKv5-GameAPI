@@ -1,5 +1,9 @@
 #pragma once
 
+#include "../Types.hpp"
+#include "Sprite.hpp"
+#include "Mesh.hpp"
+
 namespace RSDK
 {
 struct Animator {

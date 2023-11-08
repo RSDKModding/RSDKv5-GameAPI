@@ -98,10 +98,10 @@
 #define MANIA_USE_EGS  (GAME_VERSION == VER_107)
 
 #elif GAME_IS_S3
-#define VER_100 (0) // 1.00 (initial origins release)
-#define VER_104 (1) // 1.04 (origins' first patch)
-#define VER_200 (2) // 2.00 (origins plus release)
-#define VER_201 (3) // 1.04 (origins plus august 2023 patch)
+#define VER_100 (0) // 1.0.0 (initial origins release)
+#define VER_104 (1) // 1.0.4 (august 2022 patch)
+#define VER_200 (2) // 2.0.0 (origins plus release)
+#define VER_202 (3) // 2.0.1/2.0.2 (august/october 2023 patch)
 
 #if ORIGINS_PREPLUS
 
@@ -111,7 +111,7 @@
 #define GAME_VERSION VER_100
 
 #else
-	
+
 #undef GAME_VERSION
 #define GAME_VERSION VER_104
 
@@ -120,7 +120,7 @@
 #else
 
 #ifndef GAME_VERSION
-#define GAME_VERSION VER_201
+#define GAME_VERSION VER_202
 #endif
 
 #endif

@@ -1,7 +1,13 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Types.hpp"
+#include "../EngineAPI.hpp"
+#include "../Math/Math.hpp"
 #include <list>
+
+#if __clang__
+#pragma clang diagnostic ignored "-Winvalid-offsetof"
+#endif
 
 // 0x800 scene objects, 0x40 reserved ones, and 0x100 spare slots for creation
 #define RESERVE_ENTITY_COUNT (0x40)
@@ -430,7 +436,7 @@ template <typename E> static inline typename E::Static *RegisterStaticVars(typen
     else {                                                                                                                                           \
         RSDK::GameObject::SetActiveVariable(-1, #var);                                                                                               \
     }
-#define RSDK_ENUM_VAR(name) RSDK::GameObject::AddVarEnumValue(name)
+#define RSDK_ENUM_VAR(name, ...) RSDK::GameObject::AddVarEnumValue(name)
 
 // not in the original, used for RE2 :]
 #if GAME_INCLUDE_EDITOR

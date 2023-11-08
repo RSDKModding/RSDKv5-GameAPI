@@ -1,6 +1,9 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Types.hpp"
+#include "../EngineAPI.hpp"
+#include "../Game/Collision.hpp"
+#include <cstdarg>
 
 #define vsprintf_s(x, y, z) vsprintf(x, y, z)
 

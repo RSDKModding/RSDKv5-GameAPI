@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../Types.hpp"
+#include "../EngineAPI.hpp"
+
 namespace RSDK
 {
 

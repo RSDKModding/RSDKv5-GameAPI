@@ -145,4 +145,4 @@ bool32 InitModLogic(RSDK::EngineInfo *info, const char *modID)
     return true;
 }
 #endif
-}
+};

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Types.hpp"
+#include "../EngineAPI.hpp"
 
 namespace RSDK
 {
@@ -96,7 +97,7 @@ struct UserDB {
 
     // Sorting
     inline void SetupSorting() { APITable->SetupUserDBRowSorting(id); }
-    inline void Sort(int32 type, const char* name, bool32 sortAscending) { APITable->SortDBRows(id, type, name, sortAscending); }
+    inline void Sort(int32 type, const char *name, bool32 sortAscending) { APITable->SortDBRows(id, type, name, sortAscending); }
     inline bool32 RowsChanged() { return APITable->GetUserDBRowsChanged(id); }
     inline void AddSortFilter(VarTypes type, const char *name, void *value) { APITable->AddRowSortFilter(id, type, name, value); }
     inline int32 SortedRowCount() { return APITable->GetSortedUserDBRowCount(id); }

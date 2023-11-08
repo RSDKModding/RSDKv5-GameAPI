@@ -29,7 +29,7 @@ typedef signed int int32;
 typedef unsigned int uint32;
 
 typedef uint32 bool32;
-#define true 1
+#define true  1
 #define false 0
 
 typedef uint32 color;
@@ -1254,7 +1254,7 @@ typedef struct {
     bool32 (*HandleRunState_HighPriority)(void *state);
     // runs all low priority state hooks hooked to the address of 'state'
     void (*HandleRunState_LowPriority)(void *state, bool32 skipState);
-    
+
 #if RETRO_MOD_LOADER_VER >= 2
     // Mod Settings (Part 2)
     bool32 (*ForeachSetting)(const char *id, String *setting);
@@ -1557,8 +1557,8 @@ typedef struct {
     void (*DrawBlendedFace)(Vector2 *vertices, color *vertColors, int32 vertCount, int32 alpha, int32 inkEffect);
     void (*DrawSprite)(Animator *animator, Vector2 *position, bool32 screenRelative);
     void (*DrawDeformedSprite)(uint16 sheetID, int32 inkEffect, bool32 screenRelative);
-    void (*DrawText)(Animator *animator, Vector2 *position, String *string, int32 endFrame, int32 textLength, int32 align, int32 spacing, void *unused,
-                     Vector2 *charOffsets, bool32 screenRelative);
+    void (*DrawText)(Animator *animator, Vector2 *position, String *string, int32 endFrame, int32 textLength, int32 align, int32 spacing,
+                     void *unused, Vector2 *charOffsets, bool32 screenRelative);
     void (*DrawTile)(uint16 *tiles, int32 countX, int32 countY, Vector2 *position, Vector2 *offset, bool32 screenRelative);
     void (*CopyTile)(uint16 dest, uint16 src, uint16 count);
     void (*DrawAniTiles)(uint16 sheetID, uint16 tileIndex, uint16 srcX, uint16 srcY, uint16 width, uint16 height);
@@ -1934,10 +1934,10 @@ typedef struct {
 
 #if RETRO_MOD_LOADER_VER >= 2
 
-#define foreach_setting(id, text)                                                                                                                         \
+#define foreach_setting(id, text)                                                                                                                    \
     String *text = NULL;                                                                                                                             \
     while (Mod.ForeachSetting(id, &text))
-#define foreach_settingCategory(id, text)                                                                                                                 \
+#define foreach_settingCategory(id, text)                                                                                                            \
     String *text = NULL;                                                                                                                             \
     while (Mod.ForeachSettingCategory(id, &text))
 #endif

@@ -1,5 +1,9 @@
 #pragma once
 
+#include "../Types.hpp"
+#include "../EngineAPI.hpp"
+#include "Sprite.hpp"
+
 namespace RSDK
 {
 
@@ -81,4 +85,4 @@ struct Scene3D {
 };
 
 } // namespace Graphics
-}
+} // namespace RSDK
