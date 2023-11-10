@@ -27,8 +27,12 @@
 
 // Controls whether EditorLoad & EditorDraw should be included in the final product or not
 // This is a copy of what the original game likely had, as the original game does not include EditorLoad or EditorDraw funcs for any objects
-#ifndef RETRO_INCLUDE_EDITOR
-#define RETRO_INCLUDE_EDITOR (1)
+#ifndef GAME_INCLUDE_EDITOR
+#ifdef RETRO_INCLUDE_EDITOR
+#define GAME_INCLUDE_EDITOR RETRO_INCLUDE_EDITOR
+#else
+#define GAME_INCLUDE_EDITOR (1)
+#endif
 #endif
 
 #ifndef RETRO_USE_MOD_LOADER
@@ -71,7 +75,7 @@
 #undef GAME_VERSION
 #define GAME_VERSION VER_100
 #undef RETRO_REVISION
-#define RETRO_REVISION (0)
+#define RETRO_REVISION (1)
 
 #else
 	

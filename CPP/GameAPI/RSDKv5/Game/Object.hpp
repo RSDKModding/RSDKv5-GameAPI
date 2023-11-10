@@ -19,6 +19,15 @@
 #define TYPE_COUNT      (0x100)
 #define TYPEGROUP_COUNT (TYPE_COUNT + 4)
 
+#define foreach_active(type, entityOut)                                                                                                              \
+    for (auto entityOut : GameObject::GetEntities<type>(FOR_ACTIVE_ENTITIES))
+#define foreach_all(type, entityOut)                                                                                                                 \
+    for (auto entityOut : GameObject::GetEntities<type>(FOR_ALL_ENTITIES))
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
+#define foreach_group(type, entityOut)                                                                                                               \
+    for (auto entityOut : GameObject::GetEntities<type>(FOR_GROUP_ENTITIES))
+#endif
+
 namespace RSDK
 {
 
@@ -100,7 +109,7 @@ struct GameObject {
         void Update(){};
         void Draw(){};
         void LateUpdate(){};
-#if RETRO_INCLUDE_EDITOR
+#if GAME_INCLUDE_EDITOR
         void EditorDraw(){};
 #endif
 
@@ -114,7 +123,7 @@ struct GameObject {
             sVars->active  = ACTIVE_NEVER;
         };
 #endif
-#if RETRO_INCLUDE_EDITOR
+#if GAME_INCLUDE_EDITOR
         static void EditorLoad(){};
 #endif
 
@@ -134,7 +143,7 @@ struct GameObject {
         uint16 classID;
         bool32 inRange;
         bool32 isPermanent;
-        bool32 tileCollisions;
+        int32 tileCollisions;
         bool32 interaction;
         bool32 onGround;
         uint8 active;
@@ -302,7 +311,7 @@ struct GameObject {
     static inline void *FindClass(const char *name) { return modTable->FindObject(name); }
 #endif
 
-#if RETRO_INCLUDE_EDITOR
+#if GAME_INCLUDE_EDITOR
     static inline void SetActiveVariable(int32 classID, const char *name) { RSDKTable->SetActiveVariable(classID, name); }
     static inline void AddVarEnumValue(const char *name) { RSDKTable->AddVarEnumValue(name); }
 #endif
@@ -367,7 +376,7 @@ template <typename E> static inline typename E::Static *RegisterObject(typename 
         if (&E::StageLoad != &GameObject::Entity::StageLoad)
             object->stageLoad = E::StageLoad;
 
-#if RETRO_INCLUDE_EDITOR
+#if GAME_INCLUDE_EDITOR
         if (&E::EditorDraw != &GameObject::Entity::EditorDraw)
             object->editorDraw = E::_EditorDraw;
 
@@ -419,7 +428,6 @@ template <typename E> static inline typename E::Static *RegisterStaticVars(typen
 
 #define RSDK_INIT_STATIC_VARS(object) memset(sVars, 0, sizeof(object::Static))
 
-#if RETRO_INCLUDE_EDITOR
 #define RSDK_DECLARE(obj)                                                                                                                            \
     static Static *sVars;                                                                                                                            \
                                                                                                                                                      \
@@ -440,6 +448,7 @@ template <typename E> static inline typename E::Static *RegisterStaticVars(typen
 #define RSDK_ENUM_VAR(name, ...) RSDK::GameObject::AddVarEnumValue(name)
 
 // not in the original, used for RE2 :]
+#if GAME_INCLUDE_EDITOR
 #define showGizmos()                           (sceneInfo->listPos == sceneInfo->entitySlot || sceneInfo->effectGizmo)
 #define RSDK_DRAWING_OVERLAY(isDrawingOverlay) sceneInfo->debugMode = isDrawingOverlay
 
@@ -483,7 +492,7 @@ static inline typename E::Static *RegisterObject(typename E::Static **sVars, typ
         if (&E::StageLoad != &GameObject::Entity::StageLoad)
             object->stageLoad = E::StageLoad;
 
-#if RETRO_INCLUDE_EDITOR
+#if GAME_INCLUDE_EDITOR
         if (&E::EditorDraw != &GameObject::Entity::EditorDraw)
             object->editorDraw = E::_EditorDraw;
 

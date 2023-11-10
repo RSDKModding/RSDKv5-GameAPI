@@ -38,8 +38,8 @@ enum ManiaPlayerIDs {
     ID_DEFAULT_PLAYER  = ID_SONIC | ID_TAILS_ASSIST,
 };
 
-#define GET_CHARACTER_ID(playerNum)            (((globals->playerID >> (8 * ((playerNum)-1))) & 0xFF))
-#define CHECK_CHARACTER_ID(characterID, plrID) (((globals->playerID >> (8 * ((plrID)-1))) & 0xFF) == (characterID))
+#define GET_CHARACTER_ID(playerNum)                (((globals->playerID >> (8 * ((playerNum)-1))) & 0xFF))
+#define CHECK_CHARACTER_ID(characterID, playerNum) (((globals->playerID >> (8 * ((playerNum)-1))) & 0xFF) == (characterID))
 
 #if MANIA_USE_PLUS
 #define GET_STOCK_ID(stockNum)                (((globals->stock >> (8 * ((stockNum)-1))) & 0xFF))
@@ -47,8 +47,6 @@ enum ManiaPlayerIDs {
 #endif
 
 enum ManiaItemModes { ITEMS_FIXED, ITEMS_RANDOM, ITEMS_TELEPORT };
-
-enum ManiaSaveSlots { NO_SAVE_SLOT = 255 };
 
 enum ManiaPlaneFilterTypes {
     PLANEFILTER_NONE,
@@ -74,6 +72,8 @@ enum ManiaMedalMods {
 enum ManiaCategoryIDS { MEDIA_DEMO };
 
 enum ManiaScreenSplit { FORCE_SPLIT };
+
+enum ManiaSaveSlots { NO_SAVE_SLOT = 255 };
 #endif
 #endif
 
@@ -117,7 +117,9 @@ enum ManiaReservedEntities {
     SLOT_PLAYER3    = 2,
     SLOT_PLAYER4    = 3,
     SLOT_POWERUP1   = 4,
+    SLOT_PLAYER5    = 4, // Used in TMZ2Outro
     SLOT_POWERUP2   = 5,
+    SLOT_PLAYER6    = 5, // Used in TMZ2Outro
     SLOT_POWERUP3   = 6,
     SLOT_POWERUP4   = 7,
     SLOT_POWERUP1_2 = 8,
@@ -290,40 +292,44 @@ enum S3MedalMods {
 
 #if RETRO_REV0U
 enum NotifyCallbackIDs {
-    NOTIFY_DEATH_EVENT        = 0x80,
-    NOTIFY_TOUCH_SIGNPOST     = 0x81,
-    NOTIFY_HUD_ENABLE         = 0x82,
-    NOTIFY_ADD_COIN           = 0x83,
-    NOTIFY_KILL_ENEMY         = 0x84,
-    NOTIFY_SAVESLOT_SELECT    = 0x85,
-    NOTIFY_FUTURE_PAST        = 0x86,
-    NOTIFY_GOTO_FUTURE_PAST   = 0x87,
-    NOTIFY_BOSS_END           = 0x88,
-    NOTIFY_SPECIAL_END        = 0x89,
-    NOTIFY_DEBUGPRINT         = 0x8A,
-    NOTIFY_KILL_BOSS          = 0x8B,
-    NOTIFY_TOUCH_EMERALD      = 0x8C,
-    NOTIFY_STATS_ENEMY        = 0x8D,
-    NOTIFY_STATS_CHARA_ACTION = 0x8E,
-    NOTIFY_STATS_RING         = 0x8F,
-    NOTIFY_STATS_MOVIE        = 0x90,
-    NOTIFY_STATS_PARAM_1      = 0x91,
-    NOTIFY_STATS_PARAM_2      = 0x92,
-    NOTIFY_CHARACTER_SELECT   = 0x93,
-    NOTIFY_SPECIAL_RETRY      = 0x94,
-    NOTIFY_TOUCH_CHECKPOINT   = 0x95,
-    NOTIFY_ACT_FINISH         = 0x96,
-    NOTIFY_1P_VS_SELECT       = 0x97,
-    NOTIFY_CONTROLLER_SUPPORT = 0x98,
-    NOTIFY_STAGE_RETRY        = 0x99,
-    NOTIFY_SOUND_TRACK        = 0x9A,
-    NOTIFY_GOOD_ENDING        = 0x9B,
-    NOTIFY_BACK_TO_MAINMENU   = 0x9C,
-    NOTIFY_LEVEL_SELECT_MENU  = 0x9D,
-    NOTIFY_PLAYER_SET         = 0x9E,
-    NOTIFY_EXTRAS_MODE        = 0x9F,
-    NOTIFY_SPIN_DASH_TYPE     = 0xA0,
-    NOTIFY_TIME_OVER          = 0xA1,
+    NOTIFY_DEATH_EVENT         = 0x80,
+    NOTIFY_TOUCH_SIGNPOST      = 0x81,
+    NOTIFY_HUD_ENABLE          = 0x82,
+    NOTIFY_ADD_COIN            = 0x83,
+    NOTIFY_KILL_ENEMY          = 0x84,
+    NOTIFY_SAVESLOT_SELECT     = 0x85,
+    NOTIFY_FUTURE_PAST         = 0x86,
+    NOTIFY_GOTO_FUTURE_PAST    = 0x87,
+    NOTIFY_BOSS_END            = 0x88,
+    NOTIFY_SPECIAL_END         = 0x89,
+    NOTIFY_DEBUGPRINT          = 0x8A,
+    NOTIFY_KILL_BOSS           = 0x8B,
+    NOTIFY_TOUCH_EMERALD       = 0x8C,
+    NOTIFY_STATS_ENEMY         = 0x8D,
+    NOTIFY_STATS_CHARA_ACTION  = 0x8E,
+    NOTIFY_STATS_RING          = 0x8F,
+    NOTIFY_STATS_MOVIE         = 0x90,
+    NOTIFY_STATS_PARAM_1       = 0x91,
+    NOTIFY_STATS_PARAM_2       = 0x92,
+    NOTIFY_CHARACTER_SELECT    = 0x93,
+    NOTIFY_SPECIAL_RETRY       = 0x94,
+    NOTIFY_TOUCH_CHECKPOINT    = 0x95,
+    NOTIFY_ACT_FINISH          = 0x96,
+    NOTIFY_1P_VS_SELECT        = 0x97,
+    NOTIFY_CONTROLLER_SUPPORT  = 0x98,
+    NOTIFY_STAGE_RETRY         = 0x99,
+    NOTIFY_SOUND_TRACK         = 0x9A,
+    NOTIFY_GOOD_ENDING         = 0x9B,
+    NOTIFY_BACK_TO_MAINMENU    = 0x9C,
+    NOTIFY_LEVEL_SELECT_MENU   = 0x9D,
+    NOTIFY_PLAYER_SET          = 0x9E,
+    NOTIFY_EXTRAS_MODE         = 0x9F,
+    NOTIFY_SPIN_DASH_TYPE      = 0xA0,
+    NOTIFY_TIME_OVER           = 0xA1,
+    NOTIFY_TIMEATTACK_MODE     = 0xA2,
+    NOTIFY_STATS_BREAK_OBJECT  = 0xA3,
+    NOTIFY_STATS_SAVE_FUTURE   = 0xA4,
+    NOTIFY_STATS_CHARA_ACTION2 = 0xA5,
 
     NOTIFY_1000                = 1000,
     NOTIFY_1001                = 1001,
@@ -450,7 +456,9 @@ struct ManiaGlobalVariables {
     int32 restartScore;
     int32 restartScore1UP;
     int32 restartLives[4];
+#if GAME_VERSION != VER_100
     int32 restartMusicID;
+#endif
     int32 restartFlags;
     int32 tempFlags;
     int32 continues;

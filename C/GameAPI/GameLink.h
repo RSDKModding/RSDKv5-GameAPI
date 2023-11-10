@@ -38,17 +38,25 @@ typedef uint32 color;
 // CONSTANTS
 // -------------------------
 
-#define SCREEN_XMAX    (1280)
-#define SCREEN_YSIZE   (240)
+#ifndef SCREEN_XMAX
+#define SCREEN_XMAX (1280)
+#endif
+
+#ifndef SCREEN_YSIZE
+#define SCREEN_YSIZE (240)
+#endif
+
 #define SCREEN_YCENTER (SCREEN_YSIZE / 2)
 
 #define LAYER_COUNT     (8)
 #define DRAWGROUP_COUNT (16)
 
+#ifndef SCREEN_COUNT
 #if RETRO_REV02
 #define SCREEN_COUNT (4)
 #else
 #define SCREEN_COUNT (2)
+#endif
 #endif
 
 #define PLAYER_COUNT (4)
@@ -121,7 +129,7 @@ typedef struct {
     uint16 classID;
     bool32 inRange;
     bool32 isPermanent;
-    bool32 tileCollisions;
+    int32 tileCollisions;
     bool32 interaction;
     bool32 onGround;
     uint8 active;
@@ -237,7 +245,13 @@ typedef struct {
     uint8 onScreen;
 #endif
 
-#define ENTITY_SIZE (sizeof(Entity) + (0x100 * sizeof(void *)))
+typedef struct {
+    RSDK_ENTITY
+    void *data[0x100];
+#if RETRO_REV0U
+    void *unknown;
+#endif
+} EntityBase;
 
 #if RETRO_REV02
 #define Unknown_pausePress  UnknownInfo->pausePress
@@ -271,8 +285,8 @@ typedef struct {
 #endif
 
 typedef struct {
-    char engineInfo[0x40];
-    char gameSubname[0x100];
+    char gameTitle[0x40];
+    char gameSubtitle[0x100];
     char version[0x10];
 #if !RETRO_REV02
     uint8 platform;
@@ -329,13 +343,13 @@ typedef struct {
     InputState keySelect;
 
     // Rev01 hasn't split these into different structs yet
-#if !RETRO_REV02
-    InputState bumperL;
-    InputState bumperR;
+#if RETRO_REV01
+    InputState keyBumperL;
+    InputState keyBumperR;
     InputState keyTriggerL;
     InputState keyTriggerR;
-    InputState stickL;
-    InputState stickR;
+    InputState keyStickL;
+    InputState keyStickR;
 #endif
 } RSDKControllerState;
 
@@ -557,6 +571,25 @@ typedef struct {
 } TileInfo;
 #endif
 
+#if RETRO_REV02
+typedef enum {
+    LEADERBOARD_LOAD_INIT,
+    LEADERBOARD_LOAD_PREV,
+    LEADERBOARD_LOAD_NEXT,
+} LeaderboardLoadTypes;
+
+typedef struct {
+    int32 start;
+    int32 length;
+} LeaderboardAvail;
+
+typedef struct {
+    uint8 statID;
+    const char *name;
+    void *data[64];
+} StatInfo;
+#endif
+
 typedef struct {
     uint8 idPS4;     // achievement ID (PS4)
     int32 idUnknown; // achievement ID (unknown platform)
@@ -572,11 +605,6 @@ typedef struct {
 } LeaderboardID;
 
 typedef struct {
-    int32 start;
-    int32 length;
-} LeaderboardAvail;
-
-typedef struct {
     String username;
 #if RETRO_REV02
     String userID;
@@ -586,12 +614,6 @@ typedef struct {
     bool32 isUser;
     int32 status;
 } LeaderboardEntry;
-
-typedef struct {
-    uint8 statID;
-    const char *name;
-    void *data[64];
-} StatInfo;
 
 // -------------------------
 // ENUMS
@@ -781,10 +803,10 @@ typedef enum {
 } CSides;
 
 typedef enum {
-    TILECOLLISION_NONE,
-    TILECOLLISION_DOWN,
+    TILECOLLISION_NONE, // no tile collisions
+    TILECOLLISION_DOWN, // downwards tile collisions
 #if RETRO_REV0U
-    TILECOLLISION_UP
+    TILECOLLISION_UP, // upwards tile collisions
 #endif
 } TileCollisionModes;
 
@@ -1160,6 +1182,7 @@ typedef enum {
 // -------------------------
 // FUNCTION TABLES
 // -------------------------
+
 #if RETRO_USE_MOD_LOADER
 // Mod Table
 typedef struct {
@@ -1359,8 +1382,7 @@ typedef struct {
 
     // User File Management
     void (*LoadUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status)); // load user file from game dir
-    void (*SaveUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status),
-                         bool32 compressed);                                  // save user file to game dir
+    void (*SaveUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status), bool32 compressed); // save user file to game dir
     void (*DeleteUserFile)(const char *name, void (*callback)(int32 status)); // delete user file from game dir
 
     // User DBs
@@ -1583,7 +1605,7 @@ typedef struct {
     uint16 (*GetTile)(uint16 layer, int32 x, int32 y);
     void (*SetTile)(uint16 layer, int32 x, int32 y, uint16 tile);
     void (*CopyTileLayer)(uint16 dstLayerID, int32 dstStartX, int32 dstStartY, uint16 srcLayerID, int32 srcStartX, int32 srcStartY, int32 countX,
-                          int32 countY);
+                           int32 countY);
     void (*ProcessParallax)(TileLayer *tileLayer);
     ScanlineInfo *(*GetScanlines)(void);
 
@@ -1727,7 +1749,6 @@ typedef struct {
         RSDK.SetEditableVar(type, buffer, (uint8)object->classID, offsetof(Entity##object, var) + sizeof(arrType) * i);                              \
     }
 
-#if RETRO_INCLUDE_EDITOR
 // Some extra precaution to prevent crashes in editor
 #define RSDK_ACTIVE_VAR(object, var)                                                                                                                 \
     if (object) {                                                                                                                                    \
@@ -1738,6 +1759,7 @@ typedef struct {
     }
 #define RSDK_ENUM_VAR(name, var) RSDK.AddVarEnumValue(name)
 
+#if GAME_INCLUDE_EDITOR
 #define RSDK_DRAWING_OVERLAY(isDrawingOverlay) SceneInfo->debugMode = isDrawingOverlay
 
 #if RETRO_REV0U
@@ -1932,7 +1954,7 @@ typedef struct {
 #define destroyEntity(entity)   RSDK.ResetEntity(entity, TYPE_BLANK, NULL)
 #define destroyEntitySlot(slot) RSDK.ResetEntitySlot(slot, TYPE_BLANK, NULL)
 
-#if RETRO_INCLUDE_EDITOR
+#if GAME_INCLUDE_EDITOR
 #define showGizmos() (SceneInfo->listPos == SceneInfo->entitySlot || SceneInfo->effectGizmo)
 #endif
 

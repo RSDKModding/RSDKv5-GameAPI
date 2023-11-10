@@ -7,6 +7,12 @@ namespace RSDK
 {
 
 #if RETRO_REV02
+enum LeaderboardLoadTypes {
+    LEADERBOARD_LOAD_INIT,
+    LEADERBOARD_LOAD_PREV,
+    LEADERBOARD_LOAD_NEXT,
+};
+
 struct LeaderboardID {
     int32 idPS4;        // leaderboard id (PS4)
     int32 idUnknown;    // leaderboard id (unknown platform)
@@ -22,9 +28,7 @@ struct LeaderboardAvail {
 
 struct LeaderboardEntry {
     String username;
-#if RETRO_REV02
     String userID;
-#endif
     int32 globalRank;
     int32 score;
     bool32 isUser;

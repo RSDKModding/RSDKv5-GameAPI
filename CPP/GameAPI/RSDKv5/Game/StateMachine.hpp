@@ -10,6 +10,7 @@
 namespace RSDK
 {
 #define SET_CURRENT_STATE() RSDK::currentState = __func__
+#define StateMachine_None nullptr
 
 extern const char *currentState;
 

@@ -56,10 +56,10 @@ struct Animator {
     inline SpriteFrame *GetFrame(RSDK::SpriteAnimation aniFrames) { return aniFrames.GetFrame(animationID, frameID); }
 
     inline void DrawSprite(Vector2 *position, bool32 screenRelative) { RSDKTable->DrawSprite(this, position, screenRelative); }
-    inline void DrawString(Vector2 *position, String *string, int32 startFrame, int32 endFrame, int32 align, int32 spacing, Vector2 *charOffsets,
+    inline void DrawString(Vector2 *position, String *string, int32 endFrame, int32 textLength, int32 align, int32 spacing, Vector2 *charOffsets,
                            bool32 screenRelative)
     {
-        RSDKTable->DrawText(this, position, string, startFrame, endFrame, align, spacing, NULL, charOffsets, screenRelative);
+        RSDKTable->DrawText(this, position, string, endFrame, textLength, align, spacing, NULL, charOffsets, screenRelative);
     }
 
 #if RETRO_REV0U
