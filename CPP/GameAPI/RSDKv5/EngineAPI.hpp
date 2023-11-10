@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Types.hpp"
-#include "RSDKv5/Graphics/Graphics.hpp"
+#include "Graphics/Graphics.hpp"
 
 #include <stdio.h>
 #include <cstring>
