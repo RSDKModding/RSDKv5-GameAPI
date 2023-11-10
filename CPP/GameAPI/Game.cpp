@@ -127,12 +127,20 @@ void LinkGameLogicDLL(RSDK::EngineInfo info)
         }
     }
 #endif
+
+#if GAME_CUSTOMLINKLOGIC
+#if RETRO_REV02
+    LinkGameLogic(info);
+#else
+    LinkGameLogic(&info);
+#endif
+#endif
 }
 
 #if RETRO_USE_MOD_LOADER
 DLLExport RSDK::ModVersionInfo modInfo = { RETRO_REVISION, GAME_VERSION, RETRO_MOD_LOADER_VER };
 
-bool32 InitModLogic(RSDK::EngineInfo *info, const char *modID)
+bool32 LinkModLogic(RSDK::EngineInfo *info, const char *modID)
 {
 #if RETRO_REV02
     LinkGameLogicDLL(info);

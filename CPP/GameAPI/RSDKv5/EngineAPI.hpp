@@ -858,3 +858,9 @@ inline void InitEngineInfo(EngineInfo *info)
 }
 
 }; // namespace RSDK
+
+#if GAME_CUSTOMLINKLOGIC
+// DEFINE THIS YOURSELF!!!!
+// This runs after LinkGameLogicDLL registers objects
+void LinkGameLogic(RSDK::EngineInfo *info);
+#endif
