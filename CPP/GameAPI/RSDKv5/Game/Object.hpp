@@ -19,6 +19,24 @@
 #define TYPE_COUNT      (0x100)
 #define TYPEGROUP_COUNT (TYPE_COUNT + 4)
 
+#define foreach_active(type, entityOut)                                                                                                              \
+    for (auto entityOut : GameObject::GetEntities<type>(FOR_ACTIVE_ENTITIES))
+#define foreach_all(type, entityOut)                                                                                                                 \
+    for (auto entityOut : GameObject::GetEntities<type>(FOR_ALL_ENTITIES))
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
+#define foreach_group(type, entityOut)                                                                                                               \
+    for (auto entityOut : GameObject::GetEntities<type>(FOR_GROUP_ENTITIES))
+#endif
+
+#define foreach_active_type(type, entityOut)                                                                                                         \
+    for (auto (void **)entityOut : GameObject::GetEntities<type>(FOR_ACTIVE_ENTITIES))
+#define foreach_all_type(type, entityOut)                                                                                                            \
+    for (auto (void **)entityOut : GameObject::GetEntities<type>(FOR_ALL_ENTITIES))
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
+#define foreach_group_type(type, entityOut)                                                                                                          \
+    for (auto (void **)entityOut : GameObject::GetEntities<type>(FOR_GROUP_ENTITIES))
+#endif
+
 namespace RSDK
 {
 
