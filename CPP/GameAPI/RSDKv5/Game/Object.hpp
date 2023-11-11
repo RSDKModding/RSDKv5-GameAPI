@@ -82,7 +82,10 @@ enum ForeachGroups {
 };
 
 enum ObjectClassIDs {
-    TYPE_NONE,
+    TYPE_BLANK,
+#if RETRO_REV02
+    TYPE_DEVOUTPUT,
+#endif
 };
 
 enum TileCollisionModes {
