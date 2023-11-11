@@ -4,14 +4,6 @@
 #include "../EngineAPI.hpp"
 #include "Sprite.hpp"
 
-#ifndef SCREEN_XMAX
-#define SCREEN_XMAX (1280)
-#endif
-
-#ifndef SCREEN_YSIZE
-#define SCREEN_YSIZE (240)
-#endif
-
 #define SCREEN_YCENTER (SCREEN_YSIZE / 2)
 
 #define LAYER_COUNT     (8)
