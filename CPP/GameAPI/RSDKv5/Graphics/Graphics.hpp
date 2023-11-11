@@ -25,6 +25,8 @@ enum DrawFX { FX_NONE = 0, FX_FLIP = 1, FX_ROTATE = 2, FX_SCALE = 4 };
 
 enum FlipFlags { FLIP_NONE, FLIP_X, FLIP_Y, FLIP_XY };
 
+enum { ALIGN_LEFT, ALIGN_RIGHT, ALIGN_CENTER } Alignments;
+
 enum InkEffects {
     INK_NONE,
     INK_BLEND,
