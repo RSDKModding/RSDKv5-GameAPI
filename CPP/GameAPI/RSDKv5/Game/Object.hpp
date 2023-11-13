@@ -351,39 +351,7 @@ struct ObjectRegistration {
 #endif
 };
 
-struct EntityBase {
-#if RETRO_REV0U
-    void *vfTable;
-#endif
-    Vector2 position;
-    Vector2 scale;
-    Vector2 velocity;
-    Vector2 updateRange;
-    int32 angle;
-    int32 alpha;
-    int32 rotation;
-    int32 groundVel;
-    int32 zdepth;
-    uint16 group;
-    uint16 classID;
-    bool32 inRange;
-    bool32 isPermanent;
-    int32 tileCollisions;
-    bool32 interaction;
-    bool32 onGround;
-    uint8 active;
-#if RETRO_REV02
-    uint8 filter;
-#endif
-    uint8 direction;
-    uint8 drawGroup;
-    uint8 collisionLayers;
-    uint8 collisionPlane;
-    uint8 collisionMode;
-    uint8 drawFX;
-    uint8 inkEffect;
-    uint8 visible;
-    uint8 onScreen;
+struct EntityBase : public Entity {
     void *data[0x100];
 #if RETRO_REV0U
     void *unknown;
