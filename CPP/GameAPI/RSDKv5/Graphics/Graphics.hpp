@@ -4,14 +4,6 @@
 #include "../EngineAPI.hpp"
 #include "Sprite.hpp"
 
-#ifndef SCREEN_XMAX
-#define SCREEN_XMAX (1280)
-#endif
-
-#ifndef SCREEN_YSIZE
-#define SCREEN_YSIZE (240)
-#endif
-
 #define SCREEN_YCENTER (SCREEN_YSIZE / 2)
 
 #define LAYER_COUNT     (8)
@@ -32,6 +24,8 @@ namespace RSDK
 enum DrawFX { FX_NONE = 0, FX_FLIP = 1, FX_ROTATE = 2, FX_SCALE = 4 };
 
 enum FlipFlags { FLIP_NONE, FLIP_X, FLIP_Y, FLIP_XY };
+
+enum { ALIGN_LEFT, ALIGN_RIGHT, ALIGN_CENTER } Alignments;
 
 enum InkEffects {
     INK_NONE,

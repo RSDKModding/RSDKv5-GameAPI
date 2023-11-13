@@ -19,6 +19,10 @@
 #define TYPE_COUNT      (0x100)
 #define TYPEGROUP_COUNT (TYPE_COUNT + 4)
 
+#define RSDK_GET_ENTITY(slot, class)      (GameObject::Get<class>(slot))
+#define RSDK_GET_ENTITY_GEN(slot)         (GameObject::Get(slot))
+#define CREATE_ENTITY(object, data, x, y) (GameObject::Create<object>(data, x, y))
+
 #define foreach_active(type, entityOut)                                                                                                              \
     for (auto entityOut : GameObject::GetEntities<type>(FOR_ACTIVE_ENTITIES))
 #define foreach_all(type, entityOut)                                                                                                                 \
@@ -78,7 +82,10 @@ enum ForeachGroups {
 };
 
 enum ObjectClassIDs {
-    TYPE_NONE,
+    TYPE_BLANK,
+#if RETRO_REV02
+    TYPE_DEVOUTPUT,
+#endif
 };
 
 enum TileCollisionModes {
@@ -341,6 +348,13 @@ struct ObjectRegistration {
     uint32 modStaticClassSize;
     const char *inherit;
     bool32 isModded;
+#endif
+};
+
+struct EntityBase : public Entity {
+    void *data[0x100];
+#if RETRO_REV0U
+    void *unknown;
 #endif
 };
 
