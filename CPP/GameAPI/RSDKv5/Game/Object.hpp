@@ -126,7 +126,7 @@ struct GameObject {
 #if RETRO_REV0U
         static void StaticLoad(Static *sVars)
         {
-            sVars->classID = TYPE_NONE;
+            sVars->classID = TYPE_BLANK;
             sVars->active  = ACTIVE_NEVER;
         };
 #endif
@@ -351,7 +351,7 @@ struct ObjectRegistration {
 #endif
 };
 
-struct EntityBase : public Entity {
+struct EntityBase : public GameObject::Entity {
     void *data[0x100];
 #if RETRO_REV0U
     void *unknown;
