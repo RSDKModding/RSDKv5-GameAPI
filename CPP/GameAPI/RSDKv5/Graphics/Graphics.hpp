@@ -103,7 +103,7 @@ struct Palette {
     }
 
 #if RETRO_REV02
-    void SetLimitedFade(uint32 *srcColorsA, uint32 *srcColorsB, int32 blendAmount, int32 startIndex, int32 count)
+    void BlendColors(uint32 *srcColorsA, uint32 *srcColorsB, int32 blendAmount, int32 startIndex, int32 count)
     {
         RSDKTable->BlendColors(id, srcColorsA, srcColorsB, blendAmount, startIndex, count);
     }
