@@ -391,11 +391,11 @@ template <typename E> static inline typename E::Static *RegisterObject(typename 
             object->stageLoad = E::StageLoad;
 
 #if GAME_INCLUDE_EDITOR
-        if (&E::EditorDraw != &GameObject::Entity::EditorDraw)
-            object->editorDraw = E::_EditorDraw;
-
         if (&E::EditorLoad != &GameObject::Entity::EditorLoad)
             object->editorLoad = E::EditorLoad;
+
+        if (&E::EditorDraw != &GameObject::Entity::EditorDraw)
+            object->editorDraw = E::_EditorDraw;
 #endif
 
 #if RETRO_REV0U
@@ -507,11 +507,11 @@ static inline typename E::Static *RegisterObject(typename E::Static **sVars, typ
             object->stageLoad = E::StageLoad;
 
 #if GAME_INCLUDE_EDITOR
-        if (&E::EditorDraw != &GameObject::Entity::EditorDraw)
-            object->editorDraw = E::_EditorDraw;
-
         if (&E::EditorLoad != &GameObject::Entity::EditorLoad)
             object->editorLoad = E::EditorLoad;
+
+        if (&E::EditorDraw != &GameObject::Entity::EditorDraw)
+            object->editorDraw = E::_EditorDraw;
 #endif
 
 #if RETRO_REV0U
