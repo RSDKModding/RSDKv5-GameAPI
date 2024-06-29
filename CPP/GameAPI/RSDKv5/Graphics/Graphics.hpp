@@ -92,7 +92,7 @@ struct Palette {
 
     void Rotate(uint8 startIndex, uint8 endIndex, bool32 right) { RSDKTable->RotatePalette(id, startIndex, endIndex, right ? 1 : 0); }
 
-    void Copy(uint8 sourceBank, uint8 srcBankStart, uint8 destBankStart, uint16 count)
+    void Copy(uint8 sourceBank, uint8 srcBankStart, uint8 destBankStart, uint8 count)
     {
         RSDKTable->CopyPalette(sourceBank, srcBankStart, id, destBankStart, count);
     }
