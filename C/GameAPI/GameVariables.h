@@ -289,6 +289,27 @@ typedef enum {
     MEDAL_NOLIVES     = 1 << 6,
 } S3MedalMods;
 
+typedef enum {
+    MISSIONNO_NONE            = 0,
+    MISSIONNO_MERCY           = 8,
+    MISSIONNO_RINGCHALLENGE50 = 10,
+    MISSIONNO_AERIALATTACK    = 18,
+    MISSIONNO_RINGVACCUM      = 30,
+    MISSIONNO_BALLOONBURST    = 38,
+    MISSIONNO_FIREBALLDASH    = 39,
+} S3MissionFunctions;
+
+typedef enum {
+    HUDENABLE_OFF,
+    HUDENABLE_ON,
+} S3HUDEnableTypes;
+
+typedef enum {
+    MISSION_CONDITION_NONE,
+    MISSION_CONDITION_CLEAR,
+    MISSION_CONDITION_FAIL,
+} S3MissionConditions;
+
 #endif
 
 #endif
