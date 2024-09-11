@@ -473,9 +473,9 @@ struct ManiaGlobalVariables {
     int32 restartRings;
     int32 restart1UP;
     int32 restartPowerups;
-    int32 restartPos[8];
-    int32 restartSlot[4];
-    int32 restartDir[4];
+    int32 restartPos[PLAYER_COUNT * 2];
+    int32 restartSlot[PLAYER_COUNT];
+    int32 restartDir[PLAYER_COUNT];
     int32 restartMinutes;
     int32 restartSeconds;
     int32 restartMilliseconds;
@@ -484,7 +484,7 @@ struct ManiaGlobalVariables {
     int32 tempMilliseconds;
     int32 restartScore;
     int32 restartScore1UP;
-    int32 restartLives[4];
+    int32 restartLives[PLAYER_COUNT];
 #if GAME_VERSION != VER_100
     int32 restartMusicID;
 #endif
@@ -492,8 +492,8 @@ struct ManiaGlobalVariables {
     int32 tempFlags;
     int32 continues;
     int32 initCoolBonus;
-    int32 coolBonus[4];
-    // #if MANIA_USE_PLUS
+    int32 coolBonus[PLAYER_COUNT];
+#if MANIA_USE_PLUS
     int32 replayWriteBuffer[0x40000];
     int32 replayReadBuffer[0x40000];
     int32 replayTempWBuffer[0x40000];
@@ -510,7 +510,7 @@ struct ManiaGlobalVariables {
     int32 superMusicEnabled;
     int32 lastHasPlus;
     int32 hasPlusInitial;
-    // #endif
+#endif
 };
 #endif
 
@@ -562,7 +562,7 @@ struct S3GlobalVariables {
     int32 restartMilliseconds;
     int32 restartScore;
     int32 restartScore1UP;
-    int32 restartLives[4];
+    int32 restartLives[PLAYER_COUNT];
     int32 restartMusicID;
     bool32 restartFlags;
     int32 field_47B4C;
