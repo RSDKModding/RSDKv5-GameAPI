@@ -23,14 +23,18 @@
 #define RSDK_GET_ENTITY_GEN(slot)         (GameObject::Get(slot))
 #define CREATE_ENTITY(object, data, x, y) (GameObject::Create<object>(data, x, y))
 
-#define foreach_active(type, entityOut)                                                                                                              \
-    for (auto entityOut : GameObject::GetEntities<type>(FOR_ACTIVE_ENTITIES))
-#define foreach_all(type, entityOut)                                                                                                                 \
-    for (auto entityOut : GameObject::GetEntities<type>(FOR_ALL_ENTITIES))
+#define foreach_active(type, entityOut) for (auto entityOut : GameObject::GetEntities<type>(FOR_ACTIVE_ENTITIES))
+#define foreach_all(type, entityOut)    for (auto entityOut : GameObject::GetEntities<type>(FOR_ALL_ENTITIES))
 #if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
-#define foreach_group(type, entityOut)                                                                                                               \
-    for (auto entityOut : GameObject::GetEntities<type>(FOR_GROUP_ENTITIES))
+#define foreach_group(type, entityOut) for (auto entityOut : GameObject::GetEntities<type>(FOR_GROUP_ENTITIES))
 #endif
+
+#define foreach_break                                                                                                                                \
+    RSDK::RSDKTable->BreakForeachLoop();                                                                                                             \
+    break
+#define foreach_return                                                                                                                               \
+    RSDK::RSDKTable->BreakForeachLoop();                                                                                                             \
+    return
 
 namespace RSDK
 {
