@@ -25,13 +25,21 @@ typedef enum {
     ID_SONIC    = 1 << 0,
     ID_TAILS    = 1 << 1,
     ID_KNUCKLES = 1 << 2,
-#if MANIA_USE_PLUS || GAME_IS_S3
+#if (GAME_IS_MANIA && MANIA_USE_PLUS) || (GAME_IS_S3 && !ORIGINS_USE_PLUS)
     ID_MIGHTY = 1 << 3,
     ID_RAY    = 1 << 4,
+#endif
+#if GAME_IS_S3 && ORIGINS_USE_PLUS
+    ID_AMY    = 1 << 3,
+    ID_MIGHTY = 1 << 4,
+    ID_RAY    = 1 << 5,
 #endif
     ID_TAILS_ASSIST    = ID_TAILS << 8,
     ID_KNUCKLES_ASSIST = ID_KNUCKLES << 8, // custom-added, can be used to check if "& knux" is active
     ID_DEFAULT_PLAYER  = ID_SONIC | ID_TAILS_ASSIST,
+#if GAME_IS_S3 && ORIGINS_USE_PLUS
+    ID_AMY_TAILS = ID_AMY | ID_TAILS_ASSIST,
+#endif
 } ManiaPlayerIDs;
 
 #define GET_CHARACTER_ID(playerNum)                (((globals->playerID >> (8 * ((playerNum)-1))) & 0xFF))
