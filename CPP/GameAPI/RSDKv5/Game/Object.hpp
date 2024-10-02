@@ -42,20 +42,20 @@ namespace RSDK
 {
 
 enum ActiveFlags {
-    ACTIVE_NEVER,
-    ACTIVE_ALWAYS,
-    ACTIVE_NORMAL,
-    ACTIVE_PAUSED,
-    ACTIVE_BOUNDS,
-    ACTIVE_XBOUNDS,
-    ACTIVE_YBOUNDS,
-    ACTIVE_RBOUNDS,
+    ACTIVE_NEVER,   // never update
+    ACTIVE_ALWAYS,  // always update (even if paused/frozen)
+    ACTIVE_NORMAL,  // always update (unless paused/frozen)
+    ACTIVE_PAUSED,  // update only when paused/frozen
+    ACTIVE_BOUNDS,  // update if in x & y bounds
+    ACTIVE_XBOUNDS, // update only if in x bounds (y bounds dont matter)
+    ACTIVE_YBOUNDS, // update only if in y bounds (x bounds dont matter)
+    ACTIVE_RBOUNDS, // update based on radius boundaries (updateRange.x == radius)
 
     // Not really even a real active value, but some objects set their active states to this so here it is I suppose
     ACTIVE_DISABLED = 0xFF,
 };
 
-enum VarTypes {
+enum VariableTypes {
     VAR_UINT8,
     VAR_UINT16,
     VAR_UINT32,
@@ -66,7 +66,7 @@ enum VarTypes {
     VAR_BOOL,
     VAR_STRING,
     VAR_VECTOR2,
-    VAR_FLOAT,
+    VAR_FLOAT, // Not actually used in Sonic Mania so it's just an assumption, but this is the only thing that'd fit the 32 bit limit and make sense
     VAR_COLOR,
 };
 
@@ -87,11 +87,13 @@ enum ForeachGroups {
     GROUP_CUSTOM3,
 };
 
-enum ObjectClassIDs {
-    TYPE_BLANK,
+enum DefaultObjects {
+    TYPE_DEFAULTOBJECT = 0,
 #if RETRO_REV02
     TYPE_DEVOUTPUT,
 #endif
+
+    TYPE_DEFAULT_COUNT, // max
 };
 
 enum TileCollisionModes {
@@ -132,7 +134,7 @@ struct GameObject {
 #if RETRO_REV0U
         static void StaticLoad(Static *sVars)
         {
-            sVars->classID = TYPE_BLANK;
+            sVars->classID = TYPE_DEFAULTOBJECT;
             sVars->active  = ACTIVE_NEVER;
         };
 #endif
@@ -141,6 +143,7 @@ struct GameObject {
 #endif
 
 #if RETRO_REV0U
+        // used for languages such as beeflang that always have vfTables in classes
         void *vfTable;
 #endif
         Vector2 position;
@@ -174,7 +177,7 @@ struct GameObject {
         uint8 onScreen;
 
         inline uint16 Slot() { return RSDKTable->GetEntitySlot(this); }
-        inline void Destroy() { RSDKTable->ResetEntity(this, 0, nullptr); }
+        inline void Destroy() { RSDKTable->ResetEntity(this, TYPE_DEFAULTOBJECT, nullptr); }
 
         inline void Reset(uint32 type, void *data) { RSDKTable->ResetEntity(this, type, data); }
         inline void Reset(uint32 type, int32 data) { RSDKTable->ResetEntity(this, type, INT_TO_VOID(data)); }
@@ -222,8 +225,8 @@ struct GameObject {
 #endif
     };
 
-    static inline Entity *Create(void *data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(0, data, x, y); }
-    static inline Entity *Create(int32 data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(0, INT_TO_VOID(data), x, y); }
+    static inline Entity *Create(void *data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(TYPE_DEFAULTOBJECT, data, x, y); }
+    static inline Entity *Create(int32 data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(TYPE_DEFAULTOBJECT, INT_TO_VOID(data), x, y); }
 
     template <typename T> static inline T *Create(void *data, int32 x, int32 y)
     {

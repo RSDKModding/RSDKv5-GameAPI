@@ -39,11 +39,11 @@
 const char *RSDK::currentState = nullptr;
 
 int32 RSDK::registerObjectListCount = 0;
-RSDK::ObjectRegistration RSDK::registerObjectList[0x400];
+RSDK::ObjectRegistration RSDK::registerObjectList[OBJECT_COUNT];
 
 #if RETRO_REV02
 int32 RSDK::registerStaticListCount = 0;
-RSDK::ObjectRegistration RSDK::registerStaticList[0x400];
+RSDK::ObjectRegistration RSDK::registerStaticList[OBJECT_COUNT];
 #endif
 
 RSDK::Channel RSDK::channels[CHANNEL_COUNT] = { RSDK::Channel(0),  RSDK::Channel(1),  RSDK::Channel(2),  RSDK::Channel(3),

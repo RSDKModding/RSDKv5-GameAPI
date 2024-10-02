@@ -652,11 +652,13 @@ typedef enum { FX_NONE = 0, FX_FLIP = 1, FX_ROTATE = 2, FX_SCALE = 4 } DrawFX;
 typedef enum { FLIP_NONE, FLIP_X, FLIP_Y, FLIP_XY } FlipFlags;
 
 typedef enum {
-    TYPE_BLANK,
+    TYPE_DEFAULTOBJECT = 0,
 #if RETRO_REV02
     TYPE_DEVOUTPUT,
 #endif
-} DefaultObjTypes;
+
+    TYPE_DEFAULT_COUNT, // max
+} DefaultObjects;
 
 typedef enum {
     INPUT_UNASSIGNED = -2,
@@ -733,9 +735,9 @@ typedef enum {
     VAR_BOOL,
     VAR_STRING,
     VAR_VECTOR2,
-    VAR_FLOAT,
+    VAR_FLOAT, // Not actually used in Sonic Mania so it's just an assumption, but this is the only thing that'd fit the 32 bit limit and make sense
     VAR_COLOR,
-} VarTypes;
+} VariableTypes;
 
 #if RETRO_REV02
 typedef enum {
@@ -772,14 +774,14 @@ typedef enum {
 #endif
 
 typedef enum {
-    ACTIVE_NEVER,
-    ACTIVE_ALWAYS,
-    ACTIVE_NORMAL,
-    ACTIVE_PAUSED,
-    ACTIVE_BOUNDS,
-    ACTIVE_XBOUNDS,
-    ACTIVE_YBOUNDS,
-    ACTIVE_RBOUNDS,
+    ACTIVE_NEVER,   // never update
+    ACTIVE_ALWAYS,  // always update (even if paused/frozen)
+    ACTIVE_NORMAL,  // always update (unless paused/frozen)
+    ACTIVE_PAUSED,  // update only when paused/frozen
+    ACTIVE_BOUNDS,  // update if in x & y bounds
+    ACTIVE_XBOUNDS, // update only if in x bounds (y bounds dont matter)
+    ACTIVE_YBOUNDS, // update only if in y bounds (x bounds dont matter)
+    ACTIVE_RBOUNDS, // update based on radius boundaries (updateRange.x == radius)
 
     // Not really even a real active value, but some objects set their active states to this so here it is I suppose
     ACTIVE_DISABLED = 0xFF,
@@ -1956,8 +1958,8 @@ typedef struct {
     RSDK.BreakForeachLoop();                                                                                                                         \
     return
 
-#define destroyEntity(entity)   RSDK.ResetEntity(entity, TYPE_BLANK, NULL)
-#define destroyEntitySlot(slot) RSDK.ResetEntitySlot(slot, TYPE_BLANK, NULL)
+#define destroyEntity(entity)   RSDK.ResetEntity(entity, TYPE_DEFAULTOBJECT, NULL)
+#define destroyEntitySlot(slot) RSDK.ResetEntitySlot(slot, TYPE_DEFAULTOBJECT, NULL)
 
 #if GAME_INCLUDE_EDITOR
 #define showGizmos() (SceneInfo->listPos == SceneInfo->entitySlot || SceneInfo->effectGizmo)
