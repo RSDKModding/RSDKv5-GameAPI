@@ -19,8 +19,8 @@ struct Mesh {
 
     inline bool32 Loaded() { return id != (uint16)-1; }
 
-    inline bool32 Matches(SpriteSheet &other) { return this->id == other.id; }
-    inline bool32 Matches(SpriteSheet *other)
+    inline bool32 Matches(Mesh &other) { return this->id == other.id; }
+    inline bool32 Matches(Mesh *other)
     {
         if (other)
             return this->id == other->id;
@@ -74,8 +74,8 @@ struct Scene3D {
 
     inline bool32 Loaded() { return id != (uint16)-1; }
 
-    inline bool32 Matches(SpriteSheet &other) { return this->id == other.id; }
-    inline bool32 Matches(SpriteSheet *other)
+    inline bool32 Matches(Scene3D &other) { return this->id == other.id; }
+    inline bool32 Matches(Scene3D *other)
     {
         if (other)
             return this->id == other->id;
