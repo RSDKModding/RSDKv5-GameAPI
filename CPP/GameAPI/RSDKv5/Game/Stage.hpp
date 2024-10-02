@@ -32,7 +32,7 @@ struct SceneListEntry {
 };
 
 struct SceneInfo {
-    void *entity;
+    GameObject::Entity *entity;
     SceneListEntry *listData;
     SceneListInfo *listCategory;
     int32 timeCounter;

@@ -176,6 +176,14 @@ struct GameObject {
         uint8 visible;
         uint8 onScreen;
 
+        inline void Init()
+        {
+            active        = ACTIVE_BOUNDS;
+            visible       = false;
+            updateRange.x = TO_FIXED(128);
+            updateRange.y = TO_FIXED(128);
+        }
+
         inline uint16 Slot() { return RSDKTable->GetEntitySlot(this); }
         inline void Destroy() { RSDKTable->ResetEntity(this, TYPE_DEFAULTOBJECT, nullptr); }
 
@@ -226,7 +234,10 @@ struct GameObject {
     };
 
     static inline Entity *Create(void *data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(TYPE_DEFAULTOBJECT, data, x, y); }
-    static inline Entity *Create(int32 data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(TYPE_DEFAULTOBJECT, INT_TO_VOID(data), x, y); }
+    static inline Entity *Create(int32 data, int32 x, int32 y)
+    {
+        return (Entity *)RSDKTable->CreateEntity(TYPE_DEFAULTOBJECT, INT_TO_VOID(data), x, y);
+    }
 
     template <typename T> static inline T *Create(void *data, int32 x, int32 y)
     {
