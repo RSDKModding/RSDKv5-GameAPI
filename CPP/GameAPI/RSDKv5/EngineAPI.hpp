@@ -248,7 +248,7 @@ struct APIFunctionTable {
     bool32 (*CanShowAltExtensionOverlay)(int32 overlay);
     bool32 (*ShowAltExtensionOverlay)(int32 overlay);
     int32 (*GetConnectingStringID)(void);
-    void (*ShowLimitedVideoOptions)(int32 id);
+    bool32 (*ShowLimitedVideoOptions)(int32 id);
 #endif
 
     // Achievements

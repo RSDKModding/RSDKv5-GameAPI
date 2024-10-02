@@ -19,6 +19,9 @@
 
 #define CAMERA_COUNT (4)
 
+#define PALETTE_BANK_COUNT (0x8)
+#define PALETTE_BANK_SIZE  (0x100)
+
 namespace RSDK
 {
 enum DrawFX { FX_NONE = 0, FX_FLIP = 1, FX_ROTATE = 2, FX_SCALE = 4 };
@@ -112,7 +115,7 @@ struct Palette {
     uint8 id;
 };
 
-extern Palette paletteBank[8];
+extern Palette paletteBank[PALETTE_BANK_COUNT];
 
 struct Tile;
 

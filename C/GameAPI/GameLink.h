@@ -27,6 +27,8 @@ typedef signed short int16;
 typedef unsigned short uint16;
 typedef signed int int32;
 typedef unsigned int uint32;
+typedef signed long long int64;
+typedef unsigned long long uint64;
 
 typedef uint32 bool32;
 #define true  1
@@ -61,6 +63,9 @@ typedef uint32 color;
 
 #define PLAYER_COUNT (4)
 #define CAMERA_COUNT (4)
+
+#define PALETTE_BANK_COUNT (0x8)
+#define PALETTE_BANK_SIZE  (0x100)
 
 #define OBJECT_COUNT (0x400)
 
@@ -501,7 +506,7 @@ typedef struct {
 } SpriteFrame;
 
 typedef struct {
-    void *frames;
+    SpriteFrame *frames;
     int32 frameID;
     int16 animationID;
     int16 prevAnimationID;
@@ -529,7 +534,7 @@ typedef struct {
 
 typedef struct {
     uint8 type;
-    uint8 drawGroup[4];
+    uint8 drawGroup[CAMERA_COUNT];
     uint8 widthShift;
     uint8 heightShift;
     uint16 width;
@@ -714,6 +719,9 @@ typedef enum {
     PRINT_POPUP,
     PRINT_ERROR,
     PRINT_FATAL,
+#if RETRO_REV0U
+    PRINT_SCRIPTERR,
+#endif
 } PrintModes;
 #else
 typedef enum {
@@ -923,6 +931,10 @@ typedef enum {
     ENGINESTATE_ERRORMSG_FATAL,
 #endif
     ENGINESTATE_NONE,
+#if RETRO_REV0U
+    // Prolly origins-only, called by the ending so I assume this handles playing ending movies and returning to menu
+    ENGINESTATE_GAME_FINISHED,
+#endif
 } EngineStates;
 
 // see: https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
@@ -1337,7 +1349,7 @@ typedef struct {
     bool32 (*CanShowAltExtensionOverlay)(int32 overlay);
     bool32 (*ShowAltExtensionOverlay)(int32 overlay);
     int32 (*GetConnectingStringID)(void);
-    void (*ShowLimitedVideoOptions)(int32 id);
+    bool32 (*ShowLimitedVideoOptions)(int32 id);
 #endif
 
     // Achievements
