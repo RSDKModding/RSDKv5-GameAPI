@@ -62,6 +62,8 @@ typedef uint32 color;
 #define PLAYER_COUNT (4)
 #define CAMERA_COUNT (4)
 
+#define OBJECT_COUNT (0x400)
+
 // 0x800 scene objects, 0x40 reserved ones, and 0x100 spare slots for creation
 #define RESERVE_ENTITY_COUNT (0x40)
 #define TEMPENTITY_COUNT     (0x100)
@@ -70,7 +72,7 @@ typedef uint32 color;
 #define TEMPENTITY_START     (ENTITY_COUNT - TEMPENTITY_COUNT)
 
 #define TYPE_COUNT      (0x100)
-#define TYPEGROUP_COUNT (0x104)
+#define TYPEGROUP_COUNT (TYPE_COUNT + 4)
 
 #define CHANNEL_COUNT (0x10)
 

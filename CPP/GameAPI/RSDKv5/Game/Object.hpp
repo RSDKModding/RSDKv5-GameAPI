@@ -9,6 +9,8 @@
 #pragma clang diagnostic ignored "-Winvalid-offsetof"
 #endif
 
+#define OBJECT_COUNT (0x400)
+
 // 0x800 scene objects, 0x40 reserved ones, and 0x100 spare slots for creation
 #define RESERVE_ENTITY_COUNT (0x40)
 #define TEMPENTITY_COUNT     (0x100)
@@ -363,15 +365,15 @@ struct EntityBase : public GameObject::Entity {
 };
 
 extern int32 registerObjectListCount;
-extern ObjectRegistration registerObjectList[0x400];
+extern ObjectRegistration registerObjectList[OBJECT_COUNT];
 #if RETRO_REV02
 extern int32 registerStaticListCount;
-extern ObjectRegistration registerStaticList[0x400];
+extern ObjectRegistration registerStaticList[OBJECT_COUNT];
 #endif
 
 template <typename E> static inline typename E::Static *RegisterObject(typename E::Static **sVars, const char *name)
 {
-    if (registerObjectListCount < 0x400) {
+    if (registerObjectListCount < OBJECT_COUNT) {
         ObjectRegistration *object = &registerObjectList[registerObjectListCount++];
         memset(object, 0, sizeof(ObjectRegistration));
         object->name = name;
@@ -422,7 +424,7 @@ template <typename E> static inline typename E::Static *RegisterObject(typename 
 #if RETRO_REV02
 template <typename E> static inline typename E::Static *RegisterStaticVars(typename E::Static **sVars, const char *name)
 {
-    if (registerStaticListCount < 0x400) {
+    if (registerStaticListCount < OBJECT_COUNT) {
         ObjectRegistration *object = &registerStaticList[registerStaticListCount++];
         memset(object, 0, sizeof(ObjectRegistration));
         object->name = name;
@@ -487,7 +489,7 @@ template <typename E>
 static inline typename E::Static *RegisterObject(typename E::Static **sVars, typename E::ModStatic **modSVars, const char *name,
                                                  const char *inherit = "")
 {
-    if (registerObjectListCount < 0x400) {
+    if (registerObjectListCount < OBJECT_COUNT) {
         ObjectRegistration *object = &registerObjectList[registerObjectListCount++];
         memset(object, 0, sizeof(ObjectRegistration));
         object->name = name;
