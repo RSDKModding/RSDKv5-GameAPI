@@ -271,9 +271,6 @@ ModelManifest.xml
 
 Ignored/
 
-# Compiled object files
-objects/
-
 # Android specific
 .gradle/
 .idea/

@@ -27,6 +27,8 @@ typedef signed short int16;
 typedef unsigned short uint16;
 typedef signed int int32;
 typedef unsigned int uint32;
+typedef signed long long int64;
+typedef unsigned long long uint64;
 
 typedef uint32 bool32;
 #define true  1
@@ -62,6 +64,11 @@ typedef uint32 color;
 #define PLAYER_COUNT (4)
 #define CAMERA_COUNT (4)
 
+#define PALETTE_BANK_COUNT (0x8)
+#define PALETTE_BANK_SIZE  (0x100)
+
+#define OBJECT_COUNT (0x400)
+
 // 0x800 scene objects, 0x40 reserved ones, and 0x100 spare slots for creation
 #define RESERVE_ENTITY_COUNT (0x40)
 #define TEMPENTITY_COUNT     (0x100)
@@ -70,7 +77,7 @@ typedef uint32 color;
 #define TEMPENTITY_START     (ENTITY_COUNT - TEMPENTITY_COUNT)
 
 #define TYPE_COUNT      (0x100)
-#define TYPEGROUP_COUNT (0x104)
+#define TYPEGROUP_COUNT (TYPE_COUNT + 4)
 
 #define CHANNEL_COUNT (0x10)
 
@@ -499,7 +506,7 @@ typedef struct {
 } SpriteFrame;
 
 typedef struct {
-    void *frames;
+    SpriteFrame *frames;
     int32 frameID;
     int16 animationID;
     int16 prevAnimationID;
@@ -527,7 +534,7 @@ typedef struct {
 
 typedef struct {
     uint8 type;
-    uint8 drawGroup[4];
+    uint8 drawGroup[CAMERA_COUNT];
     uint8 widthShift;
     uint8 heightShift;
     uint16 width;
@@ -650,11 +657,13 @@ typedef enum { FX_NONE = 0, FX_FLIP = 1, FX_ROTATE = 2, FX_SCALE = 4 } DrawFX;
 typedef enum { FLIP_NONE, FLIP_X, FLIP_Y, FLIP_XY } FlipFlags;
 
 typedef enum {
-    TYPE_BLANK,
+    TYPE_DEFAULTOBJECT = 0,
 #if RETRO_REV02
     TYPE_DEVOUTPUT,
 #endif
-} DefaultObjTypes;
+
+    TYPE_DEFAULT_COUNT, // max
+} DefaultObjects;
 
 typedef enum {
     INPUT_UNASSIGNED = -2,
@@ -710,6 +719,9 @@ typedef enum {
     PRINT_POPUP,
     PRINT_ERROR,
     PRINT_FATAL,
+#if RETRO_REV0U
+    PRINT_SCRIPTERR,
+#endif
 } PrintModes;
 #else
 typedef enum {
@@ -731,9 +743,9 @@ typedef enum {
     VAR_BOOL,
     VAR_STRING,
     VAR_VECTOR2,
-    VAR_FLOAT,
+    VAR_FLOAT, // Not actually used in Sonic Mania so it's just an assumption, but this is the only thing that'd fit the 32 bit limit and make sense
     VAR_COLOR,
-} VarTypes;
+} VariableTypes;
 
 #if RETRO_REV02
 typedef enum {
@@ -770,14 +782,14 @@ typedef enum {
 #endif
 
 typedef enum {
-    ACTIVE_NEVER,
-    ACTIVE_ALWAYS,
-    ACTIVE_NORMAL,
-    ACTIVE_PAUSED,
-    ACTIVE_BOUNDS,
-    ACTIVE_XBOUNDS,
-    ACTIVE_YBOUNDS,
-    ACTIVE_RBOUNDS,
+    ACTIVE_NEVER,   // never update
+    ACTIVE_ALWAYS,  // always update (even if paused/frozen)
+    ACTIVE_NORMAL,  // always update (unless paused/frozen)
+    ACTIVE_PAUSED,  // update only when paused/frozen
+    ACTIVE_BOUNDS,  // update if in x & y bounds
+    ACTIVE_XBOUNDS, // update only if in x bounds (y bounds dont matter)
+    ACTIVE_YBOUNDS, // update only if in y bounds (x bounds dont matter)
+    ACTIVE_RBOUNDS, // update based on radius boundaries (updateRange.x == radius)
 
     // Not really even a real active value, but some objects set their active states to this so here it is I suppose
     ACTIVE_DISABLED = 0xFF,
@@ -919,6 +931,10 @@ typedef enum {
     ENGINESTATE_ERRORMSG_FATAL,
 #endif
     ENGINESTATE_NONE,
+#if RETRO_REV0U
+    // Prolly origins-only, called by the ending so I assume this handles playing ending movies and returning to menu
+    ENGINESTATE_GAME_FINISHED,
+#endif
 } EngineStates;
 
 // see: https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
@@ -1333,7 +1349,7 @@ typedef struct {
     bool32 (*CanShowAltExtensionOverlay)(int32 overlay);
     bool32 (*ShowAltExtensionOverlay)(int32 overlay);
     int32 (*GetConnectingStringID)(void);
-    void (*ShowLimitedVideoOptions)(int32 id);
+    bool32 (*ShowLimitedVideoOptions)(int32 id);
 #endif
 
     // Achievements
@@ -1954,8 +1970,8 @@ typedef struct {
     RSDK.BreakForeachLoop();                                                                                                                         \
     return
 
-#define destroyEntity(entity)   RSDK.ResetEntity(entity, TYPE_BLANK, NULL)
-#define destroyEntitySlot(slot) RSDK.ResetEntitySlot(slot, TYPE_BLANK, NULL)
+#define destroyEntity(entity)   RSDK.ResetEntity(entity, TYPE_DEFAULTOBJECT, NULL)
+#define destroyEntitySlot(slot) RSDK.ResetEntitySlot(slot, TYPE_DEFAULTOBJECT, NULL)
 
 #if GAME_INCLUDE_EDITOR
 #define showGizmos() (SceneInfo->listPos == SceneInfo->entitySlot || SceneInfo->effectGizmo)

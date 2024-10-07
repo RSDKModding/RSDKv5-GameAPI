@@ -25,13 +25,21 @@ typedef enum {
     ID_SONIC    = 1 << 0,
     ID_TAILS    = 1 << 1,
     ID_KNUCKLES = 1 << 2,
-#if MANIA_USE_PLUS || GAME_IS_S3
+#if (GAME_IS_MANIA && MANIA_USE_PLUS) || (GAME_IS_S3 && !ORIGINS_USE_PLUS)
     ID_MIGHTY = 1 << 3,
     ID_RAY    = 1 << 4,
+#endif
+#if GAME_IS_S3 && ORIGINS_USE_PLUS
+    ID_AMY    = 1 << 3,
+    ID_MIGHTY = 1 << 4,
+    ID_RAY    = 1 << 5,
 #endif
     ID_TAILS_ASSIST    = ID_TAILS << 8,
     ID_KNUCKLES_ASSIST = ID_KNUCKLES << 8, // custom-added, can be used to check if "& knux" is active
     ID_DEFAULT_PLAYER  = ID_SONIC | ID_TAILS_ASSIST,
+#if GAME_IS_S3 && ORIGINS_USE_PLUS
+    ID_AMY_TAILS = ID_AMY | ID_TAILS_ASSIST,
+#endif
 } ManiaPlayerIDs;
 
 #define GET_CHARACTER_ID(playerNum)                (((globals->playerID >> (8 * ((playerNum)-1))) & 0xFF))
@@ -281,6 +289,27 @@ typedef enum {
     MEDAL_NOLIVES     = 1 << 6,
 } S3MedalMods;
 
+typedef enum {
+    MISSIONNO_NONE            = 0,
+    MISSIONNO_MERCY           = 8,
+    MISSIONNO_RINGCHALLENGE50 = 10,
+    MISSIONNO_AERIALATTACK    = 18,
+    MISSIONNO_RINGVACCUM      = 30,
+    MISSIONNO_BALLOONBURST    = 38,
+    MISSIONNO_FIREBALLDASH    = 39,
+} S3MissionFunctions;
+
+typedef enum {
+    HUDENABLE_OFF,
+    HUDENABLE_ON,
+} S3HUDEnableTypes;
+
+typedef enum {
+    MISSION_CONDITION_NONE,
+    MISSION_CONDITION_CLEAR,
+    MISSION_CONDITION_FAIL,
+} S3MissionConditions;
+
 #endif
 
 #endif
@@ -399,9 +428,9 @@ typedef struct {
     int32 restartRings;
     int32 restart1UP;
     int32 restartPowerups;
-    int32 restartPos[8];
-    int32 restartSlot[4];
-    int32 restartDir[4];
+    int32 restartPos[PLAYER_COUNT * 2];
+    int32 restartSlot[PLAYER_COUNT];
+    int32 restartDir[PLAYER_COUNT];
     int32 restartMinutes;
     int32 restartSeconds;
     int32 restartMilliseconds;
@@ -410,7 +439,7 @@ typedef struct {
     int32 tempMilliseconds;
     int32 restartScore;
     int32 restartScore1UP;
-    int32 restartLives[4];
+    int32 restartLives[PLAYER_COUNT];
 #if GAME_VERSION != VER_100
     int32 restartMusicID;
 #endif
@@ -418,7 +447,7 @@ typedef struct {
     int32 tempFlags;
     int32 continues;
     int32 initCoolBonus;
-    int32 coolBonus[4];
+    int32 coolBonus[PLAYER_COUNT];
 #if MANIA_USE_PLUS
     int32 replayWriteBuffer[0x40000];
     int32 replayReadBuffer[0x40000];

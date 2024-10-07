@@ -39,11 +39,11 @@
 const char *RSDK::currentState = nullptr;
 
 int32 RSDK::registerObjectListCount = 0;
-RSDK::ObjectRegistration RSDK::registerObjectList[0x400];
+RSDK::ObjectRegistration RSDK::registerObjectList[OBJECT_COUNT];
 
 #if RETRO_REV02
 int32 RSDK::registerStaticListCount = 0;
-RSDK::ObjectRegistration RSDK::registerStaticList[0x400];
+RSDK::ObjectRegistration RSDK::registerStaticList[OBJECT_COUNT];
 #endif
 
 RSDK::Channel RSDK::channels[CHANNEL_COUNT] = { RSDK::Channel(0),  RSDK::Channel(1),  RSDK::Channel(2),  RSDK::Channel(3),
@@ -51,7 +51,7 @@ RSDK::Channel RSDK::channels[CHANNEL_COUNT] = { RSDK::Channel(0),  RSDK::Channel
                                                 RSDK::Channel(8),  RSDK::Channel(9),  RSDK::Channel(10), RSDK::Channel(11),
                                                 RSDK::Channel(12), RSDK::Channel(13), RSDK::Channel(14), RSDK::Channel(15) };
 
-RSDK::Palette RSDK::paletteBank[8] = { RSDK::Palette(0), RSDK::Palette(1), RSDK::Palette(2), RSDK::Palette(3),
+RSDK::Palette RSDK::paletteBank[PALETTE_BANK_COUNT] = { RSDK::Palette(0), RSDK::Palette(1), RSDK::Palette(2), RSDK::Palette(3),
                                        RSDK::Palette(4), RSDK::Palette(5), RSDK::Palette(6), RSDK::Palette(7) };
 
 RSDK::RSDKFunctionTable *RSDK::RSDKTable;

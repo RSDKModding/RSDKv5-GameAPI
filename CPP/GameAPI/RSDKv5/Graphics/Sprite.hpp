@@ -40,7 +40,7 @@ struct SpriteFrame {
 struct SpriteAnimation {
     uint16 aniFrames;
 
-    inline void Init() { aniFrames = -1; }
+    inline void Init() { aniFrames = (uint16)-1; }
 
     inline void Load(const char *path, Scopes scope) { aniFrames = RSDKTable->LoadSpriteAnimation(path, scope); }
     inline void Create(const char *filename, uint32 frameCount, uint32 listCount, Scopes scope)

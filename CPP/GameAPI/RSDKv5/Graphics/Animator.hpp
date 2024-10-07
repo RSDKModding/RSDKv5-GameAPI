@@ -59,7 +59,7 @@ struct Animator {
     inline void DrawString(Vector2 *position, String *string, int32 endFrame, int32 textLength, int32 align, int32 spacing, Vector2 *charOffsets,
                            bool32 screenRelative)
     {
-        RSDKTable->DrawText(this, position, string, endFrame, textLength, align, spacing, NULL, charOffsets, screenRelative);
+        RSDKTable->DrawText(this, position, string, endFrame, textLength, align, spacing, nullptr, charOffsets, screenRelative);
     }
 
 #if RETRO_REV0U

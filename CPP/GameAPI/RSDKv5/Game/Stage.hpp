@@ -11,6 +11,19 @@ enum EngineStates {
     ENGINESTATE_REGULAR,
     ENGINESTATE_PAUSED,
     ENGINESTATE_FROZEN,
+    ENGINESTATE_STEPOVER = 4,
+    ENGINESTATE_DEVMENU  = 8,
+    ENGINESTATE_VIDEOPLAYBACK,
+    ENGINESTATE_SHOWIMAGE,
+#if RETRO_REV02
+    ENGINESTATE_ERRORMSG,
+    ENGINESTATE_ERRORMSG_FATAL,
+#endif
+    ENGINESTATE_NONE,
+#if RETRO_REV0U
+    // Prolly origins-only, called by the ending so I assume this handles playing ending movies and returning to menu
+    ENGINESTATE_GAME_FINISHED,
+#endif
 };
 
 struct SceneListInfo {
@@ -32,7 +45,7 @@ struct SceneListEntry {
 };
 
 struct SceneInfo {
-    void *entity;
+    GameObject::Entity *entity;
     SceneListEntry *listData;
     SceneListInfo *listCategory;
     int32 timeCounter;

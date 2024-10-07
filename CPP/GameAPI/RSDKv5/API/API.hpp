@@ -36,7 +36,7 @@ inline bool32 ShowExtensionOverlay(int32 overlay) { return APITable->ShowExtensi
 inline bool32 CanShowAltExtensionOverlay(int32 overlay) { return APITable->CanShowAltExtensionOverlay(overlay); }
 inline bool32 ShowAltExtensionOverlay(int32 overlay) { return APITable->ShowAltExtensionOverlay(overlay); }
 inline int32 GetConnectingStringID() { return APITable->GetConnectingStringID(); }
-inline void ShowLimitedVideoOptions(int32 id) { return APITable->ShowLimitedVideoOptions(id); }
+inline bool32 ShowLimitedVideoOptions(int32 id) { return APITable->ShowLimitedVideoOptions(id); }
 #endif
 
 #endif
