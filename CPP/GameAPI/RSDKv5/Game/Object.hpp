@@ -469,10 +469,10 @@ template <typename E> static inline typename E::Static *RegisterStaticVars(typen
 
 #define RSDK_EDITABLE_VAR(object, type, var) sVars->EditableVar(type, #var, offsetof(object, var))
 #define RSDK_EDITABLE_ARRAY(object, type, var, count, arrType)                                                                                       \
-    for (int i = 0; i < (count); ++i) {                                                                                                              \
+    for (int32 i = 0; i < (count); ++i) {                                                                                                            \
         char buffer[0x40];                                                                                                                           \
         sprintf_s(buffer, (int32)sizeof(buffer), "%s%d", #var, i);                                                                                   \
-        sVars->EditableVar(type, buffer, (uint8)sVars->classID, offsetof(object, var) + sizeof(arrType) * i);                                        \
+        sVars->EditableVar(type, buffer, offsetof(object, var) + sizeof(arrType) * i);                                                               \
     }
 
 #define RSDK_INIT_STATIC_VARS(object) memset(sVars, 0, sizeof(object::Static))
