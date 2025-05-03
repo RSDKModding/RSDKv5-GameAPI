@@ -109,6 +109,8 @@ typedef uint32 color;
 #define TO_FIXED_F(x)   ((x)*65536.0)
 #define FROM_FIXED_F(x) ((x) / 65536.0)
 
+#define RSDK_PI (3.1415927f)
+
 // -------------------------
 // STRUCTS
 // -------------------------

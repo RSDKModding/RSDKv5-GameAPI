@@ -25,6 +25,8 @@
 #define TO_FIXED(x)   ((int)TO_FIXED_F(x))
 #define FROM_FIXED(x) ((int)FROM_FIXED_F(x))
 
+#define RSDK_PI (3.1415927f)
+
 namespace RSDK
 {
 
