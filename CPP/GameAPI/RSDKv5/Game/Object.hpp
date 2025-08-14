@@ -585,6 +585,18 @@ static inline typename E::Static *RegisterObject(typename E::Static **sVars, typ
 
 #define MOD_REGISTER_OBJECT_HOOK(obj) obj::Static *obj::sVars = RSDK::Mod::RegisterObjectHook<obj>(&obj::sVars, #obj);
 
+#if RETRO_MOD_LOADER_VER >= 3
+#define DEFINE_HOOK_FUNC(name, returnType, ...)                               \
+    returnType (*Original_##name)(__VA_ARGS__);                               \
+    returnType Hook_##name(__VA_ARGS__);                                      \
+    static void RegisterHook_##name(void) {                                   \
+        Mod.HookPublicFunction(#name, Hook_##name, (void**)&Original_##name); \
+    }                                                                         \
+    returnType Hook_##name(__VA_ARGS__)
+
+#define REGISTER_HOOK_FUNC(name) do { RegisterHook_##name(); } while (0)
+#endif
+
 #endif
 
 } // namespace RSDK
