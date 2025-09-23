@@ -77,6 +77,13 @@ struct Palette {
     void Load(const char *path, uint16 disabledRows) { RSDKTable->LoadPalette(id, path, disabledRows); }
 #endif
 
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 3
+    void LoadLegacy(const char *path, int32 startDstIndex, int32 startSrcIndex, int32 endSrcIndex)
+    {
+        modTable->LoadPaletteLegacy(id, path, startDstIndex, startSrcIndex, endSrcIndex);
+    }
+#endif
+
 #if RETRO_REV01
     static uint16 *GetTintLookupTable() { return RSDKTable->GetTintLookupTable(); }
 #endif

@@ -57,6 +57,9 @@ enum RetroPlatform {
 };
 
 inline int32 GetRetroPlatform(void) { return modTable->GetRetroPlatform(); }
+
+inline void GetGameTitle(String *result) { modTable->GetGameTitle(result); }
+inline void SetGameTitle(const char *name) { modTable->SetGameTitle(name); }
 #endif
 
 namespace Mod
@@ -132,6 +135,9 @@ inline bool32 ExcludeFile(const char *id, const char *path) { return modTable->E
 inline bool32 ExcludeAllFiles(const char *id) { return modTable->ExcludeAllFiles(id); }
 inline bool32 ReloadFile(const char *id, const char *path) { return modTable->ReloadFile(id, path); }
 inline bool32 ReloadAllFiles(const char *id) { return modTable->ReloadAllFiles(id); }
+#if RETRO_MOD_LOADER_VER >= 3
+inline bool32 FileExists(const char *path) { return modTable->FileExists(path); }
+#endif
 } // namespace Files
 
 namespace Engine
