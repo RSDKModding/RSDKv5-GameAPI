@@ -75,6 +75,11 @@ inline void AddViewableVariable(const char *name, void *value, ViewableVarTypes 
 inline void Print(void *msg, uint8 type) { RSDKTable->PrintMessage(msg, type); };
 #endif
 
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 3
+inline void AddDevMenuCharacter(const char *playerName, int32 id) { modTable->AddDevMenuCharacter(playerName, id); }
+inline int32 GetActiveDevMenuCharacter(void) { return modTable->GetActiveDevMenuCharacter(); }
+#endif
+
 } // namespace Dev
 
 } // namespace RSDK

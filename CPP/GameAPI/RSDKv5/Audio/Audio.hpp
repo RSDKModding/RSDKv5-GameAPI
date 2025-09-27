@@ -14,6 +14,10 @@ struct Channel {
 
     inline void SetAttributes(float volume, float pan, float speed) { RSDKTable->SetChannelAttributes(id, volume, pan, speed); }
 
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 3
+    inline void GetAttributes(float *volume, float *pan, float *speed) { modTable->GetChannelAttributes(id, volume, pan, speed); }
+#endif
+
     inline void Stop() { RSDKTable->StopChannel(id); }
     inline void Pause() { RSDKTable->PauseChannel(id); }
     inline void Resume() { RSDKTable->ResumeChannel(id); }
