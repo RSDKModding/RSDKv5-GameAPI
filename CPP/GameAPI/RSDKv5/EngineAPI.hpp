@@ -266,6 +266,7 @@ struct ModFunctionTable {
 
     // Graphics
     void (*LoadPaletteLegacy)(uint8 bankID, const char *filename, int32 startDstIndex, int32 startSrcIndex, int32 endSrcIndex);
+    void (*DrawDevString)(const char *string, int32 x, int32 y, int32 align, uint32 color);
 
     // Audio
     void (*GetChannelAttributes)(uint8 channel, float *volume, float *panning, float *speed);

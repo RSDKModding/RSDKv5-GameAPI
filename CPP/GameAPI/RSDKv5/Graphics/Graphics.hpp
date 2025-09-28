@@ -187,6 +187,10 @@ inline void DrawAniTiles(SpriteSheet sheet, uint16 tileIndex, uint16 srcX, uint1
 
 inline void FillScreen(color color, int32 alphaR, int32 alphaG, int32 alphaB) { RSDKTable->FillScreen(color, alphaR, alphaG, alphaB); }
 
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 3
+inline void DrawDevString(const char *string, int32 x, int32 y, int32 align, uint32 color) { modTable->DrawDevString(string, x, y, align, color); }
+#endif
+
 // Screens & Displays
 inline void GetDisplayInfo(int32 *displayID, int32 *width, int32 *height, int32 *refreshRate, char *text)
 {
