@@ -5,6 +5,14 @@
 
 namespace RSDK
 {
+
+enum LayerTypes {
+    LAYER_HSCROLL,
+    LAYER_VSCROLL,
+    LAYER_ROTOZOOM,
+    LAYER_BASIC,
+};
+
 struct ScanlineInfo {
     Vector2 position;
     Vector2 deform;
