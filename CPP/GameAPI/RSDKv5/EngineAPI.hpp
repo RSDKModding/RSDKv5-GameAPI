@@ -706,6 +706,11 @@ struct GameInfo {
     char gameTitle[0x40];
     char gameSubtitle[0x100];
     char version[0x10];
+#if !RETRO_REV02
+    uint8 platform;
+    uint8 language;
+    uint8 region;
+#endif
 };
 
 struct InputState {
