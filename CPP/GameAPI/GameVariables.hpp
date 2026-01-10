@@ -411,34 +411,6 @@ void RegisterGlobals(void **globals, int32 size);
 #ifndef GAME_NO_GLOBALS
 // Globals Example
 
-#if !GAME_IS_MANIA && !GAME_IS_S3 && !defined(GAME_NO_VARIABLES)
-// forward declare
-struct GlobalVariables;
-
-extern GlobalVariables *globals;
-
-struct GlobalVariables {
-    struct Constructor {
-        Constructor()
-        {
-#if RETRO_REV0U
-            RegisterGlobals((void **)&globals, sizeof(GlobalVariables), &GlobalVariables::Init);
-#else
-            RegisterGlobals((void **)&globals, sizeof(GlobalVariables));
-#endif
-        }
-    };
-
-    static Constructor c;
-
-#if RETRO_REV0U
-    static void Init(void *g);
-#endif
-
-    // Your Variables Go Here
-};
-#endif
-
 #if GAME_IS_MANIA
 // Use this if you're hooking onto Sonic Mania
 struct ManiaGlobalVariables {
@@ -513,9 +485,10 @@ struct ManiaGlobalVariables {
     int32 hasPlusInitial;
 #endif
 };
-#endif
 
-#if GAME_IS_S3
+typedef ManiaGlobalVariables GlobalVariables;
+extern GlobalVariables *globals;
+#elif GAME_IS_S3
 // Use this if you're hooking onto Origins' S3
 struct S3GlobalVariables {
     int32 gameMode;
@@ -682,6 +655,35 @@ struct S3GlobalVariables {
     bool32 cheatsEnabled;
     int32 field_447D9C;
 #endif
+};
+
+typedef S3GlobalVariables GlobalVariables;
+extern GlobalVariables *globals;
+#elif !defined(GAME_NO_VARIABLES)
+// forward declare
+struct GlobalVariables;
+
+extern GlobalVariables *globals;
+
+struct GlobalVariables {
+    struct Constructor {
+        Constructor()
+        {
+#if RETRO_REV0U
+            RegisterGlobals((void **)&globals, sizeof(GlobalVariables), &GlobalVariables::Init);
+#else
+            RegisterGlobals((void **)&globals, sizeof(GlobalVariables));
+#endif
+        }
+    };
+
+    static Constructor c;
+
+#if RETRO_REV0U
+    static void Init(void *g);
+#endif
+
+    // Your Variables Go Here
 };
 #endif
 
