@@ -15,7 +15,9 @@
 
 // GlobalVariables::Constructor c;
 
-// GlobalVariables *globals = nullptr;
+#if (GAME_IS_MANIA || GAME_IS_S3) && !defined(GAME_NO_GLOBALS)
+GlobalVariables *globals = nullptr;
+#endif
 
 void **registerGlobals    = nullptr;
 int32 registerGlobalsSize = 0;
