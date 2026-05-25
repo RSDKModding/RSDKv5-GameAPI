@@ -598,6 +598,9 @@ typedef struct {
     uint8 rWallAngle;
     uint8 roofAngle;
     uint8 flag;
+    uint8 unused1;
+    uint8 unused2;
+    uint8 unused3;
 } TileInfo;
 #endif
 
