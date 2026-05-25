@@ -67,6 +67,8 @@ typedef uint32 color;
 #define PALETTE_BANK_COUNT (0x8)
 #define PALETTE_BANK_SIZE  (0x100)
 
+#define FRAMEHITBOX_COUNT (0x8)
+
 #define OBJECT_COUNT (0x400)
 
 // 0x800 scene objects, 0x40 reserved ones, and 0x100 spare slots for creation
@@ -505,6 +507,7 @@ typedef struct {
     uint16 delay;
     int16 id;
     uint8 sheetID;
+    Hitbox hitboxes[FRAMEHITBOX_COUNT];
 } SpriteFrame;
 
 typedef struct {
