@@ -38,9 +38,9 @@ typedef struct {
     uint16 duration;
     uint16 unicodeChar;
     uint8 sheetID;
-} GameSpriteFrameType;
+} GameSpriteFrame;
 
-struct SpriteFrame : public GameSpriteFrameType {
+struct SpriteFrame : public GameSpriteFrame {
     Hitbox hitboxes[FRAMEHITBOX_COUNT];
 };
 
