@@ -307,9 +307,27 @@ typedef struct {
 } RSDKGameInfo;
 
 typedef struct {
+    uint32 hash[4];
+    char name[0x20];
+    uint16 sceneOffsetStart;
+    uint16 sceneOffsetEnd;
+    uint8 sceneCount;
+} RSDKSceneListInfo;
+
+typedef struct {
+    uint32 hash[4];
+    char name[0x20];
+    char folder[0x10];
+    char id[0x04];
+#if RETRO_REV02
+    uint8 filter;
+#endif
+} RSDKSceneListEntry;
+
+typedef struct {
     Entity *entity;
-    void *listData;
-    void *listCategory;
+    RSDKSceneListEntry *listData;
+    RSDKSceneListInfo *listCategory;
     int32 timeCounter;
     int32 currentDrawGroup;
     int32 currentScreenID;
