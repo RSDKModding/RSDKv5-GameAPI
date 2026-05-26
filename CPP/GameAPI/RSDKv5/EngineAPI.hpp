@@ -595,7 +595,7 @@ struct RSDKFunctionTable {
                              int32 tolerance);
     void (*ProcessObjectMovement)(void *entity, Hitbox *outer, Hitbox *inner);
 #if RETRO_REV0U
-    void (*SetupCollisionConfig)(int32 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
+    void (*SetupCollisionConfig)(uint8 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
                                  uint8 roofAngleTolerance);
     void (*SetPathGripSensors)(CollisionSensor *sensors); // expects 5 sensors
     void (*FindFloorPosition)(CollisionSensor *sensor);
