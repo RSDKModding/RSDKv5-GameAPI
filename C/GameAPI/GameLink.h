@@ -1617,7 +1617,7 @@ typedef struct {
     void (*MatrixRotateZ)(Matrix *matrix, int32 angle);
     void (*MatrixRotateXYZ)(Matrix *matrix, int32 x, int32 y, int32 z);
     void (*MatrixInverse)(Matrix *dest, Matrix *matrix);
-    void (*MatrixCopy)(Matrix *matDest, Matrix *matSrc);
+    void (*MatrixTranspose)(Matrix *matDest, Matrix *matSrc);
 
     // Strings
     void (*InitString)(String *string, const char *text, uint32 textLength);

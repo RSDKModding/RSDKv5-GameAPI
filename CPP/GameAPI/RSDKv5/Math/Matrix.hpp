@@ -21,7 +21,7 @@ struct Matrix {
     inline void Inverse() { RSDKTable->MatrixInverse(this, this); }
 
     static inline void Multiply(Matrix *dest, Matrix *matrixA, Matrix *matrixB) { RSDKTable->MatrixMultiply(dest, matrixA, matrixB); }
-    static inline void Copy(Matrix *matDest, Matrix *matSrc) { RSDKTable->MatrixCopy(matDest, matSrc); }
+    static inline void Transpose(Matrix *matDest, Matrix *matSrc) { RSDKTable->MatrixTranspose(matDest, matSrc); }
     static inline void Inverse(Matrix *dest, Matrix *matrix) { RSDKTable->MatrixInverse(dest, matrix); }
 
     inline int32 *operator[](int32 index) { return values[index]; }
