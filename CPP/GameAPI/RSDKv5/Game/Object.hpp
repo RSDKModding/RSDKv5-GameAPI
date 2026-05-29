@@ -428,6 +428,9 @@ template <typename E> static inline typename E::Static *RegisterStaticVars(typen
 #endif
 
 #define $(obj) (obj::sVars)
+#if RETRO_USE_MOD_LOADER
+#define M$(obj) (obj::modSVars)
+#endif
 
 #define RSDK_REGISTER_OBJECT(obj) obj::Static *obj::sVars = RSDK::RegisterObject<obj>(&obj::sVars, #obj);
 
