@@ -3,7 +3,9 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-#define TILE_SIZE (16)
+#define TILE_SIZE   (16)
+#define TILE_COUNT  (0x400)
+#define CPATH_COUNT (2)
 
 namespace RSDK
 {

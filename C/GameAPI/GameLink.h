@@ -83,7 +83,9 @@ typedef uint32 color;
 
 #define CHANNEL_COUNT (0x10)
 
-#define TILE_SIZE (16)
+#define TILE_SIZE   (16)
+#define TILE_COUNT  (0x400)
+#define CPATH_COUNT (2)
 
 // -------------------------
 // MACROS
