@@ -21,20 +21,12 @@ struct Animator {
     uint8 loopIndex;
     uint8 rotationStyle;
 
-#if RETRO_MOD_LOADER_VER >= 2
     void inline SetAnimation(SpriteAnimation &spriteAni, uint16 listID, bool32 forceApply, int32 frameID)
-#else
-    void inline SetAnimation(SpriteAnimation &spriteAni, uint16 listID, bool32 forceApply, int16 frameID)
-#endif
     {
         RSDKTable->SetSpriteAnimation(spriteAni.aniFrames, listID, this, forceApply, frameID);
     }
 
-#if RETRO_MOD_LOADER_VER >= 2
     void inline SetAnimation(SpriteAnimation *spriteAni, uint16 listID, bool32 forceApply, int32 frameID)
-#else
-    void inline SetAnimation(SpriteAnimation *spriteAni, uint16 listID, bool32 forceApply, int16 frameID)
-#endif
     {
         RSDKTable->SetSpriteAnimation(spriteAni ? spriteAni->aniFrames : -1, listID, this, forceApply, frameID);
     }
