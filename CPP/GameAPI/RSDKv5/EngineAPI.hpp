@@ -269,7 +269,7 @@ struct ModFunctionTable {
     void (*DrawDevString)(const char *string, int32 x, int32 y, int32 align, uint32 color);
 
     // Audio
-    void (*GetChannelAttributes)(uint8 channel, float *volume, float *panning, float *speed);
+    void (*GetChannelAttributes)(int32 channel, float *volume, float *panning, float *speed);
 
     // Dev Menu Characters
     void (*AddDevMenuCharacter)(const char *playerName, int32 id);
@@ -477,7 +477,7 @@ struct RSDKFunctionTable {
     void (*MatrixRotateZ)(Matrix *matrix, int32 angle);
     void (*MatrixRotateXYZ)(Matrix *matrix, int32 x, int32 y, int32 z);
     void (*MatrixInverse)(Matrix *dest, Matrix *matrix);
-    void (*MatrixCopy)(Matrix *matDest, Matrix *matSrc);
+    void (*MatrixTranspose)(Matrix *matDest, Matrix *matSrc);
 
     // Strings
     void (*InitString)(String *string, const char *text, uint32 textLength);
@@ -591,7 +591,7 @@ struct RSDKFunctionTable {
                              int32 tolerance);
     void (*ProcessObjectMovement)(void *entity, Hitbox *outer, Hitbox *inner);
 #if RETRO_REV0U
-    void (*SetupCollisionConfig)(int32 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
+    void (*SetupCollisionConfig)(uint8 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
                                  uint8 roofAngleTolerance);
     void (*SetPathGripSensors)(CollisionSensor *sensors); // expects 5 sensors
     void (*FindFloorPosition)(CollisionSensor *sensor);

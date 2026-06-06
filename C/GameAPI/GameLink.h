@@ -67,6 +67,8 @@ typedef uint32 color;
 #define PALETTE_BANK_COUNT (0x8)
 #define PALETTE_BANK_SIZE  (0x100)
 
+#define FRAMEHITBOX_COUNT (0x8)
+
 #define OBJECT_COUNT (0x400)
 
 // 0x800 scene objects, 0x40 reserved ones, and 0x100 spare slots for creation
@@ -81,7 +83,9 @@ typedef uint32 color;
 
 #define CHANNEL_COUNT (0x10)
 
-#define TILE_SIZE (16)
+#define TILE_SIZE   (16)
+#define TILE_COUNT  (0x400)
+#define CPATH_COUNT (2)
 
 // -------------------------
 // MACROS
@@ -305,9 +309,27 @@ typedef struct {
 } RSDKGameInfo;
 
 typedef struct {
+    uint32 hash[4];
+    char name[0x20];
+    uint16 sceneOffsetStart;
+    uint16 sceneOffsetEnd;
+    uint8 sceneCount;
+} RSDKSceneListInfo;
+
+typedef struct {
+    uint32 hash[4];
+    char name[0x20];
+    char folder[0x10];
+    char id[0x04];
+#if RETRO_REV02
+    uint8 filter;
+#endif
+} RSDKSceneListEntry;
+
+typedef struct {
     Entity *entity;
-    void *listData;
-    void *listCategory;
+    RSDKSceneListEntry *listData;
+    RSDKSceneListInfo *listCategory;
     int32 timeCounter;
     int32 currentDrawGroup;
     int32 currentScreenID;
@@ -505,6 +527,7 @@ typedef struct {
     uint16 delay;
     int16 id;
     uint8 sheetID;
+    Hitbox hitboxes[FRAMEHITBOX_COUNT];
 } SpriteFrame;
 
 typedef struct {
@@ -577,6 +600,9 @@ typedef struct {
     uint8 rWallAngle;
     uint8 roofAngle;
     uint8 flag;
+    uint8 unused1;
+    uint8 unused2;
+    uint8 unused3;
 } TileInfo;
 #endif
 
@@ -1198,6 +1224,9 @@ typedef enum {
     SUPER_DRAW,
     SUPER_CREATE,
     SUPER_STAGELOAD,
+#if RETRO_REV0U
+    SUPER_STATICLOAD,
+#endif
     SUPER_EDITORLOAD,
     SUPER_EDITORDRAW,
     SUPER_SERIALIZE
@@ -1380,7 +1409,7 @@ typedef struct {
     void (*DrawDevString)(const char *string, int32 x, int32 y, int32 align, uint32 color);
 
     // Audio
-    void (*GetChannelAttributes)(uint8 channel, float *volume, float *panning, float *speed);
+    void (*GetChannelAttributes)(int32 channel, float *volume, float *panning, float *speed);
 
     // Dev Menu Characters
     void (*AddDevMenuCharacter)(const char *playerName, int32 id);
@@ -1588,7 +1617,7 @@ typedef struct {
     void (*MatrixRotateZ)(Matrix *matrix, int32 angle);
     void (*MatrixRotateXYZ)(Matrix *matrix, int32 x, int32 y, int32 z);
     void (*MatrixInverse)(Matrix *dest, Matrix *matrix);
-    void (*MatrixCopy)(Matrix *matDest, Matrix *matSrc);
+    void (*MatrixTranspose)(Matrix *matDest, Matrix *matSrc);
 
     // Strings
     void (*InitString)(String *string, const char *text, uint32 textLength);
@@ -1702,7 +1731,7 @@ typedef struct {
                              int32 tolerance);
     void (*ProcessObjectMovement)(void *entity, Hitbox *outer, Hitbox *inner);
 #if RETRO_REV0U
-    void (*SetupCollisionConfig)(int32 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
+    void (*SetupCollisionConfig)(uint8 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
                                  uint8 roofAngleTolerance);
     void (*SetPathGripSensors)(CollisionSensor *sensors); // expects 5 sensors
     void (*FindFloorPosition)(CollisionSensor *sensor);
