@@ -7,7 +7,7 @@ namespace RSDK
 
 struct Matrix {
     Matrix() : values() {}
-    Matrix(const Matrix &other) { Matrix::Copy(this, const_cast<Matrix *>(&other)); }
+    Matrix(const Matrix &other) = default;
 
     int32 values[4][4];
 
