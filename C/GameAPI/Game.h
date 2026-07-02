@@ -7,11 +7,29 @@
 // =====================================================================
 
 // -------------------------
+// GAME TYPE
+// -------------------------
+#define GAMETYPE_NONE  (0)
+#define GAMETYPE_MANIA (1)
+#define GAMETYPE_S3    (2)
+
+#ifndef GAME_TYPE
+#define GAME_TYPE (GAMETYPE_MANIA)
+#endif
+
+#define GAME_IS_MANIA (GAME_TYPE == GAMETYPE_MANIA)
+#define GAME_IS_S3    (GAME_TYPE == GAMETYPE_S3)
+
+// -------------------------
 // ENGINE VERSIONS
 // -------------------------
 
 #ifndef RETRO_REVISION
+#if GAME_IS_MANIA
+#define RETRO_REVISION (2)
+#else
 #define RETRO_REVISION (3)
+#endif
 #endif
 
 #define RETRO_REV01 (RETRO_REVISION == 1)
@@ -42,20 +60,6 @@
 #ifndef RETRO_MOD_LOADER_VER
 #define RETRO_MOD_LOADER_VER (3)
 #endif
-
-// -------------------------
-// GAME TYPE
-// -------------------------
-#define GAMETYPE_NONE  (0)
-#define GAMETYPE_MANIA (1)
-#define GAMETYPE_S3    (2)
-
-#ifndef GAME_TYPE
-#define GAME_TYPE (GAMETYPE_MANIA)
-#endif
-
-#define GAME_IS_MANIA (GAME_TYPE == GAMETYPE_MANIA)
-#define GAME_IS_S3    (GAME_TYPE == GAMETYPE_S3)
 
 // -------------------------
 // GAME VERSIONS

@@ -17,7 +17,11 @@ typedef uint32 color;
 // -------------------------
 
 #ifndef RETRO_REVISION
+#if GAME_IS_MANIA
+#define RETRO_REVISION (2)
+#else
 #define RETRO_REVISION (3)
+#endif
 #endif
 
 #define RETRO_REV01 (RETRO_REVISION == 1)
