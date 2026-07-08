@@ -127,12 +127,12 @@ public:
     static void Register()
     {
         Derived instance = {};
-        PublicFunctions::Hook(instance.modID__, instance.name__, reinterpret_cast<void *>(&Derived::Implementation), reinterpret_cast<void **>(&instance.original__));
+        PublicFunctions::Hook(instance.modID__, instance.name__, reinterpret_cast<void *>(&Derived::Impl), reinterpret_cast<void **>(&instance.original__));
     }
 
     template <typename... Args> static decltype(auto) Original(Args &&...args)
     {
-        using T = decltype(&std::remove_reference_t<Derived>::Implementation);
+        using T = decltype(&std::remove_reference_t<Derived>::Impl);
 
         T _original = reinterpret_cast<T>(original__);
         return _original(std::forward<Args>(args)...);
@@ -287,7 +287,7 @@ extern const char *modID;
 #define DECLARE_PUBLIC_HOOK_FUNC(modID, name, type, returnType, ...)                                                                                 \
     struct type : RSDK::Mod::PublicFunctions::HookContainer<type> {                                                                                        \
         type() : HookContainer(name, modID) {}                                                                                                       \
-        static returnType Implementation(__VA_ARGS__);                                                                                               \
+        static returnType Impl(__VA_ARGS__);                                                                                               \
     };
 
 // Declare a generic hook, hook into the current game's public functions
@@ -297,7 +297,7 @@ extern const char *modID;
 #define DECLARE_MOD_HOOK_FUNC(modID, name, type, returnType, ...) DECLARE_PUBLIC_HOOK_FUNC(modID, name, type, returnType, __VA_ARGS__)
 
 // Define a generic hook
-#define DEFINE_PUBLIC_HOOK_FUNC(name, returnType, ...) returnType name::Implementation(__VA_ARGS__)
+#define DEFINE_PUBLIC_HOOK_FUNC(name, returnType, ...) returnType name::Impl(__VA_ARGS__)
 
 // Register a defined hook of the same name
 #define REGISTER_HOOK_FUNC(name) name::Register()
