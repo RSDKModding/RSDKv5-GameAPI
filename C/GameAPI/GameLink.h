@@ -1992,7 +1992,7 @@ typedef struct {
 
 #if RETRO_MOD_LOADER_VER >= 3
 // Declare a generic hook
-#define DECLARE_PUBLIC_HOOK_FUNC(_modID, _name, type, returnType, ...)                                                                               \
+#define DECLARE_PUBLIC_FUNC_HOOK(_modID, _name, type, returnType, ...)                                                                               \
     static struct {                                                                                                                                  \
         const char *modID;                                                                                                                           \
         const char *name;                                                                                                                            \
@@ -2001,16 +2001,16 @@ typedef struct {
     returnType type##_Impl(__VA_ARGS__);
 
 // Declare a generic hook, hook into the current game's public functions
-#define DECLARE_GAME_HOOK_FUNC(name, type, returnType, ...) DECLARE_PUBLIC_HOOK_FUNC(NULL, name, type, returnType, __VA_ARGS__)
+#define DECLARE_GAME_FUNC_HOOK(name, type, returnType, ...) DECLARE_PUBLIC_FUNC_HOOK(NULL, name, type, returnType, __VA_ARGS__)
 
 // Declare a generic hook, hook into other mods' public functions by ID
-#define DECLARE_MOD_HOOK_FUNC(modID, name, type, returnType, ...) DECLARE_PUBLIC_HOOK_FUNC(modID, name, type, returnType, __VA_ARGS__)
+#define DECLARE_MOD_FUNC_HOOK(modID, name, type, returnType, ...) DECLARE_PUBLIC_FUNC_HOOK(modID, name, type, returnType, __VA_ARGS__)
 
 // Define a generic hook
-#define DEFINE_PUBLIC_HOOK_FUNC(type, returnType, ...) returnType type##_Impl(__VA_ARGS__)
+#define DEFINE_PUBLIC_FUNC_HOOK(type, returnType, ...) returnType type##_Impl(__VA_ARGS__)
 
 // Register a defined hook of the same name
-#define REGISTER_HOOK_FUNC(type) do { Mod.HookPublicFunction(##type.modID, ##type.name, type##_Impl, (void **)(&##type.Original)); } while (0)
+#define REGISTER_FUNC_HOOK(type) do { Mod.HookPublicFunction(##type.modID, ##type.name, type##_Impl, (void **)(&##type.Original)); } while (0)
 #endif // !RETRO_MOD_LOADER_VER
 #endif // !RETRO_USE_MOD_LOADER
 

@@ -284,23 +284,23 @@ extern const char *modID;
 
 #if RETRO_MOD_LOADER_VER >= 3
 // Declare a generic hook
-#define DECLARE_PUBLIC_HOOK_FUNC(modID, name, type, returnType, ...)                                                                                 \
-    struct type : RSDK::Mod::PublicFunctions::HookContainer<type> {                                                                                        \
+#define DECLARE_PUBLIC_FUNC_HOOK(modID, name, type, returnType, ...)                                                                                 \
+    struct type : RSDK::Mod::PublicFunctions::HookContainer<type> {                                                                                  \
         type() : HookContainer(name, modID) {}                                                                                                       \
-        static returnType Impl(__VA_ARGS__);                                                                                               \
+        static returnType Impl(__VA_ARGS__);                                                                                                         \
     };
 
 // Declare a generic hook, hook into the current game's public functions
-#define DECLARE_GAME_HOOK_FUNC(name, type, returnType, ...) DECLARE_PUBLIC_HOOK_FUNC(nullptr, name, type, returnType, __VA_ARGS__)
+#define DECLARE_GAME_FUNC_HOOK(name, type, returnType, ...) DECLARE_PUBLIC_FUNC_HOOK(nullptr, name, type, returnType, __VA_ARGS__)
 
 // Declare a generic hook, hook into other mods' public functions by ID
-#define DECLARE_MOD_HOOK_FUNC(modID, name, type, returnType, ...) DECLARE_PUBLIC_HOOK_FUNC(modID, name, type, returnType, __VA_ARGS__)
+#define DECLARE_MOD_FUNC_HOOK(modID, name, type, returnType, ...) DECLARE_PUBLIC_FUNC_HOOK(modID, name, type, returnType, __VA_ARGS__)
 
 // Define a generic hook
-#define DEFINE_PUBLIC_HOOK_FUNC(name, returnType, ...) returnType name::Impl(__VA_ARGS__)
+#define DEFINE_PUBLIC_FUNC_HOOK(name, returnType, ...) returnType name::Impl(__VA_ARGS__)
 
 // Register a defined hook of the same name
-#define REGISTER_HOOK_FUNC(name) name::Register()
+#define REGISTER_FUNC_HOOK(name) name::Register()
 
 #endif // !RETRO_MOD_LOADER_VER
 
