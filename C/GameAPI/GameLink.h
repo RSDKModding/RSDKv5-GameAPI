@@ -1998,7 +1998,7 @@ typedef struct {
         const char *name;                                                                                                                            \
         returnType (*Original)(__VA_ARGS__);                                                                                                         \
     } type = { _modID, _name };                                                                                                                      \
-    returnType type##_Impl(__VA_ARGS__);
+    returnType type##_Impl(__VA_ARGS__)
 
 // Declare a generic hook, hook into the current game's public functions
 #define DECLARE_GAME_FUNC_HOOK(name, type, returnType, ...) DECLARE_PUBLIC_FUNC_HOOK(NULL, name, type, returnType, __VA_ARGS__)
