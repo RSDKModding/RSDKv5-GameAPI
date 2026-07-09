@@ -1996,8 +1996,8 @@ typedef struct {
     static struct {                                                                                                                                  \
         const char *modID;                                                                                                                           \
         const char *name;                                                                                                                            \
-        returnType (*Original)(__VA_ARGS__);                                                                                                         \
-    } type = { _modID, _name };                                                                                                                      \
+    } type##_Info = { _modID, _name };                                                                                                               \
+    extern returnType (*type##_Original)(__VA_ARGS__);                                                                                               \
     returnType type##_Impl(__VA_ARGS__)
 
 // Declare a generic hook, hook into the current game's public functions
@@ -2007,12 +2007,14 @@ typedef struct {
 #define DECLARE_MOD_FUNC_HOOK(modID, name, type, returnType, ...) DECLARE_PUBLIC_FUNC_HOOK(modID, name, type, returnType, __VA_ARGS__)
 
 // Define a generic hook
-#define DEFINE_PUBLIC_FUNC_HOOK(type, returnType, ...) returnType type##_Impl(__VA_ARGS__)
+#define DEFINE_PUBLIC_FUNC_HOOK(type, returnType, ...)                                                                                               \
+    returnType (*type##_Original)(__VA_ARGS__);                                                                                                      \
+    returnType type##_Impl(__VA_ARGS__)
 
 // Register a defined hook of the same name
-#define REGISTER_FUNC_HOOK(type) do { Mod.HookPublicFunction(##type.modID, ##type.name, type##_Impl, (void **)(&##type.Original)); } while (0)
-#endif // !RETRO_MOD_LOADER_VER
-#endif // !RETRO_USE_MOD_LOADER
+#define REGISTER_FUNC_HOOK(type) do { Mod.HookPublicFunction(type##_Info.modID, type##_Info.name, type##_Impl, (void **)(&type##_Original)); } while (0)
+#endif
+#endif
 
 #if RETRO_REV02
 #define RSDK_REGISTER_STATIC_VARIABLES(variables) RSDK.RegisterStaticVariables((void **)&variables, #variables, sizeof(Object##variables))
