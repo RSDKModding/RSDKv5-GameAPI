@@ -97,7 +97,7 @@ typedef uint32 color;
 #define FABS(a)                        ((a) > 0 ? (a) : -(a))
 
 #define SET_BIT(value, set, pos) ((value) ^= (-(int32)(set) ^ (value)) & (1 << (pos)))
-#define GET_BIT(b, pos)          ((b) >> (pos)&1)
+#define GET_BIT(b, pos)          ((b) >> (pos) & 1)
 
 #define INT_TO_VOID(x)   (void *)(size_t)(x)
 #define FLOAT_TO_VOID(x) INT_TO_VOID(*(int32 *)&(x))
@@ -110,7 +110,7 @@ typedef uint32 color;
 #define FROM_FIXED(x) ((x) >> 16)
 
 // floating point variants
-#define TO_FIXED_F(x)   ((x)*65536.0)
+#define TO_FIXED_F(x)   ((x) * 65536.0)
 #define FROM_FIXED_F(x) ((x) / 65536.0)
 
 #define RSDK_PI (3.1415927f)
@@ -1234,10 +1234,10 @@ typedef enum {
 
 #if RETRO_MOD_LOADER_VER >= 3
 typedef enum {
-    RETRO_WIN     = 0,
-    RETRO_PS4     = 1,
-    RETRO_XB1     = 2,
-    RETRO_SWITCH  = 3,
+    RETRO_WIN    = 0,
+    RETRO_PS4    = 1,
+    RETRO_XB1    = 2,
+    RETRO_SWITCH = 3,
     // CUSTOM
     RETRO_OSX     = 4,
     RETRO_LINUX   = 5,
@@ -1248,7 +1248,7 @@ typedef enum {
 } RetroPlatform;
 
 // Opaque pointer to a file descriptor
-typedef void* IOHandle;
+typedef void *IOHandle;
 
 typedef enum {
     IOSEEK_SET = 0, /* Seek from beginning of file. */
@@ -1497,7 +1497,8 @@ typedef struct {
 
     // User File Management
     void (*LoadUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status)); // load user file from game dir
-    void (*SaveUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status), bool32 compressed); // save user file to game dir
+    void (*SaveUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status),
+                         bool32 compressed);                                  // save user file to game dir
     void (*DeleteUserFile)(const char *name, void (*callback)(int32 status)); // delete user file from game dir
 
     // User DBs
@@ -1716,7 +1717,7 @@ typedef struct {
     uint16 (*GetTile)(uint16 layer, int32 x, int32 y);
     void (*SetTile)(uint16 layer, int32 x, int32 y, uint16 tile);
     void (*CopyTileLayer)(uint16 dstLayerID, int32 dstStartX, int32 dstStartY, uint16 srcLayerID, int32 srcStartX, int32 srcStartY, int32 countX,
-                           int32 countY);
+                          int32 countY);
     void (*ProcessParallax)(TileLayer *tileLayer);
     ScanlineInfo *(*GetScanlines)(void);
 
@@ -1992,27 +1993,25 @@ typedef struct {
 
 #if RETRO_MOD_LOADER_VER >= 3
 // Declare a generic hook
-#define DECLARE_PUBLIC_FUNC_HOOK(_modID, _name, type, returnType, ...)                                                                               \
-    static struct {                                                                                                                                  \
-        const char *modID;                                                                                                                           \
-        const char *name;                                                                                                                            \
-    } type##_Info = { _modID, _name };                                                                                                               \
+#define DECLARE_PUBLIC_FUNC_HOOK(type, returnType, ...)                                                                                              \
+    void type##_Register(void);                                                                                                                      \
     extern returnType (*type##_Original)(__VA_ARGS__);                                                                                               \
     returnType type##_Impl(__VA_ARGS__)
 
-// Declare a generic hook, hook into the current game's public functions
-#define DECLARE_GAME_FUNC_HOOK(name, type, returnType, ...) DECLARE_PUBLIC_FUNC_HOOK(NULL, name, type, returnType, __VA_ARGS__)
-
-// Declare a generic hook, hook into other mods' public functions by ID
-#define DECLARE_MOD_FUNC_HOOK(modID, name, type, returnType, ...) DECLARE_PUBLIC_FUNC_HOOK(modID, name, type, returnType, __VA_ARGS__)
-
 // Define a generic hook
-#define DEFINE_PUBLIC_FUNC_HOOK(type, returnType, ...)                                                                                               \
+#define DEFINE_PUBLIC_FUNC_HOOK(modID, name, type, returnType, ...)                                                                                  \
+    void type##_Register() { Mod.HookPublicFunction(modID, name, type##_Impl, (void **)(&type##_Original)); }                                        \
     returnType (*type##_Original)(__VA_ARGS__);                                                                                                      \
     returnType type##_Impl(__VA_ARGS__)
 
+// Define a function hook, hook into the current game's public functions
+#define DEFINE_GAME_FUNC_HOOK(name, type, returnType, ...) DEFINE_PUBLIC_FUNC_HOOK(NULL, name, type, returnType, __VA_ARGS__)
+
+// Define a function hook, hook into other mods' public functions by ID
+#define DEFINE_MOD_FUNC_HOOK(modID, name, type, returnType, ...) DEFINE_PUBLIC_FUNC_HOOK(modID, name, type, returnType, __VA_ARGS__)
+
 // Register a defined hook of the same name
-#define REGISTER_FUNC_HOOK(type) do { Mod.HookPublicFunction(type##_Info.modID, type##_Info.name, type##_Impl, (void **)(&type##_Original)); } while (0)
+#define REGISTER_FUNC_HOOK(type) type##_Register()
 #endif
 #endif
 
