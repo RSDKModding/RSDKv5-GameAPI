@@ -12,6 +12,8 @@ namespace RSDK
 struct SpriteSheet {
     uint16 id;
 
+    SpriteSheet() : id(0xFFFF) {}
+
     inline void Init() { id = (uint16)-1; }
 
     inline void Load(const char *path, Scopes scope) { id = RSDKTable->LoadSpriteSheet(path, scope); }
@@ -46,6 +48,8 @@ struct SpriteFrame : public GameSpriteFrame {
 
 struct SpriteAnimation {
     uint16 aniFrames;
+
+    SpriteAnimation() : aniFrames(0xFFFF) {}
 
     inline void Init() { aniFrames = (uint16)-1; }
 

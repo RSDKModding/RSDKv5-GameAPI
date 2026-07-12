@@ -38,6 +38,8 @@ extern RSDK::Channel channels[CHANNEL_COUNT];
 struct SoundFX {
     uint16 id;
 
+    SoundFX() : id(0xFFFF) {}
+
     inline void Init() { id = (uint16)-1; }
 
     inline void Get(const char *path) { id = RSDKTable->GetSfx(path); }
