@@ -481,7 +481,7 @@ struct ManiaGlobalVariables {
     int32 atlEntityData[0x4000];
     int32 saveLoaded;
     int32 saveRAM[0x4000];
-    int32 saveSlotID;
+    int32 saveSlotID = NO_SAVE_SLOT;
     int32 noSaveSlot[0x400];
     int32 menuParam[0x4000];
     int32 itemMode;
@@ -493,7 +493,7 @@ struct ManiaGlobalVariables {
     int32 enableIntro;
     int32 optionsLoaded;
     int32 optionsRAM[0x80];
-    int32 presenceID;
+    int32 presenceID = -1;
     int32 medallionDebug;
     int32 noSave;
     int32 notifiedAutosave;
@@ -526,16 +526,16 @@ struct ManiaGlobalVariables {
     int32 replayReadBuffer[0x40000];
     int32 replayTempWBuffer[0x40000];
     int32 replayTempRBuffer[0x40000];
-    int32 replayTableID;
+    int32 replayTableID = 0xFFFF;
     int32 replayTableLoaded;
-    int32 taTableID;
+    int32 taTableID = 0xFFFF;
     int32 taTableLoaded;
-    int32 stock;          // order of buddies (not including the leader/sidekick)
-    int32 characterFlags; // characters in the "party"
+    int32 stock          = (ID_RAY << 16) | (ID_KNUCKLES << 8) | ID_TAILS;         // order of buddies (not including the leader/sidekick)
+    int32 characterFlags = ID_SONIC | ID_TAILS | ID_KNUCKLES | ID_MIGHTY | ID_RAY; // characters in the "party"
     int32 vapeMode;
     int32 secrets;
     int32 superSecret;
-    int32 superMusicEnabled;
+    int32 superMusicEnabled = true;
     int32 lastHasPlus;
     int32 hasPlusInitial;
 #endif
@@ -547,7 +547,7 @@ extern GlobalVariables *globals;
 // Use this if you're hooking onto Origins' S3
 struct S3GlobalVariables {
     int32 gameMode;
-    int32 playerID;
+    int32 playerID = ID_DEFAULT_PLAYER;
     int32 specialCleared;
     int32 specialRingID;
     int32 blueSpheresID;
@@ -563,25 +563,25 @@ struct S3GlobalVariables {
 #endif
     int32 saveLoaded;
     int32 saveRAM[0x1C00];
-    int32 saveSlotID;
+    int32 saveSlotID = NO_SAVE_SLOT;
     int32 noSaveSlot[0x100];
     int32 menuParam[0x4000];
     int32 itemMode;
     bool32 suppressTitlecard;
     bool32 suppressAutoMusic;
     int32 competitionSession[0x4000];
-    int32 medalMods;
+    int32 medalMods = MEDAL_INSTASHIELD;
     int32 parallaxOffset[0x100];
     int32 enableIntro;
     int32 optionsLoaded;
     int32 optionsRAM[0x80];
-    int32 presenceID;
+    int32 presenceID = -1;
     int32 medallionDebug;
     int32 noSave;
     int32 notifiedAutosave;
     int32 recallEntities;
     int32 restartRings;
-    int32 restart1UP;
+    int32 restart1UP = 100;
     int32 restartPowerups;
     RSDK::Vector2 restartPos[PLAYER_COUNT];
     int32 restartSlot[PLAYER_COUNT];
@@ -590,8 +590,8 @@ struct S3GlobalVariables {
     int32 restartSeconds;
     int32 restartMilliseconds;
     int32 restartScore;
-    int32 restartScore1UP;
-    int32 restartLives[PLAYER_COUNT];
+    int32 restartScore1UP            = 50000;
+    int32 restartLives[PLAYER_COUNT] = { 3, 3, 3, 3 };
     int32 restartMusicID;
     bool32 restartFlags;
     int32 restartPostID;
@@ -620,17 +620,17 @@ struct S3GlobalVariables {
     int32 replayTableLoaded;
     RSDK::API::Storage::UserDB taTable;
     int32 taTableLoaded;
-    int32 stock;
+    int32 stock = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
     int32 characterFlags;
     bool32 vapeMode;
     int32 secrets;
     int32 superSecret;
     bool32 soundTestEnabled;
-    bool32 superMusicEnabled;
-    int32 playerSpriteStyle;
-    int32 gameSpriteStyle;
-    int32 ostStyle;
-    int32 starpostStyle;
+    bool32 superMusicEnabled = true;
+    int32 playerSpriteStyle  = GAME_S3K;
+    int32 gameSpriteStyle    = GAME_S3K;
+    int32 ostStyle           = GAME_S3K;
+    int32 starpostStyle      = GAME_S3K;
     bool32 stageFinished;
     bool32 displayAct1Title;
     bool32 useHiteRestartStage;
@@ -642,23 +642,23 @@ struct S3GlobalVariables {
     RSDK::Vector2 atlOffset;
     uint8 atlScratchRAM[0x20];
     int32 atlTimer;
-    int32 tileCollisionMode;
+    int32 tileCollisionMode = RSDK::TILECOLLISION_DOWN;
     uint8 gravityDir;
     uint8 blueSpheresSeed[4];
     bool32 blueSpheresHasPerfect;
     int32 blueSpheresLevel;
     int32 blueSpheresProgress;
-    int32 blueSpheresNextLevel;
+    int32 blueSpheresNextLevel = -1;
     bool32 blueSpheresDisableAdvancement;
     bool32 blueSpheresAdvancementStore;
     uint8 blueSpheresUnlockFlag;
-    bool32 gameStarted;
-    bool32 disableLives;
+    bool32 gameStarted  = true;
+    bool32 disableLives = true;
     bool32 mirrorMode;
     bool32 useManiaBehavior;
     int32 coinCount;
-    bool32 showHUD;
-    bool32 showLives;
+    bool32 showHUD   = true;
+    bool32 showLives = true;
     bool32 disableSSAdvancement;
     bool32 pressButton;
     int32 blueSpheresDifficulty;
