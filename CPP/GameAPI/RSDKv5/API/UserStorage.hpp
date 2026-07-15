@@ -52,7 +52,7 @@ inline void SetNoSave(bool32 noSave) { APITable->SetNoSave(noSave); }
 inline bool32 GetNoSave() { return APITable->GetNoSave(); }
 
 struct UserDB {
-    UserDB() : id(0) {}
+    UserDB() : id(0xFFFF) {}
 
     enum VarTypes {
         Unknown,
