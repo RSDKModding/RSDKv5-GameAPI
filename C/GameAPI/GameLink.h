@@ -1234,10 +1234,10 @@ typedef enum {
 
 #if RETRO_MOD_LOADER_VER >= 3
 typedef enum {
-    RETRO_WIN    = 0,
-    RETRO_PS4    = 1,
-    RETRO_XB1    = 2,
-    RETRO_SWITCH = 3,
+    RETRO_WIN     = 0,
+    RETRO_PS4     = 1,
+    RETRO_XB1     = 2,
+    RETRO_SWITCH  = 3,
     // CUSTOM
     RETRO_OSX     = 4,
     RETRO_LINUX   = 5,
@@ -1248,7 +1248,7 @@ typedef enum {
 } RetroPlatform;
 
 // Opaque pointer to a file descriptor
-typedef void *IOHandle;
+typedef void* IOHandle;
 
 typedef enum {
     IOSEEK_SET = 0, /* Seek from beginning of file. */
@@ -1497,8 +1497,7 @@ typedef struct {
 
     // User File Management
     void (*LoadUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status)); // load user file from game dir
-    void (*SaveUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status),
-                         bool32 compressed);                                  // save user file to game dir
+    void (*SaveUserFile)(const char *name, void *buffer, uint32 size, void (*callback)(int32 status), bool32 compressed); // save user file to game dir
     void (*DeleteUserFile)(const char *name, void (*callback)(int32 status)); // delete user file from game dir
 
     // User DBs
