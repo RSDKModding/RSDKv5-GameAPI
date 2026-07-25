@@ -97,7 +97,7 @@ typedef uint32 color;
 #define FABS(a)                        ((a) > 0 ? (a) : -(a))
 
 #define SET_BIT(value, set, pos) ((value) ^= (-(int32)(set) ^ (value)) & (1 << (pos)))
-#define GET_BIT(b, pos)          ((b) >> (pos)&1)
+#define GET_BIT(b, pos)          ((b) >> (pos) & 1)
 
 #define INT_TO_VOID(x)   (void *)(size_t)(x)
 #define FLOAT_TO_VOID(x) INT_TO_VOID(*(int32 *)&(x))
@@ -110,7 +110,7 @@ typedef uint32 color;
 #define FROM_FIXED(x) ((x) >> 16)
 
 // floating point variants
-#define TO_FIXED_F(x)   ((x)*65536.0)
+#define TO_FIXED_F(x)   ((x) * 65536.0)
 #define FROM_FIXED_F(x) ((x) / 65536.0)
 
 #define RSDK_PI (3.1415927f)
@@ -1716,7 +1716,7 @@ typedef struct {
     uint16 (*GetTile)(uint16 layer, int32 x, int32 y);
     void (*SetTile)(uint16 layer, int32 x, int32 y, uint16 tile);
     void (*CopyTileLayer)(uint16 dstLayerID, int32 dstStartX, int32 dstStartY, uint16 srcLayerID, int32 srcStartX, int32 srcStartY, int32 countX,
-                           int32 countY);
+                          int32 countY);
     void (*ProcessParallax)(TileLayer *tileLayer);
     ScanlineInfo *(*GetScanlines)(void);
 
@@ -1991,25 +1991,26 @@ typedef struct {
 #define GET_PUBLIC_FUNC(modID, name, returnType, ...) returnType (*name)(__VA_ARGS__) = Mod.GetPublicFunction(modID, #name)
 
 #if RETRO_MOD_LOADER_VER >= 3
+// Declare a generic hook
+#define DECLARE_PUBLIC_FUNC_HOOK(type, returnType, ...)                                                                                              \
+    void type##_Register(void);                                                                                                                      \
+    extern returnType (*type##_Original)(__VA_ARGS__);                                                                                               \
+    returnType type##_Impl(__VA_ARGS__)
 
-// Generic hook
-#define DEFINE_PUBLIC_HOOK_FUNC(modID, name, returnType, ...)                        \
-    static returnType (*Original_##name)(__VA_ARGS__);                               \
-    static returnType Hook_##name(__VA_ARGS__);                                      \
-    static void RegisterHook_##name(void) {                                          \
-        Mod.HookPublicFunction(modID, #name, Hook_##name, (void**)&Original_##name); \
-    }                                                                                \
-    static returnType Hook_##name(__VA_ARGS__)
+// Define a generic hook
+#define DEFINE_PUBLIC_FUNC_HOOK(modID, name, type, returnType, ...)                                                                                  \
+    void type##_Register() { Mod.HookPublicFunction(modID, name, type##_Impl, (void **)(&type##_Original)); }                                        \
+    returnType (*type##_Original)(__VA_ARGS__);                                                                                                      \
+    returnType type##_Impl(__VA_ARGS__)
 
-// Hook into the current game's public functions
-#define DEFINE_GAME_HOOK_FUNC(name, returnType, ...) DEFINE_PUBLIC_HOOK_FUNC(NULL, name, returnType, __VA_ARGS__)
+// Define a function hook, hook into the current game's public functions
+#define DEFINE_GAME_FUNC_HOOK(name, type, returnType, ...) DEFINE_PUBLIC_FUNC_HOOK(NULL, name, type, returnType, __VA_ARGS__)
 
-// Hook into other mods' public functions by ID
-#define DEFINE_MOD_HOOK_FUNC(modID, name, returnType, ...) DEFINE_PUBLIC_HOOK_FUNC(modID, name, returnType, __VA_ARGS__)
+// Define a function hook, hook into other mods' public functions by ID
+#define DEFINE_MOD_FUNC_HOOK(modID, name, type, returnType, ...) DEFINE_PUBLIC_FUNC_HOOK(modID, name, type, returnType, __VA_ARGS__)
 
 // Register a defined hook of the same name
-#define REGISTER_HOOK_FUNC(name) do { RegisterHook_##name(); } while (0)
-
+#define REGISTER_FUNC_HOOK(type) type##_Register()
 #endif
 #endif
 
