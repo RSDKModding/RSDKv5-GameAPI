@@ -95,16 +95,22 @@ void LinkGameLogicDLL(RSDK::EngineInfo info)
             if (registration->isModded) {
 #if RETRO_REV0U
                 modTable->RegisterObject(registration->staticVars, registration->modStaticVars, registration->name, registration->entityClassSize,
-                                         registration->staticClassSize, registration->modStaticClassSize, registration->update,
-                                         registration->lateUpdate, registration->staticUpdate, registration->draw, registration->create,
-                                         registration->stageLoad, registration->editorLoad, registration->editorDraw, registration->serialize,
-                                         registration->staticLoad, registration->inherit);
+                                         registration->staticClassSize,
+#if RETRO_MOD_LOADER_VER >= 3
+                                         registration->modEntityClassSize,
+#endif
+                                         registration->modStaticClassSize, registration->update, registration->lateUpdate, registration->staticUpdate,
+                                         registration->draw, registration->create, registration->stageLoad, registration->editorLoad,
+                                         registration->editorDraw, registration->serialize, registration->staticLoad, registration->inherit);
 #else
                 modTable->RegisterObject(registration->staticVars, registration->modStaticVars, registration->name, registration->entityClassSize,
-                                         registration->staticClassSize, registration->modStaticClassSize, registration->update,
-                                         registration->lateUpdate, registration->staticUpdate, registration->draw, registration->create,
-                                         registration->stageLoad, registration->editorLoad, registration->editorDraw, registration->serialize,
-                                         registration->inherit);
+                                         registration->staticClassSize,
+#if RETRO_MOD_LOADER_VER >= 3
+                                         registration->modEntityClassSize,
+#endif
+                                         registration->modStaticClassSize, registration->update, registration->lateUpdate, registration->staticUpdate,
+                                         registration->draw, registration->create, registration->stageLoad, registration->editorLoad,
+                                         registration->editorDraw, registration->serialize, registration->inherit);
 #endif
 
                 continue;

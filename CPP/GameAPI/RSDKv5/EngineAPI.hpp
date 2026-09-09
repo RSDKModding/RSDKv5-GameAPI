@@ -118,26 +118,50 @@ struct ModFunctionTable {
     // Registration & Core
 #if RETRO_REV0U
     void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size, void (*initCB)(void *globals));
+#if RETRO_MOD_LOADER_VER >= 3
     void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
-                           uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
-                           void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void), void (*editorDraw)(void),
-                           void (*serialize)(void), void (*staticLoad)(void *staticVars), const char *inherited);
+                           uint32 modEntityClassSize, uint32 modStaticClassSize, void (*update)(void), void (*lateUpdate)(void),
+                           void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void),
+                           void (*editorDraw)(void), void (*serialize)(void), void (*staticLoad)(void *staticVars), const char *inherited);
     void (*RegisterObject_STD)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
-                               uint32 modClassSize, std::function<void()> update, std::function<void()> lateUpdate,
+                               uint32 modEntityClassSize, uint32 modStaticClassSize, std::function<void()> update, std::function<void()> lateUpdate,
                                std::function<void()> staticUpdate, std::function<void()> draw, std::function<void(void *)> create,
                                std::function<void()> stageLoad, std::function<void()> editorLoad, std::function<void()> editorDraw,
                                std::function<void()> serialize, std::function<void(void *)> staticLoad, const char *inherited);
 #else
-    void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size);
     void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
-                           uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
+                           uint32 modStaticClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
                            void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void), void (*editorDraw)(void),
-                           void (*serialize)(void), const char *inherited);
+                           void (*serialize)(void), void (*staticLoad)(void *staticVars), const char *inherited);
     void (*RegisterObject_STD)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
-                               uint32 modClassSize, std::function<void()> update, std::function<void()> lateUpdate,
+                               uint32 modStaticClassSize, std::function<void()> update, std::function<void()> lateUpdate,
+                               std::function<void()> staticUpdate, std::function<void()> draw, std::function<void(void *)> create,
+                               std::function<void()> stageLoad, std::function<void()> editorLoad, std::function<void()> editorDraw,
+                               std::function<void()> serialize, std::function<void(void *)> staticLoad, const char *inherited);
+#endif
+#else
+    void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size);
+#if RETRO_MOD_LOADER_VER >= 3
+    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
+                           uint32 modEntityClassSize, uint32 modStaticClassSize, void (*update)(void), void (*lateUpdate)(void),
+                           void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void),
+                           void (*editorDraw)(void), void (*serialize)(void), const char *inherited);
+    void (*RegisterObject_STD)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
+                               uint32 modEntityClassSize, uint32 modStaticClassSize, std::function<void()> update, std::function<void()> lateUpdate,
                                std::function<void()> staticUpdate, std::function<void()> draw, std::function<void(void *)> create,
                                std::function<void()> stageLoad, std::function<void()> editorLoad, std::function<void()> editorDraw,
                                std::function<void()> serialize, const char *inherited);
+#else
+    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
+                           uint32 modStaticClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
+                           void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void), void (*editorDraw)(void),
+                           void (*serialize)(void), const char *inherited);
+    void (*RegisterObject_STD)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
+                               uint32 modStaticClassSize, std::function<void()> update, std::function<void()> lateUpdate,
+                               std::function<void()> staticUpdate, std::function<void()> draw, std::function<void(void *)> create,
+                               std::function<void()> stageLoad, std::function<void()> editorLoad, std::function<void()> editorDraw,
+                               std::function<void()> serialize, const char *inherited);
+#endif
 #endif
     void (*RegisterObjectHook)(void **staticVars, const char *staticName);
     void *(*FindObject)(const char *name);
@@ -245,6 +269,10 @@ struct ModFunctionTable {
 #if RETRO_MOD_LOADER_VER >= 3
     // Mod hooks (Public Functions override)
     void (*HookPublicFunction)(const char *id, const char *functionName, void *functionPtr, void **originalPtr);
+
+    // Entities
+    void *(*GetModEntityForModID)(void *entity, const char *modID);
+    void *(*GetModEntityForModIndex)(void *entity, int32 modIndex);
 
     // Platform info
     int32 (*GetRetroPlatform)(void);

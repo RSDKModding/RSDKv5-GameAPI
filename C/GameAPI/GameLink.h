@@ -258,6 +258,14 @@ typedef struct {
     uint8 onScreen;
 #endif
 
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 3
+#define MOD_ENTITY int32 index;
+
+typedef struct {
+    MOD_ENTITY
+} ModEntity;
+#endif
+
 typedef struct {
     RSDK_ENTITY
     void *data[0x100];
@@ -1268,16 +1276,30 @@ typedef struct {
     // Registration & Core
 #if RETRO_REV0U
     void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size, void (*initCB)(void *globals));
+#if RETRO_MOD_LOADER_VER >= 3
+    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
+                           uint32 modEntityClassSize, uint32 modStaticClassSize, void (*update)(void), void (*lateUpdate)(void),
+                           void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void),
+                           void (*editorDraw)(void), void (*serialize)(void), void (*staticLoad)(void *staticVars), const char *inherited);
+#else
     void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
                            uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
                            void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void), void (*editorDraw)(void),
                            void (*serialize)(void), void (*staticLoad)(void *staticVars), const char *inherited);
+#endif
 #else
     void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size);
+#if RETRO_MOD_LOADER_VER >= 3
+    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
+                           uint32 modEntityClassSize, uint32 modStaticClassSize, void (*update)(void), void (*lateUpdate)(void),
+                           void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void),
+                           void (*editorDraw)(void), void (*serialize)(void), const char *inherited);
+#else
     void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
                            uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
                            void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void), void (*editorDraw)(void),
                            void (*serialize)(void), const char *inherited);
+#endif
 #endif
     void *RegisterObject_STD;
     void (*RegisterObjectHook)(void **staticVars, const char *staticName);
@@ -1385,6 +1407,10 @@ typedef struct {
 #if RETRO_MOD_LOADER_VER >= 3
     // Mod hooks (Public Functions override)
     void (*HookPublicFunction)(const char *id, const char *functionName, void *functionPtr, void **originalPtr);
+
+    // Entities
+    void *(*GetModEntityForModID)(void *entity, const char *modID);
+    void *(*GetModEntityForModIndex)(void *entity, int32 modIndex);
 
     // Platform info
     int32 (*GetRetroPlatform)(void);
@@ -1910,42 +1936,62 @@ typedef struct {
 #endif
 
 #if RETRO_USE_MOD_LOADER
-
-// dear god.
-
-#if RETRO_REV0U
-
-// Excludes StaticLoad (Parity With REV01 & REV02)
-#define MOD_REGISTER_OBJECT(object, inherit, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize)           \
-    Mod.RegisterObject((void **)&object, NULL, #object, sizeof(Entity##object), sizeof(Object##object), 0, update, lateUpdate, staticUpdate, draw,   \
-                       create, stageLoad, editorLoad, editorDraw, serialize, NULL, inherit)
-
 #define MOD_REGISTER_OBJ_OVERLOAD(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize)              \
     MOD_REGISTER_OBJECT(object, #object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize)
 
+#if RETRO_REV0U
+// Excludes StaticLoad (Parity With REV01 & REV02)
+#define MOD_REGISTER_OBJECT(object, inherit, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize)           \
+    MOD_REGISTER_OBJECT_STATIC(object, inherit, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize, NULL)
+
+#define MOD_REGISTER_OBJ_OVERLOAD_STATIC(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize,       \
+                                         staticLoad)                                                                                                 \
+    MOD_REGISTER_OBJECT_STATIC(object, #object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize,        \
+                               staticLoad)
+
 #define MOD_REGISTER_OBJ_OVERLOAD_NOCLASS(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize)      \
-    Mod.RegisterObject(NULL, NULL, #object, sizeof(Entity##object), 0, 0, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad,     \
-                       editorDraw, serialize, NULL, NULL)
+    MOD_REGISTER_OBJ_OVERLOAD_NOCLASS_STATIC(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize,   \
+                                             NULL)
 
 #define MOD_REGISTER_OBJ_OVERLOAD_MSV(object, modSVars, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw,           \
                                       serialize)                                                                                                     \
-    Mod.RegisterObject((void **)&object, (void **)&modSVars, #object, sizeof(Entity##object), sizeof(Object##object), sizeof(ModObject##object),     \
-                       update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize, NULL, NULL)
+    MOD_REGISTER_OBJ_OVERLOAD_MSV_STATIC(object, modSVars, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw,        \
+                                         serialize, NULL)
 
 #define MOD_REGISTER_OBJ_OVERLOAD_MSV_NOCLASS(object, modSVars, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw,   \
                                               serialize)                                                                                             \
-    Mod.RegisterObject(NULL, (void **)&modSVars, #object, sizeof(Entity##object), 0, sizeof(ModObject##object), update, lateUpdate, staticUpdate,    \
-                       draw, create, stageLoad, editorLoad, editorDraw, serialize, NULL, NULL)
+    MOD_REGISTER_OBJ_OVERLOAD_MSV_NOCLASS_STATIC(object, modSVars, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad,            \
+                                                 editorDraw, serialize, NULL)
+#endif // !RETRO_REV0U
 
-// Includes StaticLoad
+// dear god.
+#if RETRO_REV0U
+#if RETRO_MOD_LOADER_VER >= 3
+#define MOD_REGISTER_OBJECT_STATIC(object, inherit, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize,    \
+                                   staticLoad)                                                                                                       \
+    Mod.RegisterObject((void **)&object, NULL, #object, sizeof(Entity##object), sizeof(Object##object), 0, 0, update, lateUpdate, staticUpdate,      \
+                       draw, create, stageLoad, editorLoad, editorDraw, serialize, staticLoad, inherit)
+
+#define MOD_REGISTER_OBJ_OVERLOAD_NOCLASS_STATIC(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw,          \
+                                                 serialize, staticLoad)                                                                              \
+    Mod.RegisterObject(NULL, NULL, #object, sizeof(Entity##object), 0, 0, 0, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad,  \
+                       editorDraw, serialize, staticLoad, NULL)
+
+#define MOD_REGISTER_OBJ_OVERLOAD_MSV_STATIC(object, modSVars, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw,    \
+                                             serialize, staticLoad)                                                                                  \
+    Mod.RegisterObject((void **)&object, (void **)&modSVars, #object, sizeof(Entity##object), sizeof(Object##object), sizeof(ModEntity##object),     \
+                       sizeof(ModObject##object), update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize,      \
+                       staticLoad, NULL)
+
+#define MOD_REGISTER_OBJ_OVERLOAD_MSV_NOCLASS_STATIC(object, modSVars, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad,        \
+                                                     editorDraw, serialize, staticLoad)                                                              \
+    Mod.RegisterObject(NULL, (void **)&modSVars, #object, sizeof(Entity##object), 0, sizeof(ModEntity##object), sizeof(ModObject##object), update,   \
+                       lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize, staticLoad, NULL)
+#else // RETRO_MOD_LOADER_VER < 3
 #define MOD_REGISTER_OBJECT_STATIC(object, inherit, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize,    \
                                    staticLoad)                                                                                                       \
     Mod.RegisterObject((void **)&object, NULL, #object, sizeof(Entity##object), sizeof(Object##object), 0, update, lateUpdate, staticUpdate, draw,   \
                        create, stageLoad, editorLoad, editorDraw, serialize, staticLoad, inherit)
-
-#define MOD_REGISTER_OBJ_OVERLOAD_STATIC(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize,       \
-                                         staticLoad)                                                                                                 \
-    MOD_REGISTER_OBJECT(object, #object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize, staticLoad)
 
 #define MOD_REGISTER_OBJ_OVERLOAD_NOCLASS_STATIC(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw,          \
                                                  serialize, staticLoad)                                                                              \
@@ -1961,15 +2007,31 @@ typedef struct {
                                                      editorDraw, serialize, staticLoad)                                                              \
     Mod.RegisterObject(NULL, (void **)&modSVars, #object, sizeof(Entity##object), 0, sizeof(ModObject##object), update, lateUpdate, staticUpdate,    \
                        draw, create, stageLoad, editorLoad, editorDraw, serialize, staticLoad, NULL)
+#endif // !RETRO_MOD_LOADER_VER
+#else  // !RETRO_REV0U
+#if RETRO_MOD_LOADER_VER >= 3
+#define MOD_REGISTER_OBJECT(object, inherit, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize)           \
+    Mod.RegisterObject((void **)&object, NULL, #object, sizeof(Entity##object), sizeof(Object##object), 0, 0, update, lateUpdate, staticUpdate,      \
+                       draw, create, stageLoad, editorLoad, editorDraw, serialize, inherit)
 
-#else
+#define MOD_REGISTER_OBJ_OVERLOAD_NOCLASS(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize)      \
+    Mod.RegisterObject(NULL, NULL, #object, sizeof(Entity##object), 0, 0, 0, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad,  \
+                       editorDraw, serialize, NULL)
 
+#define MOD_REGISTER_OBJ_OVERLOAD_MSV(object, modSVars, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw,           \
+                                      serialize)                                                                                                     \
+    Mod.RegisterObject((void **)&object, (void **)&modSVars, #object, sizeof(Entity##object), sizeof(Object##object), sizeof(ModEntity##object),     \
+                       sizeof(ModObject##object), update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize,      \
+                       NULL)
+
+#define MOD_REGISTER_OBJ_OVERLOAD_MSV_NOCLASS(object, modSVars, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw,   \
+                                              serialize)                                                                                             \
+    Mod.RegisterObject(NULL, (void **)&modSVars, #object, sizeof(Entity##object), 0, sizeof(ModEntity##object), sizeof(ModObject##object), update,   \
+                       lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize, NULL)
+#else // RETRO_MOD_LOADER_VER < 3
 #define MOD_REGISTER_OBJECT(object, inherit, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize)           \
     Mod.RegisterObject((void **)&object, NULL, #object, sizeof(Entity##object), sizeof(Object##object), 0, update, lateUpdate, staticUpdate, draw,   \
                        create, stageLoad, editorLoad, editorDraw, serialize, inherit)
-
-#define MOD_REGISTER_OBJ_OVERLOAD(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize)              \
-    MOD_REGISTER_OBJECT(object, #object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize)
 
 #define MOD_REGISTER_OBJ_OVERLOAD_NOCLASS(object, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad, editorDraw, serialize)      \
     Mod.RegisterObject(NULL, NULL, #object, sizeof(Entity##object), 0, 0, update, lateUpdate, staticUpdate, draw, create, stageLoad, editorLoad,     \
@@ -1984,6 +2046,7 @@ typedef struct {
                                               serialize)                                                                                             \
     Mod.RegisterObject(NULL, (void **)&modSVars, #object, sizeof(Entity##object), 0, sizeof(ModObject##object), update, lateUpdate, staticUpdate,    \
                        draw, create, stageLoad, editorLoad, editorDraw, serialize, NULL)
+#endif // !RETRO_MOD_LOADER_VER
 #endif
 
 #define MOD_REGISTER_OBJECT_HOOK(object) Mod.RegisterObjectHook((void **)&object, #object)
@@ -2012,7 +2075,7 @@ typedef struct {
 // Register a defined hook of the same name
 #define REGISTER_FUNC_HOOK(type) type##_Register()
 #endif
-#endif
+#endif // !RETRO_USE_MOD_LOADER
 
 #if RETRO_REV02
 #define RSDK_REGISTER_STATIC_VARIABLES(variables) RSDK.RegisterStaticVariables((void **)&variables, #variables, sizeof(Object##variables))
@@ -2023,6 +2086,15 @@ typedef struct {
 #define RSDK_GET_ENTITY(slot, class)      ((Entity##class *)RSDK.GetEntity(slot))
 #define RSDK_GET_ENTITY_GEN(slot)         ((Entity *)RSDK.GetEntity(slot))
 #define CREATE_ENTITY(object, data, x, y) ((Entity##object *)RSDK.CreateEntity(object->classID, data, x, y))
+
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 3
+#define MOD_THIS(class)                                                                                                                              \
+    RSDK_THIS(class);                                                                                                                                \
+    ModEntity##class *mod = MOD_GET_ENTITY(self, NULL, class);
+
+#define MOD_GET_ENTITY(entityPtr, modID, class)              ((ModEntity##class *)Mod.GetModEntityForModID(entityPtr, modID))
+#define MOD_GET_ENTITY_FOR_INDEX(entityPtr, modIndex, class) ((ModEntity##class *)Mod.GetModEntityForModIndex(entityPtr, modIndex))
+#endif
 
 #define INIT_STRING(string)                                                                                                                          \
     string.chars  = NULL;                                                                                                                            \

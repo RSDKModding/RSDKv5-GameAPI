@@ -79,6 +79,34 @@ namespace Mod
 inline void AddModCallback(int32 callbackID, void (*callback)(void *)) { modTable->AddModCallback(callbackID, callback); }
 inline void AddModCallback(int32 callbackID, std::function<void(void *)> callback) { modTable->AddModCallback_STD(callbackID, callback); }
 
+#if RETRO_MOD_LOADER_VER >= 3
+// Entities
+struct Entity {
+    int32 index;
+
+    template <class T> static typename T::ModEntity *Get(void *entity) { return Get<T>(entity, nullptr); }
+
+    template <class T> static typename T::ModEntity *Get(void *entity, const char *modID)
+    {
+        return (T::ModEntity *)(modTable->GetModEntityForModID(entity, modID));
+    }
+
+    template <class T> static typename T::ModEntity *Get(void *entity, int32 modIndex)
+    {
+        return (T::ModEntity *)(modTable->GetModEntityForModIndex(entity, modIndex));
+    }
+
+    template <class T> struct ModImpl {
+        typename T::ModEntity *operator->()
+        {
+            // ModImpl is technically a variable, so we're gonna have to do a bit of math to get the address of the entity
+            // else, this'll end up attempting to find a ModEntity for (char *)(entity) + offsetof(T, T::mod);
+            return Get<T>((char *)(this) - offsetof(T, T::mod));
+        }
+    };
+};
+#endif
+
 namespace PublicFunctions
 {
 struct FunctionObject {
@@ -119,29 +147,27 @@ inline void Hook(const char *id, const char *functionName, void *functionPtr, vo
     modTable->HookPublicFunction(id, functionName, functionPtr, originalPtr);
 }
 
-template <typename Derived> class HookContainer
+template <typename T> class HookContainer
 {
 public:
-    constexpr HookContainer(const char *name, const char *modID = nullptr) : name__(name), modID__(modID) {}
+    constexpr HookContainer(const char *funcName, const char *funcModID = nullptr) : name(funcName), modID(funcModID) {}
 
     static void Register()
     {
-        Derived instance = {};
-        PublicFunctions::Hook(instance.modID__, instance.name__, reinterpret_cast<void *>(&Derived::Impl), reinterpret_cast<void **>(&instance.original__));
+        T instance = {};
+        PublicFunctions::Hook(instance.modID, instance.name, reinterpret_cast<void *>(&T::Impl), reinterpret_cast<void **>(&instance.original));
     }
 
-    template <typename... Args> static decltype(auto) Original(Args &&...args)
+    template <typename... arguments> static decltype(auto) Original(arguments &&...args)
     {
-        using T = decltype(&std::remove_reference_t<Derived>::Impl);
-
-        T _original = reinterpret_cast<T>(original__);
-        return _original(std::forward<Args>(args)...);
+        using T = decltype(&std::remove_reference_t<T>::Impl);
+        return reinterpret_cast<T>(original)(std::forward<arguments>(args)...);
     }
 
 protected:
-    const char *modID__;
-    const char *name__;
-    inline static void *original__ = nullptr;
+    const char *modID;
+    const char *name;
+    inline static void *original = nullptr;
 };
 #endif
 } // namespace PublicFunctions
