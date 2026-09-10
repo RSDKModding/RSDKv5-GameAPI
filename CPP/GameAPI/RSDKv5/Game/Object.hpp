@@ -123,6 +123,10 @@ struct GameObject {
     };
 
     struct Entity {
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 3
+        struct ModEntity {};
+#endif
+
         void Create(void *data) {};
         void Update() {};
         void Draw() {};
@@ -339,6 +343,9 @@ struct ObjectRegistration {
 
 #if RETRO_USE_MOD_LOADER
     void **modStaticVars;
+#if RETRO_MOD_LOADER_VER >= 3
+    uint32 modEntityClassSize;
+#endif
     uint32 modStaticClassSize;
     const char *inherit;
     bool32 isModded;
@@ -532,10 +539,13 @@ static inline typename E::Static *RegisterObject(typename E::Static **sVars, typ
         if (&E::Serialize != &GameObject::Entity::Serialize)
             object->serialize = E::Serialize;
 
-        object->staticVars         = (void **)sVars;
-        object->modStaticVars      = (void **)modSVars;
-        object->entityClassSize    = sizeof(E);
-        object->staticClassSize    = sizeof(typename E::Static);
+        object->staticVars      = (void **)sVars;
+        object->modStaticVars   = (void **)modSVars;
+        object->entityClassSize = sizeof(E);
+        object->staticClassSize = sizeof(typename E::Static);
+#if RETRO_MOD_LOADER_VER >= 3
+        object->modEntityClassSize = sizeof(typename E::ModEntity);
+#endif
         object->modStaticClassSize = sizeof(typename E::ModStatic);
 
         object->isModded = true;
@@ -563,9 +573,16 @@ template <typename E> static inline typename E::Static *RegisterObjectHook(typen
 }
 } // namespace Mod
 
+#if RETRO_MOD_LOADER_VER >= 3
+#define MOD_DECLARE(obj)                                                                                                                             \
+    RSDK::Mod::Entity::ModImpl<obj> mod;                                                                                                             \
+    static ModStatic *modSVars;                                                                                                                      \
+    RSDK_DECLARE(obj)
+#else
 #define MOD_DECLARE(obj)                                                                                                                             \
     static ModStatic *modSVars;                                                                                                                      \
     RSDK_DECLARE(obj)
+#endif
 
 #define MOD_REGISTER_OBJECT(obj)                                                                                                                     \
     obj::Static *obj::sVars       = RSDK::Mod::RegisterObject<obj>(&obj::sVars, &obj::modSVars, #obj);                                               \
