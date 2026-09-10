@@ -1276,30 +1276,24 @@ typedef struct {
     // Registration & Core
 #if RETRO_REV0U
     void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size, void (*initCB)(void *globals));
+    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
 #if RETRO_MOD_LOADER_VER >= 3
-    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
-                           uint32 modEntityClassSize, uint32 modStaticClassSize, void (*update)(void), void (*lateUpdate)(void),
-                           void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void),
-                           void (*editorDraw)(void), void (*serialize)(void), void (*staticLoad)(void *staticVars), const char *inherited);
-#else
-    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
-                           uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
+                           uint32 modEntityClassSize,
+#endif
+                           uint32 modStaticClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
                            void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void), void (*editorDraw)(void),
                            void (*serialize)(void), void (*staticLoad)(void *staticVars), const char *inherited);
-#endif
+
 #else
     void (*RegisterGlobals)(const char *globalsPath, void **globals, uint32 size);
+    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
 #if RETRO_MOD_LOADER_VER >= 3
-    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
-                           uint32 modEntityClassSize, uint32 modStaticClassSize, void (*update)(void), void (*lateUpdate)(void),
-                           void (*staticUpdate)(void), void (*draw)(void), void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void),
-                           void (*editorDraw)(void), void (*serialize)(void), const char *inherited);
-#else
-    void (*RegisterObject)(void **staticVars, void **modStaticVars, const char *name, uint32 entityClassSize, uint32 staticClassSize,
-                           uint32 modClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
+                           uint32 modEntityClassSize,
+#endif
+                           uint32 modStaticClassSize, void (*update)(void), void (*lateUpdate)(void), void (*staticUpdate)(void), void (*draw)(void),
                            void (*create)(void *), void (*stageLoad)(void), void (*editorLoad)(void), void (*editorDraw)(void),
                            void (*serialize)(void), const char *inherited);
-#endif
+
 #endif
     void *RegisterObject_STD;
     void (*RegisterObjectHook)(void **staticVars, const char *staticName);
