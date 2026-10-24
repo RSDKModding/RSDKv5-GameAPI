@@ -285,38 +285,38 @@ enum KeyMappings {
 };
 
 #if RETRO_REV02
-inline uint32 GetInputDeviceID(uint8 controllerID) { return RSDKTable->GetInputDeviceID(controllerID); }
-inline uint32 GetFilteredInputDeviceID(bool32 confirmOnly, bool32 unassignedOnly, uint32 maxInactiveTimer)
+RSDK_FORCE_INLINE uint32 GetInputDeviceID(uint8 controllerID) { return RSDKTable->GetInputDeviceID(controllerID); }
+RSDK_FORCE_INLINE uint32 GetFilteredInputDeviceID(bool32 confirmOnly, bool32 unassignedOnly, uint32 maxInactiveTimer)
 {
     return RSDKTable->GetFilteredInputDeviceID(confirmOnly, unassignedOnly, maxInactiveTimer);
 }
-inline int32 GetInputDeviceType(uint32 deviceID) { return RSDKTable->GetInputDeviceType(deviceID); }
-inline bool32 IsInputDeviceAssigned(uint32 deviceID) { return RSDKTable->IsInputDeviceAssigned(deviceID); }
-inline int32 GetInputDeviceUnknown(uint32 deviceID) { return RSDKTable->GetInputDeviceUnknown(deviceID); }
-inline int32 InputDeviceUnknown1(uint32 deviceID, int32 unknown1, int32 unknown2)
+RSDK_FORCE_INLINE int32 GetInputDeviceType(uint32 deviceID) { return RSDKTable->GetInputDeviceType(deviceID); }
+RSDK_FORCE_INLINE bool32 IsInputDeviceAssigned(uint32 deviceID) { return RSDKTable->IsInputDeviceAssigned(deviceID); }
+RSDK_FORCE_INLINE int32 GetInputDeviceUnknown(uint32 deviceID) { return RSDKTable->GetInputDeviceUnknown(deviceID); }
+RSDK_FORCE_INLINE int32 InputDeviceUnknown1(uint32 deviceID, int32 unknown1, int32 unknown2)
 {
     return RSDKTable->InputDeviceUnknown1(deviceID, unknown1, unknown2);
 }
-inline int32 InputDeviceUnknown2(uint32 deviceID, int32 unknown1, int32 unknown2)
+RSDK_FORCE_INLINE int32 InputDeviceUnknown2(uint32 deviceID, int32 unknown1, int32 unknown2)
 {
     return RSDKTable->InputDeviceUnknown2(deviceID, unknown1, unknown2);
 }
-inline int32 GetInputSlotUnknown(uint8 inputSlot) { return RSDKTable->GetInputSlotUnknown(inputSlot); }
-inline int32 InputSlotUnknown1(uint8 inputSlot, int32 unknown1, int32 unknown2)
+RSDK_FORCE_INLINE int32 GetInputSlotUnknown(uint8 inputSlot) { return RSDKTable->GetInputSlotUnknown(inputSlot); }
+RSDK_FORCE_INLINE int32 InputSlotUnknown1(uint8 inputSlot, int32 unknown1, int32 unknown2)
 {
     return RSDKTable->InputSlotUnknown1(inputSlot, unknown1, unknown2);
 }
-inline int32 InputSlotUnknown2(uint8 inputSlot, int32 unknown1, int32 unknown2)
+RSDK_FORCE_INLINE int32 InputSlotUnknown2(uint8 inputSlot, int32 unknown1, int32 unknown2)
 {
     return RSDKTable->InputSlotUnknown2(inputSlot, unknown1, unknown2);
 }
-inline void AssignInputSlotToDevice(uint8 inputSlot, uint32 inputID) { RSDKTable->AssignInputSlotToDevice(inputSlot, inputID); }
-inline bool32 IsInputSlotAssigned(uint8 inputSlot) { return RSDKTable->IsInputSlotAssigned(inputSlot); }
-inline void ResetInputSlotAssignments() { RSDKTable->ResetInputSlotAssignments(); }
+RSDK_FORCE_INLINE void AssignInputSlotToDevice(uint8 inputSlot, uint32 inputID) { RSDKTable->AssignInputSlotToDevice(inputSlot, inputID); }
+RSDK_FORCE_INLINE bool32 IsInputSlotAssigned(uint8 inputSlot) { return RSDKTable->IsInputSlotAssigned(inputSlot); }
+RSDK_FORCE_INLINE void ResetInputSlotAssignments() { RSDKTable->ResetInputSlotAssignments(); }
 #endif
 
 #if !RETRO_REV02
-inline void GetUnknownInputValue(int32 inputSlot, int32 type, int32 *value) { RSDKTable->GetUnknownInputValue(inputSlot, type, value); }
+RSDK_FORCE_INLINE void GetUnknownInputValue(int32 inputSlot, int32 type, int32 *value) { RSDKTable->GetUnknownInputValue(inputSlot, type, value); }
 #endif
 
 } // namespace Input

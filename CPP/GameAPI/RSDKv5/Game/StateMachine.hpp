@@ -15,7 +15,7 @@ namespace RSDK
 
 extern const char *currentState;
 
-template <typename E> static inline void *ToGenericPtr(void (E::*ptr)())
+template <typename E> static RSDK_FORCE_INLINE void *ToGenericPtr(void (E::*ptr)())
 {
     // converts from E:: -> void* without the compiler interfering :]
     union {
@@ -33,7 +33,7 @@ template <typename T> struct StateMachine {
         PRIORITY_LOCKED = 0xFF,
     };
 
-    inline void Init()
+    RSDK_FORCE_INLINE void Init()
     {
         state    = nullptr;
         timer    = 0;
@@ -43,7 +43,7 @@ template <typename T> struct StateMachine {
         priority = 0;
     }
 
-    inline bool32 Set(void (T::*state)(), uint8 priority = PRIORITY_NONE)
+    RSDK_FORCE_INLINE bool32 Set(void (T::*state)(), uint8 priority = PRIORITY_NONE)
     {
         if (priority < this->priority || this->priority == PRIORITY_LOCKED)
             return false;
@@ -54,7 +54,7 @@ template <typename T> struct StateMachine {
         return true;
     }
 
-    inline bool32 SetAndRun(void (T::*state)(), GameObject::Entity *self, uint8 priority = PRIORITY_NONE)
+    RSDK_FORCE_INLINE bool32 SetAndRun(void (T::*state)(), GameObject::Entity *self, uint8 priority = PRIORITY_NONE)
     {
         bool32 applied = Set(state, priority);
         if (applied)
@@ -62,7 +62,7 @@ template <typename T> struct StateMachine {
         return applied;
     }
 
-    inline bool32 QueueForTime(void (T::*state)(), uint32 duration, uint8 priority = PRIORITY_NONE)
+    RSDK_FORCE_INLINE bool32 QueueForTime(void (T::*state)(), uint32 duration, uint8 priority = PRIORITY_NONE)
     {
         if (priority < this->priority || this->priority == PRIORITY_LOCKED)
             return false;
@@ -74,7 +74,7 @@ template <typename T> struct StateMachine {
         return true;
     }
 
-    template <typename E> inline bool32 Set(void (E::*state)(), uint8 priority = PRIORITY_NONE)
+    template <typename E> RSDK_FORCE_INLINE bool32 Set(void (E::*state)(), uint8 priority = PRIORITY_NONE)
     {
         if (priority < this->priority || this->priority == PRIORITY_LOCKED)
             return false;
@@ -92,7 +92,7 @@ template <typename T> struct StateMachine {
         return true;
     }
 
-    template <typename E> inline bool32 SetAndRun(void (E::*state)(), GameObject::Entity *self, uint8 priority = PRIORITY_NONE)
+    template <typename E> RSDK_FORCE_INLINE bool32 SetAndRun(void (E::*state)(), GameObject::Entity *self, uint8 priority = PRIORITY_NONE)
     {
         bool32 applied = Set(state, priority);
         if (applied)
@@ -100,7 +100,7 @@ template <typename T> struct StateMachine {
         return applied;
     }
 
-    template <typename E> inline bool32 QueueForTime(void (E::*state)(), uint32 duration, uint8 priority = PRIORITY_NONE)
+    template <typename E> RSDK_FORCE_INLINE bool32 QueueForTime(void (E::*state)(), uint32 duration, uint8 priority = PRIORITY_NONE)
     {
         if (priority < this->priority || this->priority == PRIORITY_LOCKED)
             return false;
@@ -118,7 +118,7 @@ template <typename T> struct StateMachine {
         return true;
     }
 
-    inline bool32 Set(std::nullptr_t, uint8 priority = PRIORITY_NONE)
+    RSDK_FORCE_INLINE bool32 Set(std::nullptr_t, uint8 priority = PRIORITY_NONE)
     {
         if (priority < this->priority || this->priority == PRIORITY_LOCKED)
             return false;
@@ -129,7 +129,7 @@ template <typename T> struct StateMachine {
         return true;
     }
 
-    inline bool32 QueueForTime(std::nullptr_t, uint32 duration, uint8 priority = PRIORITY_NONE)
+    RSDK_FORCE_INLINE bool32 QueueForTime(std::nullptr_t, uint32 duration, uint8 priority = PRIORITY_NONE)
     {
         if (priority < this->priority || this->priority == PRIORITY_LOCKED)
             return false;
@@ -142,29 +142,29 @@ template <typename T> struct StateMachine {
 
     // overloads below are for member function pointer states, keeping the syntax consistent
     // Say that State_Idle is a public function: .Set(TestObject::State_Idle) -> .Set(&TestObject::State_Idle)
-    inline bool32 Set(void (T::**state)(), uint8 priority = PRIORITY_NONE) { return Set(*state, priority); }
-    inline bool32 SetAndRun(void (T::**state)(), GameObject::Entity *self, uint8 priority = PRIORITY_NONE)
+    RSDK_FORCE_INLINE bool32 Set(void (T::**state)(), uint8 priority = PRIORITY_NONE) { return Set(*state, priority); }
+    RSDK_FORCE_INLINE bool32 SetAndRun(void (T::**state)(), GameObject::Entity *self, uint8 priority = PRIORITY_NONE)
     {
         return SetAndRun(*state, self, priority);
     }
 
-    template <typename E> inline bool32 Set(void (E::**state)(), uint8 priority = PRIORITY_NONE) { return Set(*state, priority); }
-    template <typename E> inline bool32 SetAndRun(void (E::**state)(), GameObject::Entity *self, uint8 priority = PRIORITY_NONE)
+    template <typename E> RSDK_FORCE_INLINE bool32 Set(void (E::**state)(), uint8 priority = PRIORITY_NONE) { return Set(*state, priority); }
+    template <typename E> RSDK_FORCE_INLINE bool32 SetAndRun(void (E::**state)(), GameObject::Entity *self, uint8 priority = PRIORITY_NONE)
     {
         return SetAndRun(*state, self, priority);
     }
 
-    inline bool32 QueueForTime(void (T::**state)(), uint32 duration, uint8 priority = PRIORITY_NONE)
+    RSDK_FORCE_INLINE bool32 QueueForTime(void (T::**state)(), uint32 duration, uint8 priority = PRIORITY_NONE)
     {
         return QueueForTime(*state, duration, priority);
     }
 
-    template <typename E> inline bool32 QueueForTime(void (E::**state)(), uint32 duration, uint8 priority = PRIORITY_NONE)
+    template <typename E> RSDK_FORCE_INLINE bool32 QueueForTime(void (E::**state)(), uint32 duration, uint8 priority = PRIORITY_NONE)
     {
         return QueueForTime(*state, duration, priority);
     }
 
-    inline void Run(GameObject::Entity *self)
+    RSDK_FORCE_INLINE void Run(GameObject::Entity *self)
     {
         if (timer)
             timer--;
@@ -192,15 +192,15 @@ template <typename T> struct StateMachine {
         }
     }
 
-    inline bool32 Matches(void (T::*other)()) { return state == other; }
-    inline bool32 Matches(void (T::**other)()) { return ToGenericPtr(state) == ToGenericPtr(*other); }
+    RSDK_FORCE_INLINE bool32 Matches(void (T::*other)()) { return state == other; }
+    RSDK_FORCE_INLINE bool32 Matches(void (T::**other)()) { return ToGenericPtr(state) == ToGenericPtr(*other); }
 
-    template <typename E> inline bool32 Matches(void (E::*other)()) { return state == (void (T::*)())other; }
-    template <typename E> inline bool32 Matches(void (E::**other)()) { return ToGenericPtr(state) == ToGenericPtr(*other); }
+    template <typename E> RSDK_FORCE_INLINE bool32 Matches(void (E::*other)()) { return state == (void (T::*)())other; }
+    template <typename E> RSDK_FORCE_INLINE bool32 Matches(void (E::**other)()) { return ToGenericPtr(state) == ToGenericPtr(*other); }
 
-    inline bool32 Matches(std::nullptr_t) { return state == nullptr; }
+    RSDK_FORCE_INLINE bool32 Matches(std::nullptr_t) { return state == nullptr; }
 
-    inline void Copy(StateMachine<T> *other)
+    RSDK_FORCE_INLINE void Copy(StateMachine<T> *other)
     {
         this->state    = other->state;
         this->timer    = other->timer;
@@ -210,7 +210,7 @@ template <typename T> struct StateMachine {
         this->priority = other->priority;
     }
 
-    template <typename E> inline void Copy(StateMachine<T> *other)
+    template <typename E> RSDK_FORCE_INLINE void Copy(StateMachine<T> *other)
     {
         // converts from E:: -> T:: without the compiler interfering :]
         union {

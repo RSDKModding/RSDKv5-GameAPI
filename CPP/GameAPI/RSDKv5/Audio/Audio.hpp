@@ -12,20 +12,20 @@ struct Channel {
     Channel() : id(0) {}
     Channel(int32 channelID) : id(channelID) {}
 
-    inline void SetAttributes(float volume, float pan, float speed) { RSDKTable->SetChannelAttributes(id, volume, pan, speed); }
+    RSDK_FORCE_INLINE void SetAttributes(float volume, float pan, float speed) { RSDKTable->SetChannelAttributes(id, volume, pan, speed); }
 
 #if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 3
-    inline void GetAttributes(float *volume, float *pan, float *speed) { modTable->GetChannelAttributes(id, volume, pan, speed); }
+    RSDK_FORCE_INLINE void GetAttributes(float *volume, float *pan, float *speed) { modTable->GetChannelAttributes(id, volume, pan, speed); }
 #endif
 
-    inline void Stop() { RSDKTable->StopChannel(id); }
-    inline void Pause() { RSDKTable->PauseChannel(id); }
-    inline void Resume() { RSDKTable->ResumeChannel(id); }
-    inline bool32 IsActive() { return RSDKTable->ChannelActive(id); }
+    RSDK_FORCE_INLINE void Stop() { RSDKTable->StopChannel(id); }
+    RSDK_FORCE_INLINE void Pause() { RSDKTable->PauseChannel(id); }
+    RSDK_FORCE_INLINE void Resume() { RSDKTable->ResumeChannel(id); }
+    RSDK_FORCE_INLINE bool32 IsActive() { return RSDKTable->ChannelActive(id); }
 
-    inline uint32 AudioPos() { return RSDKTable->GetChannelPos(id); }
+    RSDK_FORCE_INLINE uint32 AudioPos() { return RSDKTable->GetChannelPos(id); }
 
-    inline int32 PlayStream(const char *filename, uint32 startPos, uint32 loopPoint, bool32 loadASync)
+    RSDK_FORCE_INLINE int32 PlayStream(const char *filename, uint32 startPos, uint32 loopPoint, bool32 loadASync)
     {
         return RSDKTable->PlayStream(filename, id, startPos, loopPoint, loadASync);
     }
@@ -40,24 +40,24 @@ struct SoundFX {
 
     SoundFX() : id(0xFFFF) {}
 
-    inline void Init() { id = (uint16)-1; }
+    RSDK_FORCE_INLINE void Init() { id = (uint16)-1; }
 
-    inline void Get(const char *path) { id = RSDKTable->GetSfx(path); }
+    RSDK_FORCE_INLINE void Get(const char *path) { id = RSDKTable->GetSfx(path); }
 
-    inline bool32 Loaded() { return id != (uint16)-1; }
+    RSDK_FORCE_INLINE bool32 Loaded() { return id != (uint16)-1; }
 
-    inline int32 Play(int32 loopPoint = 0, int32 priority = 0xFF) { return RSDKTable->PlaySfx(id, loopPoint, priority); }
+    RSDK_FORCE_INLINE int32 Play(int32 loopPoint = 0, int32 priority = 0xFF) { return RSDKTable->PlaySfx(id, loopPoint, priority); }
 
-    inline void Stop() { RSDKTable->StopSfx(id); }
+    RSDK_FORCE_INLINE void Stop() { RSDKTable->StopSfx(id); }
 
-    inline bool32 IsPlaying() { return RSDKTable->IsSfxPlaying(id); }
+    RSDK_FORCE_INLINE bool32 IsPlaying() { return RSDKTable->IsSfxPlaying(id); }
 
 #if RETRO_REV0U
-    static inline void StopAll() { RSDKTable->StopAllSfx(); }
+    static RSDK_FORCE_INLINE void StopAll() { RSDKTable->StopAllSfx(); }
 #endif
 
-    inline bool32 Matches(SoundFX &other) { return this->id == other.id; }
-    inline bool32 Matches(SoundFX *other)
+    RSDK_FORCE_INLINE bool32 Matches(SoundFX &other) { return this->id == other.id; }
+    RSDK_FORCE_INLINE bool32 Matches(SoundFX *other)
     {
         if (other)
             return this->id == other->id;

@@ -74,13 +74,13 @@ struct SceneInfo {
 namespace Stage
 {
 
-inline bool32 CheckSceneFolder(const char *folderName) { return RSDKTable->CheckSceneFolder(folderName); }
-inline bool32 CheckValidScene() { return RSDKTable->CheckValidScene(); }
-inline void SetScene(const char *categoryName, const char *sceneName) { RSDKTable->SetScene(categoryName, sceneName); }
-inline void LoadScene() { RSDKTable->LoadScene(); }
-inline void SetEngineState(EngineStates state) { RSDKTable->SetEngineState(state); }
+RSDK_FORCE_INLINE bool32 CheckSceneFolder(const char *folderName) { return RSDKTable->CheckSceneFolder(folderName); }
+RSDK_FORCE_INLINE bool32 CheckValidScene() { return RSDKTable->CheckValidScene(); }
+RSDK_FORCE_INLINE void SetScene(const char *categoryName, const char *sceneName) { RSDKTable->SetScene(categoryName, sceneName); }
+RSDK_FORCE_INLINE void LoadScene() { RSDKTable->LoadScene(); }
+RSDK_FORCE_INLINE void SetEngineState(EngineStates state) { RSDKTable->SetEngineState(state); }
 #if RETRO_REV02
-inline void ForceHardReset(bool32 shouldHardReset) { RSDKTable->ForceHardReset(shouldHardReset); }
+RSDK_FORCE_INLINE void ForceHardReset(bool32 shouldHardReset) { RSDKTable->ForceHardReset(shouldHardReset); }
 #endif
 
 } // namespace Stage

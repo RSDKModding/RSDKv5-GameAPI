@@ -130,98 +130,98 @@ namespace Graphics
 {
 
 // Cameras
-inline void AddCamera(Vector2 *targetPos, int32 offsetX, int32 offsetY, bool32 worldRelative)
+RSDK_FORCE_INLINE void AddCamera(Vector2 *targetPos, int32 offsetX, int32 offsetY, bool32 worldRelative)
 {
     RSDKTable->AddCamera(targetPos, offsetX, offsetY, worldRelative);
 }
-inline void ClearCameras() { RSDKTable->ClearCameras(); }
+RSDK_FORCE_INLINE void ClearCameras() { RSDKTable->ClearCameras(); }
 
 // Drawing
-inline void DrawLine(int32 x1, int32 y1, int32 x2, int32 y2, uint32 color, int32 alpha, uint8 inkEffect, bool32 screenRelative)
+RSDK_FORCE_INLINE void DrawLine(int32 x1, int32 y1, int32 x2, int32 y2, uint32 color, int32 alpha, uint8 inkEffect, bool32 screenRelative)
 {
     RSDKTable->DrawLine(x1, y1, x2, y2, color, alpha, (InkEffects)inkEffect, screenRelative);
 }
 
-inline void DrawRect(int32 x, int32 y, int32 width, int32 height, uint32 color, int32 alpha, uint8 inkEffect, bool32 screenRelative)
+RSDK_FORCE_INLINE void DrawRect(int32 x, int32 y, int32 width, int32 height, uint32 color, int32 alpha, uint8 inkEffect, bool32 screenRelative)
 {
     RSDKTable->DrawRect(x, y, width, height, color, alpha, (InkEffects)inkEffect, screenRelative);
 }
 
-inline void DrawCircle(int32 x, int32 y, int32 radius, uint32 color, int32 alpha, uint8 inkEffect, bool32 screenRelative)
+RSDK_FORCE_INLINE void DrawCircle(int32 x, int32 y, int32 radius, uint32 color, int32 alpha, uint8 inkEffect, bool32 screenRelative)
 {
     RSDKTable->DrawCircle(x, y, radius, color, alpha, (InkEffects)inkEffect, screenRelative);
 }
 
-inline void DrawCircleOutline(int32 x, int32 y, int32 innerRadius, int32 outerRadius, uint32 color, int32 alpha, uint8 inkEffect,
+RSDK_FORCE_INLINE void DrawCircleOutline(int32 x, int32 y, int32 innerRadius, int32 outerRadius, uint32 color, int32 alpha, uint8 inkEffect,
                               bool32 screenRelative)
 {
     RSDKTable->DrawCircleOutline(x, y, innerRadius, outerRadius, color, alpha, inkEffect, screenRelative);
 }
 
-inline void DrawFace(Vector2 *vertices, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, int32 inkEffect)
+RSDK_FORCE_INLINE void DrawFace(Vector2 *vertices, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, int32 inkEffect)
 {
     RSDKTable->DrawFace(vertices, vertCount, r, g, b, alpha, inkEffect);
 }
 
-inline void DrawBlendedFace(Vector2 *vertices, color *vertColors, int32 vertCount, int32 alpha, int32 inkEffect)
+RSDK_FORCE_INLINE void DrawBlendedFace(Vector2 *vertices, color *vertColors, int32 vertCount, int32 alpha, int32 inkEffect)
 {
     RSDKTable->DrawBlendedFace(vertices, vertColors, vertCount, alpha, inkEffect);
 }
 
-inline void DrawDeformedSprite(SpriteSheet sheet, int32 inkEffect, int32 alpha)
+RSDK_FORCE_INLINE void DrawDeformedSprite(SpriteSheet sheet, int32 inkEffect, int32 alpha)
 {
     RSDKTable->DrawDeformedSprite(sheet.id, inkEffect, alpha);
 }
 
-inline void DrawTile(Tile *tiles, int32 countX, int32 countY, Vector2 *position, Vector2 *offset, bool32 screenRelative)
+RSDK_FORCE_INLINE void DrawTile(Tile *tiles, int32 countX, int32 countY, Vector2 *position, Vector2 *offset, bool32 screenRelative)
 {
     RSDKTable->DrawTile((uint16 *)tiles, countX, countY, position, offset, screenRelative);
 }
 
-inline void CopyTile(uint16 dest, uint16 src, uint16 count) { RSDKTable->CopyTile(dest, src, count); }
+RSDK_FORCE_INLINE void CopyTile(uint16 dest, uint16 src, uint16 count) { RSDKTable->CopyTile(dest, src, count); }
 
-inline void DrawAniTiles(SpriteSheet sheet, uint16 tileIndex, uint16 srcX, uint16 srcY, uint16 width, uint16 height)
+RSDK_FORCE_INLINE void DrawAniTiles(SpriteSheet sheet, uint16 tileIndex, uint16 srcX, uint16 srcY, uint16 width, uint16 height)
 {
     RSDKTable->DrawAniTiles(sheet.id, tileIndex, srcX, srcY, width, height);
 }
 
-inline void FillScreen(color color, int32 alphaR, int32 alphaG, int32 alphaB) { RSDKTable->FillScreen(color, alphaR, alphaG, alphaB); }
+RSDK_FORCE_INLINE void FillScreen(color color, int32 alphaR, int32 alphaG, int32 alphaB) { RSDKTable->FillScreen(color, alphaR, alphaG, alphaB); }
 
 #if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 3
-inline void DrawDevString(const char *string, int32 x, int32 y, int32 align, uint32 color) { modTable->DrawDevString(string, x, y, align, color); }
+RSDK_FORCE_INLINE void DrawDevString(const char *string, int32 x, int32 y, int32 align, uint32 color) { modTable->DrawDevString(string, x, y, align, color); }
 #endif
 
 // Screens & Displays
-inline void GetDisplayInfo(int32 *displayID, int32 *width, int32 *height, int32 *refreshRate, char *text)
+RSDK_FORCE_INLINE void GetDisplayInfo(int32 *displayID, int32 *width, int32 *height, int32 *refreshRate, char *text)
 {
     RSDKTable->GetDisplayInfo(displayID, width, height, refreshRate, text);
 }
-inline void GetWindowSize(int32 *width, int32 *height) { RSDKTable->GetWindowSize(width, height); }
-inline int32 SetScreenSize(uint8 screenID, uint16 width, uint16 height) { return RSDKTable->SetScreenSize(screenID, width, height); }
-inline void SetClipBounds(uint8 screenID, int32 x1, int32 y1, int32 x2, int32 y2) { RSDKTable->SetClipBounds(screenID, x1, y1, x2, y2); }
+RSDK_FORCE_INLINE void GetWindowSize(int32 *width, int32 *height) { RSDKTable->GetWindowSize(width, height); }
+RSDK_FORCE_INLINE int32 SetScreenSize(uint8 screenID, uint16 width, uint16 height) { return RSDKTable->SetScreenSize(screenID, width, height); }
+RSDK_FORCE_INLINE void SetClipBounds(uint8 screenID, int32 x1, int32 y1, int32 x2, int32 y2) { RSDKTable->SetClipBounds(screenID, x1, y1, x2, y2); }
 #if RETRO_REV02
-inline void SetScreenVertices(uint8 startVert2P_S1, uint8 startVert2P_S2, uint8 startVert3P_S1, uint8 startVert3P_S2, uint8 startVert3P_S3)
+RSDK_FORCE_INLINE void SetScreenVertices(uint8 startVert2P_S1, uint8 startVert2P_S2, uint8 startVert3P_S1, uint8 startVert3P_S2, uint8 startVert3P_S3)
 {
     RSDKTable->SetScreenVertices(startVert2P_S1, startVert2P_S2, startVert3P_S1, startVert3P_S2, startVert3P_S3);
 }
 #endif
 
 // Window/Video Settings
-inline int32 GetVideoSetting(VideoSettingsValues id) { return RSDKTable->GetVideoSetting(id); }
-inline void SetVideoSetting(VideoSettingsValues id, int32 value) { RSDKTable->SetVideoSetting(id, value); }
+RSDK_FORCE_INLINE int32 GetVideoSetting(VideoSettingsValues id) { return RSDKTable->GetVideoSetting(id); }
+RSDK_FORCE_INLINE void SetVideoSetting(VideoSettingsValues id, int32 value) { RSDKTable->SetVideoSetting(id, value); }
 
-inline void UpdateWindow() { RSDKTable->UpdateWindow(); }
+RSDK_FORCE_INLINE void UpdateWindow() { RSDKTable->UpdateWindow(); }
 
 // Entities & Objects
-inline int32 GetDrawListRefSlot(uint8 drawGroup, uint16 listPos) { return RSDKTable->GetDrawListRefSlot(drawGroup, listPos); }
-inline void *GetDrawListRef(uint8 drawGroup, uint16 listPos) { return RSDKTable->GetDrawListRef(drawGroup, listPos); }
-template <typename T> inline T *GetDrawListRef(uint8 drawGroup, uint16 entitySlot) { return (T *)RSDKTable->GetDrawListRef(drawGroup, entitySlot); }
-inline void AddDrawListRef(uint8 drawGroup, uint16 entitySlot) { RSDKTable->AddDrawListRef(drawGroup, entitySlot); }
-inline void SwapDrawListEntries(uint8 drawGroup, uint16 slot1, uint16 slot2, uint16 count)
+RSDK_FORCE_INLINE int32 GetDrawListRefSlot(uint8 drawGroup, uint16 listPos) { return RSDKTable->GetDrawListRefSlot(drawGroup, listPos); }
+RSDK_FORCE_INLINE void *GetDrawListRef(uint8 drawGroup, uint16 listPos) { return RSDKTable->GetDrawListRef(drawGroup, listPos); }
+template <typename T> RSDK_FORCE_INLINE T *GetDrawListRef(uint8 drawGroup, uint16 entitySlot) { return (T *)RSDKTable->GetDrawListRef(drawGroup, entitySlot); }
+RSDK_FORCE_INLINE void AddDrawListRef(uint8 drawGroup, uint16 entitySlot) { RSDKTable->AddDrawListRef(drawGroup, entitySlot); }
+RSDK_FORCE_INLINE void SwapDrawListEntries(uint8 drawGroup, uint16 slot1, uint16 slot2, uint16 count)
 {
     RSDKTable->SwapDrawListEntries(drawGroup, slot1, slot2, count);
 }
-inline void SetDrawGroupProperties(uint8 drawGroup, bool32 sorted, void (*hookCB)()) { RSDKTable->SetDrawGroupProperties(drawGroup, sorted, hookCB); }
+RSDK_FORCE_INLINE void SetDrawGroupProperties(uint8 drawGroup, bool32 sorted, void (*hookCB)()) { RSDKTable->SetDrawGroupProperties(drawGroup, sorted, hookCB); }
 
 } // namespace Graphics
 

@@ -14,14 +14,14 @@ struct SpriteSheet {
 
     SpriteSheet() : id(0xFFFF) {}
 
-    inline void Init() { id = (uint16)-1; }
+    RSDK_FORCE_INLINE void Init() { id = (uint16)-1; }
 
-    inline void Load(const char *path, Scopes scope) { id = RSDKTable->LoadSpriteSheet(path, scope); }
+    RSDK_FORCE_INLINE void Load(const char *path, Scopes scope) { id = RSDKTable->LoadSpriteSheet(path, scope); }
 
-    inline bool32 Loaded() { return id != (uint16)-1; }
+    RSDK_FORCE_INLINE bool32 Loaded() { return id != (uint16)-1; }
 
-    inline bool32 Matches(SpriteSheet &other) { return this->id == other.id; }
-    inline bool32 Matches(SpriteSheet *other)
+    RSDK_FORCE_INLINE bool32 Matches(SpriteSheet &other) { return this->id == other.id; }
+    RSDK_FORCE_INLINE bool32 Matches(SpriteSheet *other)
     {
         if (other)
             return this->id == other->id;
@@ -51,27 +51,27 @@ struct SpriteAnimation {
 
     SpriteAnimation() : aniFrames(0xFFFF) {}
 
-    inline void Init() { aniFrames = (uint16)-1; }
+    RSDK_FORCE_INLINE void Init() { aniFrames = (uint16)-1; }
 
-    inline void Load(const char *path, Scopes scope) { aniFrames = RSDKTable->LoadSpriteAnimation(path, scope); }
-    inline void Create(const char *filename, uint32 frameCount, uint32 listCount, Scopes scope)
+    RSDK_FORCE_INLINE void Load(const char *path, Scopes scope) { aniFrames = RSDKTable->LoadSpriteAnimation(path, scope); }
+    RSDK_FORCE_INLINE void Create(const char *filename, uint32 frameCount, uint32 listCount, Scopes scope)
     {
         aniFrames = RSDKTable->CreateSpriteAnimation(filename, frameCount, listCount, scope);
     }
 
-    inline void Edit(uint16 listID, const char *name, int32 frameOffset, uint16 frameCount, int16 speed, uint8 loopIndex, uint8 rotationStyle)
+    RSDK_FORCE_INLINE void Edit(uint16 listID, const char *name, int32 frameOffset, uint16 frameCount, int16 speed, uint8 loopIndex, uint8 rotationStyle)
     {
         RSDKTable->EditSpriteAnimation(aniFrames, listID, name, frameOffset, frameCount, speed, loopIndex, rotationStyle);
     }
 
-    inline uint16 FindAnimation(const char *name) { return RSDKTable->FindSpriteAnimation(aniFrames, name); }
+    RSDK_FORCE_INLINE uint16 FindAnimation(const char *name) { return RSDKTable->FindSpriteAnimation(aniFrames, name); }
 
-    inline bool32 Loaded() { return aniFrames != (uint16)-1; }
+    RSDK_FORCE_INLINE bool32 Loaded() { return aniFrames != (uint16)-1; }
 
-    inline SpriteFrame *GetFrame(int32 animID, int32 frameID) { return RSDKTable->GetFrame(aniFrames, animID, frameID); }
+    RSDK_FORCE_INLINE SpriteFrame *GetFrame(int32 animID, int32 frameID) { return RSDKTable->GetFrame(aniFrames, animID, frameID); }
 
-    inline bool32 Matches(SpriteAnimation &other) { return this->aniFrames == other.aniFrames; }
-    inline bool32 Matches(SpriteAnimation *other)
+    RSDK_FORCE_INLINE bool32 Matches(SpriteAnimation &other) { return this->aniFrames == other.aniFrames; }
+    RSDK_FORCE_INLINE bool32 Matches(SpriteAnimation *other)
     {
         if (other)
             return this->aniFrames == other->aniFrames;

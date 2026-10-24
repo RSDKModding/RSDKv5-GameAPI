@@ -113,12 +113,12 @@ struct GameObject {
         uint16 classID;
         uint8 active;
 
-        inline void EditableVar(uint8 type, const char *name, uint32 offset) { RSDKTable->SetEditableVar(type, name, (uint8)this->classID, offset); }
+        RSDK_FORCE_INLINE void EditableVar(uint8 type, const char *name, uint32 offset) { RSDKTable->SetEditableVar(type, name, (uint8)this->classID, offset); }
 
-        inline int32 Count(bool32 isActive = false) { return RSDKTable->GetEntityCount(this->classID, isActive); }
+        RSDK_FORCE_INLINE int32 Count(bool32 isActive = false) { return RSDKTable->GetEntityCount(this->classID, isActive); }
 
 #if RETRO_USE_MOD_LOADER
-        inline void Super(int32 callback, void *data = nullptr) { modTable->Super(this->classID, callback, data); }
+        RSDK_FORCE_INLINE void Super(int32 callback, void *data = nullptr) { modTable->Super(this->classID, callback, data); }
 #endif
     };
 
@@ -179,7 +179,7 @@ struct GameObject {
         uint8 visible;
         uint8 onScreen;
 
-        inline void Init()
+        RSDK_FORCE_INLINE void Init()
         {
             active        = ACTIVE_BOUNDS;
             visible       = false;
@@ -187,92 +187,92 @@ struct GameObject {
             updateRange.y = TO_FIXED(128);
         }
 
-        inline uint16 Slot() { return RSDKTable->GetEntitySlot(this); }
-        inline void Destroy() { RSDKTable->ResetEntity(this, TYPE_DEFAULTOBJECT, nullptr); }
+        RSDK_FORCE_INLINE uint16 Slot() { return RSDKTable->GetEntitySlot(this); }
+        RSDK_FORCE_INLINE void Destroy() { RSDKTable->ResetEntity(this, TYPE_DEFAULTOBJECT, nullptr); }
 
-        inline void Reset(uint32 type, void *data) { RSDKTable->ResetEntity(this, type, data); }
-        inline void Reset(uint32 type, int32 data) { RSDKTable->ResetEntity(this, type, INT_TO_VOID(data)); }
+        RSDK_FORCE_INLINE void Reset(uint32 type, void *data) { RSDKTable->ResetEntity(this, type, data); }
+        RSDK_FORCE_INLINE void Reset(uint32 type, int32 data) { RSDKTable->ResetEntity(this, type, INT_TO_VOID(data)); }
 
         void Copy(Entity *dst, bool32 clearThis) { RSDKTable->CopyEntity(dst, this, clearThis); }
 
-        inline bool32 CheckOnScreen(Vector2 *range) { return RSDKTable->CheckOnScreen(this, range); }
+        RSDK_FORCE_INLINE bool32 CheckOnScreen(Vector2 *range) { return RSDKTable->CheckOnScreen(this, range); }
 
-        inline void AddDrawListRef(uint8 drawGroup) { RSDKTable->AddDrawListRef(drawGroup, Slot()); }
+        RSDK_FORCE_INLINE void AddDrawListRef(uint8 drawGroup) { RSDKTable->AddDrawListRef(drawGroup, Slot()); }
 
-        inline bool32 TileCollision(uint16 collisionLayers, uint8 collisionMode, uint8 collisionPlane, int32 xOffset, int32 yOffset, bool32 setPos)
+        RSDK_FORCE_INLINE bool32 TileCollision(uint16 collisionLayers, uint8 collisionMode, uint8 collisionPlane, int32 xOffset, int32 yOffset, bool32 setPos)
         {
             return RSDKTable->ObjectTileCollision(this, collisionLayers, collisionMode, collisionPlane, xOffset, yOffset, setPos);
         }
 
-        inline bool32 TileGrip(uint16 collisionLayers, uint8 collisionMode, uint8 collisionPlane, int32 xOffset, int32 yOffset, int32 tolerance)
+        RSDK_FORCE_INLINE bool32 TileGrip(uint16 collisionLayers, uint8 collisionMode, uint8 collisionPlane, int32 xOffset, int32 yOffset, int32 tolerance)
         {
             return RSDKTable->ObjectTileGrip(this, collisionLayers, collisionMode, collisionPlane, xOffset, yOffset, tolerance);
         }
 
-        inline void ProcessMovement(Hitbox *outerBox, Hitbox *innerBox) { return RSDKTable->ProcessObjectMovement(this, outerBox, innerBox); }
+        RSDK_FORCE_INLINE void ProcessMovement(Hitbox *outerBox, Hitbox *innerBox) { return RSDKTable->ProcessObjectMovement(this, outerBox, innerBox); }
 
-        inline bool32 CheckCollisionTouchBox(RSDK::Hitbox *thisHitbox, Entity *other, RSDK::Hitbox *otherHitbox)
+        RSDK_FORCE_INLINE bool32 CheckCollisionTouchBox(RSDK::Hitbox *thisHitbox, Entity *other, RSDK::Hitbox *otherHitbox)
         {
             return RSDKTable->CheckObjectCollisionTouchBox(this, thisHitbox, other, otherHitbox);
         }
 
-        inline bool32 CheckCollisionTouchCircle(int32 thisRadius, Entity *other, int32 otherRadius)
+        RSDK_FORCE_INLINE bool32 CheckCollisionTouchCircle(int32 thisRadius, Entity *other, int32 otherRadius)
         {
             return RSDKTable->CheckObjectCollisionTouchCircle(this, thisRadius, other, otherRadius);
         }
 
-        inline uint8 CheckCollisionBox(RSDK::Hitbox *thisHitbox, Entity *other, RSDK::Hitbox *otherHitbox, bool32 setPos = true)
+        RSDK_FORCE_INLINE uint8 CheckCollisionBox(RSDK::Hitbox *thisHitbox, Entity *other, RSDK::Hitbox *otherHitbox, bool32 setPos = true)
         {
             return RSDKTable->CheckObjectCollisionBox(this, thisHitbox, other, otherHitbox, setPos);
         }
 
-        inline bool32 CheckCollisionPlatform(RSDK::Hitbox *thisHitbox, Entity *other, RSDK::Hitbox *otherHitbox, bool32 setPos = true)
+        RSDK_FORCE_INLINE bool32 CheckCollisionPlatform(RSDK::Hitbox *thisHitbox, Entity *other, RSDK::Hitbox *otherHitbox, bool32 setPos = true)
         {
             return RSDKTable->CheckObjectCollisionPlatform(this, thisHitbox, other, otherHitbox, setPos);
         }
 
 #if RETRO_USE_MOD_LOADER
-        inline void Super(int32 callback, void *data = nullptr) { modTable->Super(this->classID, callback, data); }
+        RSDK_FORCE_INLINE void Super(int32 callback, void *data = nullptr) { modTable->Super(this->classID, callback, data); }
 #endif
     };
 
-    static inline Entity *Create(void *data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(TYPE_DEFAULTOBJECT, data, x, y); }
-    static inline Entity *Create(int32 data, int32 x, int32 y)
+    static RSDK_FORCE_INLINE Entity *Create(void *data, int32 x, int32 y) { return (Entity *)RSDKTable->CreateEntity(TYPE_DEFAULTOBJECT, data, x, y); }
+    static RSDK_FORCE_INLINE Entity *Create(int32 data, int32 x, int32 y)
     {
         return (Entity *)RSDKTable->CreateEntity(TYPE_DEFAULTOBJECT, INT_TO_VOID(data), x, y);
     }
 
-    template <typename T> static inline T *Create(void *data, int32 x, int32 y)
+    template <typename T> static RSDK_FORCE_INLINE T *Create(void *data, int32 x, int32 y)
     {
         return (T *)RSDKTable->CreateEntity(T::sVars->classID, data, x, y);
     }
 
-    template <typename T> static inline T *Create(int32 data, int32 x, int32 y)
+    template <typename T> static RSDK_FORCE_INLINE T *Create(int32 data, int32 x, int32 y)
     {
         return (T *)RSDKTable->CreateEntity(T::sVars->classID, INT_TO_VOID(data), x, y);
     }
 
-    static inline Entity *Get(uint16 slot) { return (Entity *)RSDKTable->GetEntity(slot); }
-    template <typename T> static inline T *Get(uint16 slot) { return (T *)RSDKTable->GetEntity(slot); }
+    static RSDK_FORCE_INLINE Entity *Get(uint16 slot) { return (Entity *)RSDKTable->GetEntity(slot); }
+    template <typename T> static RSDK_FORCE_INLINE T *Get(uint16 slot) { return (T *)RSDKTable->GetEntity(slot); }
 
-    template <typename T> static inline int32 Count(bool32 isActive = false) { return RSDKTable->GetEntityCount(T::sVars->classID, isActive); }
+    template <typename T> static RSDK_FORCE_INLINE int32 Count(bool32 isActive = false) { return RSDKTable->GetEntityCount(T::sVars->classID, isActive); }
 
-    static inline void Copy(Entity *dst, Entity *src, bool32 clearSrc) { RSDKTable->CopyEntity(dst, src, clearSrc); }
-    static inline void Copy(void *dst, void *src, bool32 clearSrc) { RSDKTable->CopyEntity(dst, src, clearSrc); }
+    static RSDK_FORCE_INLINE void Copy(Entity *dst, Entity *src, bool32 clearSrc) { RSDKTable->CopyEntity(dst, src, clearSrc); }
+    static RSDK_FORCE_INLINE void Copy(void *dst, void *src, bool32 clearSrc) { RSDKTable->CopyEntity(dst, src, clearSrc); }
 
-    static inline void Reset(int32 slot, uint32 type, void *data) { RSDKTable->ResetEntitySlot(slot, type, data); }
-    static inline void Reset(int32 slot, uint32 type, int32 data) { RSDKTable->ResetEntitySlot(slot, type, INT_TO_VOID(data)); }
+    static RSDK_FORCE_INLINE void Reset(int32 slot, uint32 type, void *data) { RSDKTable->ResetEntitySlot(slot, type, data); }
+    static RSDK_FORCE_INLINE void Reset(int32 slot, uint32 type, int32 data) { RSDKTable->ResetEntitySlot(slot, type, INT_TO_VOID(data)); }
 
-    static inline void Destroy(int32 slot) { Reset(slot, TYPE_DEFAULTOBJECT, nullptr); }
+    static RSDK_FORCE_INLINE void Destroy(int32 slot) { Reset(slot, TYPE_DEFAULTOBJECT, nullptr); }
 
     template <typename T> struct EntityIterator {
         T *entity;
         uint16 group;
         ForeachTypes type;
 
-        inline T *operator*() { return entity; }
+        RSDK_FORCE_INLINE T *operator*() { return entity; }
 
-        inline bool operator!=(const EntityIterator &)
+        RSDK_FORCE_INLINE bool operator!=(const EntityIterator &)
         {
             switch (type) {
                 case FOR_ALL_ENTITIES: return RSDKTable->GetAllEntities(group, (void **)&entity);
@@ -286,35 +286,35 @@ struct GameObject {
             return false;
         }
 
-        inline void operator++() const {}
+        RSDK_FORCE_INLINE void operator++() const {}
     };
 
     template <typename T> struct EntityList {
         uint16 group;
         ForeachTypes type;
 
-        inline EntityIterator<T> begin() { return { nullptr, group, type }; }
-        inline EntityIterator<T> end() { return { nullptr, group, type }; }
+        RSDK_FORCE_INLINE EntityIterator<T> begin() { return { nullptr, group, type }; }
+        RSDK_FORCE_INLINE EntityIterator<T> end() { return { nullptr, group, type }; }
     };
 
-    template <typename T> static inline EntityList<T> GetEntities(ForeachTypes type)
+    template <typename T> static RSDK_FORCE_INLINE EntityList<T> GetEntities(ForeachTypes type)
     {
         return { T::sVars ? T::sVars->classID : (uint16)GROUP_ALL, type };
     }
-    template <typename T> static inline EntityList<T> GetEntities(ForeachTypes type, uint16 group) { return { group, type }; }
+    template <typename T> static RSDK_FORCE_INLINE EntityList<T> GetEntities(ForeachTypes type, uint16 group) { return { group, type }; }
 
-    static inline EntityList<Entity> GetEntities(ForeachTypes type) { return { (uint16)GROUP_ALL, type }; }
-    static inline EntityList<Entity> GetEntities(ForeachTypes type, uint16 group) { return { group, type }; }
+    static RSDK_FORCE_INLINE EntityList<Entity> GetEntities(ForeachTypes type) { return { (uint16)GROUP_ALL, type }; }
+    static RSDK_FORCE_INLINE EntityList<Entity> GetEntities(ForeachTypes type, uint16 group) { return { group, type }; }
 
-    static inline uint16 Find(const char *name) { return RSDKTable->FindObject(name); }
+    static RSDK_FORCE_INLINE uint16 Find(const char *name) { return RSDKTable->FindObject(name); }
 
 #if RETRO_USE_MOD_LOADER
-    template <typename T> static inline T *FindClass(const char *name) { return (T *)modTable->FindObject(name); }
+    template <typename T> static RSDK_FORCE_INLINE T *FindClass(const char *name) { return (T *)modTable->FindObject(name); }
 #endif
 
 #if GAME_INCLUDE_EDITOR
-    static inline void SetActiveVariable(int32 classID, const char *name) { RSDKTable->SetActiveVariable(classID, name); }
-    static inline void AddVarEnumValue(const char *name) { RSDKTable->AddVarEnumValue(name); }
+    static RSDK_FORCE_INLINE void SetActiveVariable(int32 classID, const char *name) { RSDKTable->SetActiveVariable(classID, name); }
+    static RSDK_FORCE_INLINE void AddVarEnumValue(const char *name) { RSDKTable->AddVarEnumValue(name); }
 #endif
 };
 
@@ -360,7 +360,7 @@ extern int32 registerStaticListCount;
 extern ObjectRegistration registerStaticList[OBJECT_COUNT];
 #endif
 
-template <typename E> static inline typename E::Static *RegisterObject(typename E::Static **sVars, const char *name)
+template <typename E> static RSDK_FORCE_INLINE typename E::Static *RegisterObject(typename E::Static **sVars, const char *name)
 {
     if (registerObjectListCount < OBJECT_COUNT) {
         ObjectRegistration *object = &registerObjectList[registerObjectListCount++];
@@ -411,7 +411,7 @@ template <typename E> static inline typename E::Static *RegisterObject(typename 
 }
 
 #if RETRO_REV02
-template <typename E> static inline typename E::Static *RegisterStaticVars(typename E::Static **sVars, const char *name)
+template <typename E> static RSDK_FORCE_INLINE typename E::Static *RegisterStaticVars(typename E::Static **sVars, const char *name)
 {
     if (registerStaticListCount < OBJECT_COUNT) {
         ObjectRegistration *object = &registerStaticList[registerStaticListCount++];
@@ -490,7 +490,7 @@ template <typename E> static inline typename E::Static *RegisterStaticVars(typen
 namespace Mod
 {
 template <typename E>
-static inline typename E::Static *RegisterObject(typename E::Static **sVars, typename E::ModStatic **modSVars, const char *name,
+static RSDK_FORCE_INLINE typename E::Static *RegisterObject(typename E::Static **sVars, typename E::ModStatic **modSVars, const char *name,
                                                  const char *inherit = "")
 {
     if (registerObjectListCount < OBJECT_COUNT) {
@@ -547,7 +547,7 @@ static inline typename E::Static *RegisterObject(typename E::Static **sVars, typ
     return nullptr;
 }
 
-template <typename E> static inline typename E::Static *RegisterObjectHook(typename E::Static **sVars, const char *name)
+template <typename E> static RSDK_FORCE_INLINE typename E::Static *RegisterObjectHook(typename E::Static **sVars, const char *name)
 {
     if (registerObjectListCount < OBJECT_COUNT) {
         ObjectRegistration *object = &registerObjectList[registerObjectListCount++];

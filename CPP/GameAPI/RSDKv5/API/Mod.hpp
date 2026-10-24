@@ -66,18 +66,18 @@ enum RetroPlatform {
     RETRO_OTHER   = 9
 };
 
-inline int32 GetRetroPlatform(void) { return modTable->GetRetroPlatform(); }
+RSDK_FORCE_INLINE int32 GetRetroPlatform(void) { return modTable->GetRetroPlatform(); }
 
-inline void GetGameTitle(String *result) { modTable->GetGameTitle(result); }
-inline void SetGameTitle(const char *name) { modTable->SetGameTitle(name); }
+RSDK_FORCE_INLINE void GetGameTitle(String *result) { modTable->GetGameTitle(result); }
+RSDK_FORCE_INLINE void SetGameTitle(const char *name) { modTable->SetGameTitle(name); }
 #endif
 
 namespace Mod
 {
 
 // Mod Callbacks & Public Functions
-inline void AddModCallback(int32 callbackID, void (*callback)(void *)) { modTable->AddModCallback(callbackID, callback); }
-inline void AddModCallback(int32 callbackID, std::function<void(void *)> callback) { modTable->AddModCallback_STD(callbackID, callback); }
+RSDK_FORCE_INLINE void AddModCallback(int32 callbackID, void (*callback)(void *)) { modTable->AddModCallback(callbackID, callback); }
+RSDK_FORCE_INLINE void AddModCallback(int32 callbackID, std::function<void(void *)> callback) { modTable->AddModCallback_STD(callbackID, callback); }
 
 namespace PublicFunctions
 {
@@ -85,7 +85,7 @@ struct FunctionObject {
     const char *id;
     const char *functionName;
 
-    template <typename T> inline operator T() const
+    template <typename T> RSDK_FORCE_INLINE operator T() const
     {
         if constexpr (std::is_member_function_pointer_v<T>) {
             union {
@@ -101,20 +101,20 @@ struct FunctionObject {
     }
 };
 
-template <typename obj, typename R> inline void Add(const char *functionName, R(obj::*functionPtr))
+template <typename obj, typename R> RSDK_FORCE_INLINE void Add(const char *functionName, R(obj::*functionPtr))
 {
     modTable->AddPublicFunction(functionName, reinterpret_cast<void *&>(functionPtr));
 }
 
-template <typename R> inline void Add(const char *functionName, R(*functionPtr))
+template <typename R> RSDK_FORCE_INLINE void Add(const char *functionName, R(*functionPtr))
 {
     modTable->AddPublicFunction(functionName, reinterpret_cast<void *&>(functionPtr));
 }
 
-inline FunctionObject Get(const char *id, const char *functionName) { return { id, functionName }; }
+RSDK_FORCE_INLINE FunctionObject Get(const char *id, const char *functionName) { return { id, functionName }; }
 
 #if RETRO_MOD_LOADER_VER >= 3
-inline void Hook(const char *id, const char *functionName, void *functionPtr, void **originalPtr)
+RSDK_FORCE_INLINE void Hook(const char *id, const char *functionName, void *functionPtr, void **originalPtr)
 {
     modTable->HookPublicFunction(id, functionName, functionPtr, originalPtr);
 }
@@ -147,98 +147,98 @@ protected:
 } // namespace PublicFunctions
 
 // Shaders
-inline void LoadShader(const char *shaderName, bool32 linear) { modTable->LoadShader(shaderName, linear); }
+RSDK_FORCE_INLINE void LoadShader(const char *shaderName, bool32 linear) { modTable->LoadShader(shaderName, linear); }
 
 // Misc
-template <typename T> inline T *GetGlobals() { return (T *)modTable->GetGlobals(); }
+template <typename T> RSDK_FORCE_INLINE T *GetGlobals() { return (T *)modTable->GetGlobals(); }
 
 #if RETRO_MOD_LOADER_VER >= 3
-inline void OpenModMenu() { modTable->OpenModMenu(); }
+RSDK_FORCE_INLINE void OpenModMenu() { modTable->OpenModMenu(); }
 #endif
 
 namespace List
 {
 // Mod Info
-inline bool32 LoadModInfo(const char *id, String *name, String *description, String *version, bool32 *active)
+RSDK_FORCE_INLINE bool32 LoadModInfo(const char *id, String *name, String *description, String *version, bool32 *active)
 {
     return modTable->LoadModInfo(id, name, description, version, active);
 }
-inline void GetModPath(const char *id, String *result) { modTable->GetModPath(id, result); }
-inline int32 GetModCount(bool32 active = false) { return modTable->GetModCount(active); }
-inline const char *GetModIDByIndex(uint32 index) { return modTable->GetModIDByIndex(index); }
+RSDK_FORCE_INLINE void GetModPath(const char *id, String *result) { modTable->GetModPath(id, result); }
+RSDK_FORCE_INLINE int32 GetModCount(bool32 active = false) { return modTable->GetModCount(active); }
+RSDK_FORCE_INLINE const char *GetModIDByIndex(uint32 index) { return modTable->GetModIDByIndex(index); }
 
 } // namespace List
 
 namespace Achievements
 {
-inline void Register(const char *identifier, const char *name, const char *desc) { modTable->RegisterAchievement(identifier, name, desc); }
-inline void GetInfo(uint32 id, String *name, String *description, String *identifier, bool32 *achieved)
+RSDK_FORCE_INLINE void Register(const char *identifier, const char *name, const char *desc) { modTable->RegisterAchievement(identifier, name, desc); }
+RSDK_FORCE_INLINE void GetInfo(uint32 id, String *name, String *description, String *identifier, bool32 *achieved)
 {
     modTable->GetAchievementInfo(id, name, description, identifier, achieved);
 }
-inline int32 GetIndexByID(const char *identifier) { return modTable->GetAchievementIndexByID(identifier); }
-inline int32 GetCount() { return modTable->GetAchievementCount(); }
+RSDK_FORCE_INLINE int32 GetIndexByID(const char *identifier) { return modTable->GetAchievementIndexByID(identifier); }
+RSDK_FORCE_INLINE int32 GetCount() { return modTable->GetAchievementCount(); }
 } // namespace Achievements
 
 namespace Settings
 {
-inline bool32 GetBool(const char *id, const char *key, bool32 fallback) { return modTable->GetSettingsBool(id, key, fallback); }
-inline int32 GetInteger(const char *id, const char *key, int32 fallback) { return modTable->GetSettingsInteger(id, key, fallback); }
-inline float GetFloat(const char *id, const char *key, float fallback) { return modTable->GetSettingsFloat(id, key, fallback); }
-inline void GetString(const char *id, const char *key, String *result, const char *fallback)
+RSDK_FORCE_INLINE bool32 GetBool(const char *id, const char *key, bool32 fallback) { return modTable->GetSettingsBool(id, key, fallback); }
+RSDK_FORCE_INLINE int32 GetInteger(const char *id, const char *key, int32 fallback) { return modTable->GetSettingsInteger(id, key, fallback); }
+RSDK_FORCE_INLINE float GetFloat(const char *id, const char *key, float fallback) { return modTable->GetSettingsFloat(id, key, fallback); }
+RSDK_FORCE_INLINE void GetString(const char *id, const char *key, String *result, const char *fallback)
 {
     modTable->GetSettingsString(id, key, result, fallback);
 }
 
-inline void SetBool(const char *key, bool32 val) { modTable->SetSettingsBool(key, val); }
-inline void SetInteger(const char *key, int32 val) { modTable->SetSettingsInteger(key, val); }
-inline void SetFloat(const char *key, float val) { modTable->SetSettingsFloat(key, val); }
-inline void SetString(const char *key, String *val) { modTable->SetSettingsString(key, val); }
+RSDK_FORCE_INLINE void SetBool(const char *key, bool32 val) { modTable->SetSettingsBool(key, val); }
+RSDK_FORCE_INLINE void SetInteger(const char *key, int32 val) { modTable->SetSettingsInteger(key, val); }
+RSDK_FORCE_INLINE void SetFloat(const char *key, float val) { modTable->SetSettingsFloat(key, val); }
+RSDK_FORCE_INLINE void SetString(const char *key, String *val) { modTable->SetSettingsString(key, val); }
 
-inline void SaveSettings() { modTable->SaveSettings(); }
+RSDK_FORCE_INLINE void SaveSettings() { modTable->SaveSettings(); }
 } // namespace Settings
 
 namespace Config
 {
-inline bool32 GetBool(const char *key, bool32 fallback) { return modTable->GetConfigBool(key, fallback); }
-inline int32 GetInteger(const char *key, int32 fallback) { return modTable->GetConfigInteger(key, fallback); }
-inline float GetFloat(const char *key, float fallback) { return modTable->GetConfigFloat(key, fallback); }
-inline void GetString(const char *key, String *result, const char *fallback) { modTable->GetConfigString(key, result, fallback); }
+RSDK_FORCE_INLINE bool32 GetBool(const char *key, bool32 fallback) { return modTable->GetConfigBool(key, fallback); }
+RSDK_FORCE_INLINE int32 GetInteger(const char *key, int32 fallback) { return modTable->GetConfigInteger(key, fallback); }
+RSDK_FORCE_INLINE float GetFloat(const char *key, float fallback) { return modTable->GetConfigFloat(key, fallback); }
+RSDK_FORCE_INLINE void GetString(const char *key, String *result, const char *fallback) { modTable->GetConfigString(key, result, fallback); }
 } // namespace Config
 
 #if RETRO_MOD_LOADER_VER >= 2
 namespace Files
 {
-inline bool32 ExcludeFile(const char *id, const char *path) { return modTable->ExcludeFile(id, path); }
-inline bool32 ExcludeAllFiles(const char *id) { return modTable->ExcludeAllFiles(id); }
-inline bool32 ReloadFile(const char *id, const char *path) { return modTable->ReloadFile(id, path); }
-inline bool32 ReloadAllFiles(const char *id) { return modTable->ReloadAllFiles(id); }
+RSDK_FORCE_INLINE bool32 ExcludeFile(const char *id, const char *path) { return modTable->ExcludeFile(id, path); }
+RSDK_FORCE_INLINE bool32 ExcludeAllFiles(const char *id) { return modTable->ExcludeAllFiles(id); }
+RSDK_FORCE_INLINE bool32 ReloadFile(const char *id, const char *path) { return modTable->ReloadFile(id, path); }
+RSDK_FORCE_INLINE bool32 ReloadAllFiles(const char *id) { return modTable->ReloadAllFiles(id); }
 #if RETRO_MOD_LOADER_VER >= 3
-inline bool32 FileExists(const char *path) { return modTable->FileExists(path); }
+RSDK_FORCE_INLINE bool32 FileExists(const char *path) { return modTable->FileExists(path); }
 #endif
 } // namespace Files
 
 namespace Engine
 {
-inline void *GetSpriteAnimation(uint16 id) { return modTable->GetSpriteAnimation(id); }
-inline void *GetSpriteSurface(uint16 id) { return modTable->GetSpriteSurface(id); }
-inline uint16 *GetPaletteBank(uint8 id) { return modTable->GetPaletteBank(id); }
-inline uint8 *GetActivePaletteBuffer() { return modTable->GetActivePaletteBuffer(); }
-inline void GetRGB32To16Buffer(uint16 **rgb32To16_R, uint16 **rgb32To16_G, uint16 **rgb32To16_B)
+RSDK_FORCE_INLINE void *GetSpriteAnimation(uint16 id) { return modTable->GetSpriteAnimation(id); }
+RSDK_FORCE_INLINE void *GetSpriteSurface(uint16 id) { return modTable->GetSpriteSurface(id); }
+RSDK_FORCE_INLINE uint16 *GetPaletteBank(uint8 id) { return modTable->GetPaletteBank(id); }
+RSDK_FORCE_INLINE uint8 *GetActivePaletteBuffer() { return modTable->GetActivePaletteBuffer(); }
+RSDK_FORCE_INLINE void GetRGB32To16Buffer(uint16 **rgb32To16_R, uint16 **rgb32To16_G, uint16 **rgb32To16_B)
 {
     modTable->GetRGB32To16Buffer(rgb32To16_R, rgb32To16_G, rgb32To16_B);
 }
-inline uint16 *GetBlendLookupTable() { return modTable->GetBlendLookupTable(); }
-inline uint16 *GetSubtractLookupTable() { return modTable->GetSubtractLookupTable(); }
-inline uint16 *GetTintLookupTable() { return modTable->GetTintLookupTable(); }
-inline color GetMaskColor() { return modTable->GetMaskColor(); }
-inline void *GetScanEdgeBuffer() { return modTable->GetScanEdgeBuffer(); }
-inline void *GetCamera(uint8 id) { return modTable->GetCamera(id); }
-inline void *GetShader(uint8 id) { return modTable->GetShader(id); }
-inline void *GetModel(uint16 id) { return modTable->GetModel(id); }
-inline void *GetScene3D(uint16 id) { return modTable->GetScene3D(id); }
-inline void *GetSfx(uint16 id) { return modTable->GetSfx(id); }
-inline void *GetChannel(uint8 id) { return modTable->GetChannel(id); }
+RSDK_FORCE_INLINE uint16 *GetBlendLookupTable() { return modTable->GetBlendLookupTable(); }
+RSDK_FORCE_INLINE uint16 *GetSubtractLookupTable() { return modTable->GetSubtractLookupTable(); }
+RSDK_FORCE_INLINE uint16 *GetTintLookupTable() { return modTable->GetTintLookupTable(); }
+RSDK_FORCE_INLINE color GetMaskColor() { return modTable->GetMaskColor(); }
+RSDK_FORCE_INLINE void *GetScanEdgeBuffer() { return modTable->GetScanEdgeBuffer(); }
+RSDK_FORCE_INLINE void *GetCamera(uint8 id) { return modTable->GetCamera(id); }
+RSDK_FORCE_INLINE void *GetShader(uint8 id) { return modTable->GetShader(id); }
+RSDK_FORCE_INLINE void *GetModel(uint16 id) { return modTable->GetModel(id); }
+RSDK_FORCE_INLINE void *GetScene3D(uint16 id) { return modTable->GetScene3D(id); }
+RSDK_FORCE_INLINE void *GetSfx(uint16 id) { return modTable->GetSfx(id); }
+RSDK_FORCE_INLINE void *GetChannel(uint8 id) { return modTable->GetChannel(id); }
 } // namespace Engine
 #endif
 
@@ -271,7 +271,7 @@ template <auto hook> void RegisterStateHook(void (*state)(), bool32 priority)
         modTable->RegisterStateHook(state, hook, priority);
 }
 
-inline void RegisterStateHook(void (*state)(), bool32 (*hook)(bool32 skippedState), bool32 priority)
+RSDK_FORCE_INLINE void RegisterStateHook(void (*state)(), bool32 (*hook)(bool32 skippedState), bool32 priority)
 {
     modTable->RegisterStateHook(state, hook, priority);
 }

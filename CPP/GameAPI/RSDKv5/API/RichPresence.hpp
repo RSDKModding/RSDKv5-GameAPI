@@ -12,7 +12,7 @@ namespace API
 {
 namespace RichPresence
 {
-inline void Set(int32 id, String *text) { APITable->SetRichPresence(id, text); }
+RSDK_FORCE_INLINE void Set(int32 id, String *text) { APITable->SetRichPresence(id, text); }
 } // namespace RichPresence
 } // namespace API
 

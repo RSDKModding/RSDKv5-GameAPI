@@ -14,7 +14,7 @@ namespace Mod
 namespace List
 {
 
-inline std::list<String> GetIDs()
+RSDK_FORCE_INLINE std::list<String> GetIDs()
 {
     std::list<String> list;
 
@@ -37,7 +37,7 @@ inline std::list<String> GetIDs()
 namespace Settings
 {
 
-inline std::list<String> Get(const char *id)
+RSDK_FORCE_INLINE std::list<String> Get(const char *id)
 {
     std::list<String> list;
 
@@ -54,7 +54,7 @@ inline std::list<String> Get(const char *id)
     return list;
 }
 
-inline std::list<String> GetCategories(const char *id)
+RSDK_FORCE_INLINE std::list<String> GetCategories(const char *id)
 {
     std::list<String> list;
 
@@ -76,7 +76,7 @@ inline std::list<String> GetCategories(const char *id)
 namespace Config
 {
 
-inline std::list<String> Get()
+RSDK_FORCE_INLINE std::list<String> Get()
 {
     std::list<String> list;
 
@@ -93,7 +93,7 @@ inline std::list<String> Get()
     return list;
 }
 
-inline std::list<String> GetCategories()
+RSDK_FORCE_INLINE std::list<String> GetCategories()
 {
     std::list<String> list;
 

@@ -56,37 +56,37 @@ inline void Print(PrintModes severity, const char *message, ...)
     vsprintf_s(buffer, message, args);
     RSDKTable->PrintLog(severity, buffer);
 };
-inline void PrintText(PrintModes severity, const char *message) { RSDKTable->PrintText(severity, message); }
-inline void PrintString(PrintModes severity, String *string) { RSDKTable->PrintString(severity, string); }
-inline void PrintUInt32(PrintModes severity, const char *message, uint32 integer) { RSDKTable->PrintUInt32(severity, message, integer); }
-inline void PrintInt32(PrintModes severity, const char *message, int32 integer) { RSDKTable->PrintInt32(severity, message, integer); }
-inline void PrintFloat(PrintModes severity, const char *message, float f) { RSDKTable->PrintFloat(severity, message, f); }
-inline void PrintVector2(PrintModes severity, const char *message, int32 x, int32 y) { RSDKTable->PrintVector2(severity, message, Vector2(x, y)); }
-inline void PrintVector2(PrintModes severity, const char *message, Vector2 *vec) { RSDKTable->PrintVector2(severity, message, *vec); }
-inline void PrintVector2(PrintModes severity, const char *message, Vector2 vec) { RSDKTable->PrintVector2(severity, message, vec); }
-inline void PrintHitbox(PrintModes severity, const char *message, Hitbox *hitbox) { RSDKTable->PrintHitbox(severity, message, *hitbox); }
-inline void PrintHitbox(PrintModes severity, const char *message, Hitbox hitbox) { RSDKTable->PrintHitbox(severity, message, hitbox); }
+RSDK_FORCE_INLINE void PrintText(PrintModes severity, const char *message) { RSDKTable->PrintText(severity, message); }
+RSDK_FORCE_INLINE void PrintString(PrintModes severity, String *string) { RSDKTable->PrintString(severity, string); }
+RSDK_FORCE_INLINE void PrintUInt32(PrintModes severity, const char *message, uint32 integer) { RSDKTable->PrintUInt32(severity, message, integer); }
+RSDK_FORCE_INLINE void PrintInt32(PrintModes severity, const char *message, int32 integer) { RSDKTable->PrintInt32(severity, message, integer); }
+RSDK_FORCE_INLINE void PrintFloat(PrintModes severity, const char *message, float f) { RSDKTable->PrintFloat(severity, message, f); }
+RSDK_FORCE_INLINE void PrintVector2(PrintModes severity, const char *message, int32 x, int32 y) { RSDKTable->PrintVector2(severity, message, Vector2(x, y)); }
+RSDK_FORCE_INLINE void PrintVector2(PrintModes severity, const char *message, Vector2 *vec) { RSDKTable->PrintVector2(severity, message, *vec); }
+RSDK_FORCE_INLINE void PrintVector2(PrintModes severity, const char *message, Vector2 vec) { RSDKTable->PrintVector2(severity, message, vec); }
+RSDK_FORCE_INLINE void PrintHitbox(PrintModes severity, const char *message, Hitbox *hitbox) { RSDKTable->PrintHitbox(severity, message, *hitbox); }
+RSDK_FORCE_INLINE void PrintHitbox(PrintModes severity, const char *message, Hitbox hitbox) { RSDKTable->PrintHitbox(severity, message, hitbox); }
 
-inline void ClearViewableVariables() { RSDKTable->ClearViewableVariables(); }
-inline void AddViewableVariable(const char *name, void *value, ViewableVarTypes type, int32 min, int32 max)
+RSDK_FORCE_INLINE void ClearViewableVariables() { RSDKTable->ClearViewableVariables(); }
+RSDK_FORCE_INLINE void AddViewableVariable(const char *name, void *value, ViewableVarTypes type, int32 min, int32 max)
 {
     RSDKTable->AddViewableVariable(name, value, type, min, max);
 }
 
-inline void AddViewableVariable(const char *name, bool32 *value) { AddViewableVariable(name, value, VIEWVAR_BOOL, 0, 1); }
-inline void AddViewableVariable(const char *name, uint8 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_UINT8, min, max); }
-inline void AddViewableVariable(const char *name, uint16 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_UINT16, min, max); }
-inline void AddViewableVariable(const char *name, uint32 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_UINT32, min, max); }
-inline void AddViewableVariable(const char *name, int8 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_INT8, min, max); }
-inline void AddViewableVariable(const char *name, int16 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_INT16, min, max); }
-inline void AddViewableVariable(const char *name, int32 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_INT32, min, max); }
+RSDK_FORCE_INLINE void AddViewableVariable(const char *name, bool32 *value) { AddViewableVariable(name, value, VIEWVAR_BOOL, 0, 1); }
+RSDK_FORCE_INLINE void AddViewableVariable(const char *name, uint8 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_UINT8, min, max); }
+RSDK_FORCE_INLINE void AddViewableVariable(const char *name, uint16 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_UINT16, min, max); }
+RSDK_FORCE_INLINE void AddViewableVariable(const char *name, uint32 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_UINT32, min, max); }
+RSDK_FORCE_INLINE void AddViewableVariable(const char *name, int8 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_INT8, min, max); }
+RSDK_FORCE_INLINE void AddViewableVariable(const char *name, int16 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_INT16, min, max); }
+RSDK_FORCE_INLINE void AddViewableVariable(const char *name, int32 *value, int32 min, int32 max) { AddViewableVariable(name, value, VIEWVAR_INT32, min, max); }
 #else
-inline void Print(void *msg, uint8 type) { RSDKTable->PrintMessage(msg, type); };
+RSDK_FORCE_INLINE void Print(void *msg, uint8 type) { RSDKTable->PrintMessage(msg, type); };
 #endif
 
 #if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 3
-inline void AddDevMenuCharacter(const char *playerName, int32 id) { modTable->AddDevMenuCharacter(playerName, id); }
-inline int32 GetActiveDevMenuCharacter(void) { return modTable->GetActiveDevMenuCharacter(); }
+RSDK_FORCE_INLINE void AddDevMenuCharacter(const char *playerName, int32 id) { modTable->AddDevMenuCharacter(playerName, id); }
+RSDK_FORCE_INLINE int32 GetActiveDevMenuCharacter(void) { return modTable->GetActiveDevMenuCharacter(); }
 #endif
 
 } // namespace Dev

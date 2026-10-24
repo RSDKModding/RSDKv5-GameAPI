@@ -16,6 +16,12 @@
 #include <functional>
 #endif
 
+#ifdef _MSC_VER
+#define RSDK_FORCE_INLINE __forceinline inline
+#else /* GCC/Clang/others */
+#define RSDK_FORCE_INLINE __attribute__((always_inline)) inline
+#endif
+
 namespace RSDK
 {
 

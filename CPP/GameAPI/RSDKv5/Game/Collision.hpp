@@ -15,8 +15,8 @@ enum CollisionModes { CMODE_FLOOR, CMODE_LWALL, CMODE_ROOF, CMODE_RWALL };
 enum CollisionSides { C_NONE, C_TOP, C_LEFT, C_RIGHT, C_BOTTOM };
 
 struct Hitbox {
-    inline Hitbox() : left(0), top(0), right(0), bottom(0) {};
-    inline Hitbox(int16 Left, int16 Top, int16 Right, int16 Bottom) : left(Left), top(Top), right(Right), bottom(Bottom) {};
+    RSDK_FORCE_INLINE Hitbox() : left(0), top(0), right(0), bottom(0) {};
+    RSDK_FORCE_INLINE Hitbox(int16 Left, int16 Top, int16 Right, int16 Bottom) : left(Left), top(Top), right(Right), bottom(Bottom) {};
 
     int16 left;
     int16 top;
@@ -32,28 +32,28 @@ struct CollisionSensor {
 
 #if RETRO_REV0U
     // expects an array of 5 sensors
-    static inline void SetPathGripSensors(CollisionSensor *sensors) { RSDKTable->SetPathGripSensors(sensors); };
+    static RSDK_FORCE_INLINE void SetPathGripSensors(CollisionSensor *sensors) { RSDKTable->SetPathGripSensors(sensors); };
 
-    inline void FindFloorPosition() { RSDKTable->FindFloorPosition(this); }
-    inline void FindLWallPosition() { RSDKTable->FindLWallPosition(this); }
-    inline void FindRoofPosition() { RSDKTable->FindRoofPosition(this); }
-    inline void FindRWallPosition() { RSDKTable->FindRWallPosition(this); }
-    inline void FloorCollision() { RSDKTable->FloorCollision(this); }
-    inline void LWallCollision() { RSDKTable->LWallCollision(this); }
-    inline void RoofCollision() { RSDKTable->RoofCollision(this); }
-    inline void RWallCollision() { RSDKTable->RWallCollision(this); }
+    RSDK_FORCE_INLINE void FindFloorPosition() { RSDKTable->FindFloorPosition(this); }
+    RSDK_FORCE_INLINE void FindLWallPosition() { RSDKTable->FindLWallPosition(this); }
+    RSDK_FORCE_INLINE void FindRoofPosition() { RSDKTable->FindRoofPosition(this); }
+    RSDK_FORCE_INLINE void FindRWallPosition() { RSDKTable->FindRWallPosition(this); }
+    RSDK_FORCE_INLINE void FloorCollision() { RSDKTable->FloorCollision(this); }
+    RSDK_FORCE_INLINE void LWallCollision() { RSDKTable->LWallCollision(this); }
+    RSDK_FORCE_INLINE void RoofCollision() { RSDKTable->RoofCollision(this); }
+    RSDK_FORCE_INLINE void RWallCollision() { RSDKTable->RWallCollision(this); }
 #elif RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
     // expects an array of 5 sensors
-    static inline void SetPathGripSensors(CollisionSensor *sensors) { modTable->SetPathGripSensors(sensors); };
+    static RSDK_FORCE_INLINE void SetPathGripSensors(CollisionSensor *sensors) { modTable->SetPathGripSensors(sensors); };
 
-    inline void FindFloorPosition() { modTable->FindFloorPosition(this); }
-    inline void FindLWallPosition() { modTable->FindLWallPosition(this); }
-    inline void FindRoofPosition() { modTable->FindRoofPosition(this); }
-    inline void FindRWallPosition() { modTable->FindRWallPosition(this); }
-    inline void FloorCollision() { modTable->FloorCollision(this); }
-    inline void LWallCollision() { modTable->LWallCollision(this); }
-    inline void RoofCollision() { modTable->RoofCollision(this); }
-    inline void RWallCollision() { modTable->RWallCollision(this); }
+    RSDK_FORCE_INLINE void FindFloorPosition() { modTable->FindFloorPosition(this); }
+    RSDK_FORCE_INLINE void FindLWallPosition() { modTable->FindLWallPosition(this); }
+    RSDK_FORCE_INLINE void FindRoofPosition() { modTable->FindRoofPosition(this); }
+    RSDK_FORCE_INLINE void FindRWallPosition() { modTable->FindRWallPosition(this); }
+    RSDK_FORCE_INLINE void FloorCollision() { modTable->FloorCollision(this); }
+    RSDK_FORCE_INLINE void LWallCollision() { modTable->LWallCollision(this); }
+    RSDK_FORCE_INLINE void RoofCollision() { modTable->RoofCollision(this); }
+    RSDK_FORCE_INLINE void RWallCollision() { modTable->RWallCollision(this); }
 #endif
 };
 
@@ -79,7 +79,7 @@ struct TileInfo {
 namespace Collision
 {
 #if RETRO_REV0U
-inline void SetupCollisionConfig(uint8 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
+RSDK_FORCE_INLINE void SetupCollisionConfig(uint8 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
                                  uint8 roofAngleTolerance)
 {
     RSDKTable->SetupCollisionConfig(minDistance, lowTolerance, highTolerance, floorAngleTolerance, wallAngleTolerance, roofAngleTolerance);
@@ -87,11 +87,11 @@ inline void SetupCollisionConfig(uint8 minDistance, uint8 lowTolerance, uint8 hi
 #endif
 
 #if RETRO_REV0U
-inline void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) { RSDKTable->CopyCollisionMask(dst, src, cPlane, cMode); }
-inline void GetCollisionInfo(CollisionMask **masks, TileInfo **tileInfo) { RSDKTable->GetCollisionInfo(masks, tileInfo); }
+RSDK_FORCE_INLINE void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) { RSDKTable->CopyCollisionMask(dst, src, cPlane, cMode); }
+RSDK_FORCE_INLINE void GetCollisionInfo(CollisionMask **masks, TileInfo **tileInfo) { RSDKTable->GetCollisionInfo(masks, tileInfo); }
 #elif RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
-inline void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) { modTable->CopyCollisionMask(dst, src, cPlane, cMode); }
-inline void GetCollisionInfo(CollisionMask **masks, TileInfo **tileInfo) { modTable->GetCollisionInfo(masks, tileInfo); }
+RSDK_FORCE_INLINE void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) { modTable->CopyCollisionMask(dst, src, cPlane, cMode); }
+RSDK_FORCE_INLINE void GetCollisionInfo(CollisionMask **masks, TileInfo **tileInfo) { modTable->GetCollisionInfo(masks, tileInfo); }
 #endif
 
 } // namespace Collision

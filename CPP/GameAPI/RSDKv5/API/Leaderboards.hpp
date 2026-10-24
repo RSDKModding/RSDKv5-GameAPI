@@ -41,20 +41,20 @@ namespace Leaderboards
 {
 
 #if RETRO_USE_EGS
-inline bool32 CheckEnabled() { return APITable->CheckLeaderboardsEnabled(); }
+RSDK_FORCE_INLINE bool32 CheckEnabled() { return APITable->CheckLeaderboardsEnabled(); }
 #endif
-inline void Init() { APITable->InitLeaderboards(); }
-inline void Fetch(LeaderboardID *leaderboard, bool32 isUser) { APITable->FetchLeaderboard(leaderboard, isUser); }
-inline void TrackScore(LeaderboardID *leaderboard, int32 score, void (*callback)(bool32 success, int32 rank))
+RSDK_FORCE_INLINE void Init() { APITable->InitLeaderboards(); }
+RSDK_FORCE_INLINE void Fetch(LeaderboardID *leaderboard, bool32 isUser) { APITable->FetchLeaderboard(leaderboard, isUser); }
+RSDK_FORCE_INLINE void TrackScore(LeaderboardID *leaderboard, int32 score, void (*callback)(bool32 success, int32 rank))
 {
     APITable->TrackScore(leaderboard, score, callback);
 }
-inline int32 GetStatus() { return APITable->GetLeaderboardsStatus(); }
-inline LeaderboardAvail EntryViewSize() { return APITable->LeaderboardEntryViewSize(); }
-inline LeaderboardAvail EntryLoadSize() { return APITable->LeaderboardEntryLoadSize(); }
-inline void LoadEntries(int32 start, uint32 end, int32 type) { APITable->LoadLeaderboardEntries(start, end, type); }
-inline void ResetInfo() { APITable->ResetLeaderboardInfo(); }
-inline LeaderboardEntry *ReadEntry(uint32 entryID) { return APITable->ReadLeaderboardEntry(entryID); }
+RSDK_FORCE_INLINE int32 GetStatus() { return APITable->GetLeaderboardsStatus(); }
+RSDK_FORCE_INLINE LeaderboardAvail EntryViewSize() { return APITable->LeaderboardEntryViewSize(); }
+RSDK_FORCE_INLINE LeaderboardAvail EntryLoadSize() { return APITable->LeaderboardEntryLoadSize(); }
+RSDK_FORCE_INLINE void LoadEntries(int32 start, uint32 end, int32 type) { APITable->LoadLeaderboardEntries(start, end, type); }
+RSDK_FORCE_INLINE void ResetInfo() { APITable->ResetLeaderboardInfo(); }
+RSDK_FORCE_INLINE LeaderboardEntry *ReadEntry(uint32 entryID) { return APITable->ReadLeaderboardEntry(entryID); }
 
 } // namespace Leaderboards
 } // namespace API
