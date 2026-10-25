@@ -452,6 +452,7 @@ template <typename E> static RSDK_FORCE_INLINE typename E::Static *RegisterStati
 
 #define RSDK_INIT_STATIC_VARS(object) memset(sVars, 0, sizeof(object::Static))
 
+#if GAME_INCLUDE_EDITOR
 #define RSDK_DECLARE(obj)                                                                                                                            \
     static Static *sVars;                                                                                                                            \
                                                                                                                                                      \
@@ -472,7 +473,6 @@ template <typename E> static RSDK_FORCE_INLINE typename E::Static *RegisterStati
 #define RSDK_ENUM_VAR(name, ...) RSDK::GameObject::AddVarEnumValue(name)
 
 // not in the original, used for RE2 :]
-#if GAME_INCLUDE_EDITOR
 #define showGizmos()                           (sceneInfo->listPos == sceneInfo->entitySlot || sceneInfo->effectGizmo)
 #define RSDK_DRAWING_OVERLAY(isDrawingOverlay) sceneInfo->debugMode = isDrawingOverlay
 
