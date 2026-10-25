@@ -22,6 +22,16 @@
 #define RSDK_FORCE_INLINE __attribute__((always_inline)) inline
 #endif
 
+// Assume Windows/MSVC is always little-endian, and use GCC/Clang's __BYTE_ORDER__ for the other platforms.
+// (MSVC supports big-endian, but none of the target platforms have a version that also supports C++17...)
+#if defined(_MSC_VER) || (defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__))
+#define RSDK_LITTLEENDIAN
+#elif defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
+#define RSDK_BIGENDIAN
+#else
+#error "Unknown endianness"
+#endif
+
 namespace RSDK
 {
 

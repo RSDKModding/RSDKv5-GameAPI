@@ -17,6 +17,15 @@
 #undef sprintf_s
 #endif
 
+// Assume Windows/MSVC is always little-endian, and use GCC/Clang's __BYTE_ORDER__ for the other platforms.
+#if defined(_MSC_VER) || (defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__))
+#define RSDK_LITTLEENDIAN
+#elif defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
+#define RSDK_BIGENDIAN
+#else
+#error "Unknown endianness"
+#endif
+
 // -------------------------
 // STANDARD TYPES
 // -------------------------
