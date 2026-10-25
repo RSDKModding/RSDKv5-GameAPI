@@ -11,7 +11,7 @@
 #undef vsprintf_s
 #endif
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 namespace Dev
@@ -91,4 +91,4 @@ RSDK_FORCE_INLINE int32 GetActiveDevMenuCharacter(void) { return modTable->GetAc
 
 } // namespace Dev
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

@@ -8,7 +8,7 @@
 #include "RichPresence.hpp"
 #include "UserStorage.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 namespace API
 {
@@ -42,4 +42,4 @@ RSDK_FORCE_INLINE bool32 ShowLimitedVideoOptions(int32 id) { return APITable->Sh
 #endif
 
 } // namespace API
-} // namespace RSDK
+} // namespace GameAPI::RSDK

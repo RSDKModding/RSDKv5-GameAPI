@@ -6,7 +6,7 @@
 
 #define FRAMEHITBOX_COUNT (0x8)
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 struct SpriteSheet {
@@ -80,4 +80,4 @@ struct SpriteAnimation {
     }
 };
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

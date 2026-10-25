@@ -40,7 +40,7 @@
     RSDK::RSDKTable->BreakForeachLoop();                                                                                                             \
     return
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 enum ActiveFlags {
@@ -575,4 +575,4 @@ template <typename E> static RSDK_FORCE_INLINE typename E::Static *RegisterObjec
 
 #endif
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

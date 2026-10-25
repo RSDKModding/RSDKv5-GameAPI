@@ -7,7 +7,7 @@
 #define TILE_COUNT  (0x400)
 #define CPATH_COUNT (2)
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 enum CollisionModes { CMODE_FLOOR, CMODE_LWALL, CMODE_ROOF, CMODE_RWALL };
@@ -96,4 +96,4 @@ RSDK_FORCE_INLINE void GetCollisionInfo(CollisionMask **masks, TileInfo **tileIn
 
 } // namespace Collision
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

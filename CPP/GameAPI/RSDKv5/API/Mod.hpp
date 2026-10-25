@@ -9,7 +9,7 @@
 #include <functional>
 #include <type_traits>
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 struct ModVersionInfo {
@@ -280,7 +280,7 @@ extern const char *modID;
 
 } // namespace Mod
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK
 
 #if RETRO_MOD_LOADER_VER >= 3
 // Declare a generic hook

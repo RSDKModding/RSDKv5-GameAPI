@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 #if RETRO_REV02
 struct StatInfo {
@@ -24,4 +24,4 @@ RSDK_FORCE_INLINE void SetEnabled(bool32 enabled) { APITable->SetStatsEnabled(en
 } // namespace Stats
 } // namespace API
 #endif
-} // namespace RSDK
+} // namespace GameAPI::RSDK

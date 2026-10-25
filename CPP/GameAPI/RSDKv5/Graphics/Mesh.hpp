@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 namespace Graphics
@@ -84,4 +84,4 @@ struct Scene3D {
 };
 
 } // namespace Graphics
-} // namespace RSDK
+} // namespace GameAPI::RSDK

@@ -8,7 +8,7 @@
 #pragma clang diagnostic ignored "-Wmicrosoft-cast"
 #endif
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 #define SET_CURRENT_STATE() RSDK::currentState = __func__
 #define StateMachine_None   nullptr
@@ -235,4 +235,4 @@ template <typename T> struct StateMachine {
     uint8 priority;
 };
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

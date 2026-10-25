@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 namespace Input
@@ -321,4 +321,4 @@ RSDK_FORCE_INLINE void GetUnknownInputValue(int32 inputSlot, int32 type, int32 *
 
 } // namespace Input
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

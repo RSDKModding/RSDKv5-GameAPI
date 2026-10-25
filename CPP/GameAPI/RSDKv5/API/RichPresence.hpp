@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 #if RETRO_REV02
@@ -18,4 +18,4 @@ RSDK_FORCE_INLINE void Set(int32 id, String *text) { APITable->SetRichPresence(i
 
 #endif
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 namespace API
 {
@@ -123,4 +123,4 @@ struct UserDB {
 
 } // namespace Storage
 } // namespace API
-} // namespace RSDK
+} // namespace GameAPI::RSDK

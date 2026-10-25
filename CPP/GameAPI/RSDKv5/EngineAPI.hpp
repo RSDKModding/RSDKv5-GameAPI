@@ -32,9 +32,8 @@
 #error "Unknown endianness"
 #endif
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
-
 // RSDK forward decls
 struct Vector2;
 
@@ -704,11 +703,11 @@ struct RSDKFunctionTable {
 #endif
 };
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK
 
 #include "Math/Vector2.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 enum GamePlatforms {
@@ -933,7 +932,12 @@ inline void InitEngineInfo(EngineInfo *info)
 #endif
 }
 
-}; // namespace RSDK
+}; // namespace GameAPI::RSDK
+
+// Force using the GameAPI namespace to allow using RSDK directly.
+// Internally, this also allows us to trick the linker into separating
+// engine and GameAPI variables when statically linking.
+using namespace GameAPI;
 
 #if GAME_CUSTOMLINKLOGIC
 // DEFINE THIS YOURSELF!!!!

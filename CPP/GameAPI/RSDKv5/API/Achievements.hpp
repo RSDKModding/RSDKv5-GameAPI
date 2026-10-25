@@ -4,7 +4,7 @@
 #include "../EngineAPI.hpp"
 
 #if RETRO_REV02
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 struct AchievementID {
@@ -29,5 +29,5 @@ RSDK_FORCE_INLINE void SetNames(String **names, int32 count) { APITable->SetAchi
 } // namespace Achievements
 
 } // namespace API
-} // namespace RSDK
+} // namespace GameAPI::RSDK
 #endif

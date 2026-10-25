@@ -5,7 +5,7 @@
 
 #define CHANNEL_COUNT (0x10)
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 struct Channel {
 
@@ -66,4 +66,4 @@ struct SoundFX {
     }
 };
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

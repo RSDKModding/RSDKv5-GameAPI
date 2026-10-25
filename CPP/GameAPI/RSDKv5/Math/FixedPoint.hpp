@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 union FixedPoint {
     FixedPoint() { value = 0; }
@@ -160,4 +160,4 @@ union FixedPoint {
 private:
     int32 value;
 };
-} // namespace RSDK
+} // namespace GameAPI::RSDK

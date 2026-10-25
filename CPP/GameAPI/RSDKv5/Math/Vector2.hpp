@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 struct Vector2 {
     // FixedPoint x;
@@ -44,4 +44,4 @@ struct Vector2 {
 
     RSDK_FORCE_INLINE bool32 CheckOnScreen(Vector2 *range) { return RSDKTable->CheckPosOnScreen(this, range); }
 };
-} // namespace RSDK
+} // namespace GameAPI::RSDK

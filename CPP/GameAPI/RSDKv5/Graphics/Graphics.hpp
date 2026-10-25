@@ -22,7 +22,7 @@
 #define PALETTE_BANK_COUNT (0x8)
 #define PALETTE_BANK_SIZE  (0x100)
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 enum DrawFX { FX_NONE = 0, FX_FLIP = 1, FX_ROTATE = 2, FX_SCALE = 4 };
 
@@ -225,4 +225,4 @@ RSDK_FORCE_INLINE void SetDrawGroupProperties(uint8 drawGroup, bool32 sorted, vo
 
 } // namespace Graphics
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

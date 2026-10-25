@@ -4,7 +4,7 @@
 #include "../EngineAPI.hpp"
 #include "../Graphics/Graphics.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 enum LayerTypes {
@@ -141,4 +141,4 @@ RSDK_FORCE_INLINE ScanlineInfo *GetScanlines() { return RSDKTable->GetScanlines(
 
 } // namespace Stage
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

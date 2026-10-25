@@ -5,7 +5,7 @@
 
 #if RETRO_USE_MOD_LOADER
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 namespace Mod
@@ -113,6 +113,6 @@ RSDK_FORCE_INLINE std::list<String> GetCategories()
 
 } // namespace Mod
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK
 
 #endif

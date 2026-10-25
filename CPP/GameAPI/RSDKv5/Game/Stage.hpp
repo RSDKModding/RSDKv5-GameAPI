@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 enum EngineStates {
@@ -85,4 +85,4 @@ RSDK_FORCE_INLINE void ForceHardReset(bool32 shouldHardReset) { RSDKTable->Force
 
 } // namespace Stage
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

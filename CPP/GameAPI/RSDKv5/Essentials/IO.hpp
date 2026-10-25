@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 #if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 3
 namespace IO
@@ -41,4 +41,4 @@ RSDK_FORCE_INLINE uint32 Write(const void *buffer, uint32 elementSize, uint32 el
 } // namespace IO
 #endif
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

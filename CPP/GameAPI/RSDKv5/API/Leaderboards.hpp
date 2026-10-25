@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../Essentials/String.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 #if RETRO_REV02
@@ -61,4 +61,4 @@ RSDK_FORCE_INLINE LeaderboardEntry *ReadEntry(uint32 entryID) { return APITable-
 
 #endif
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

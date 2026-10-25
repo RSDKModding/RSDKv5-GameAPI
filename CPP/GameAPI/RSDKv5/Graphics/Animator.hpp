@@ -4,7 +4,7 @@
 #include "Sprite.hpp"
 #include "Mesh.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 struct Animator {
 
@@ -62,4 +62,4 @@ struct Animator {
     RSDK_FORCE_INLINE void DrawAniTiles(uint16 tileID) { modTable->DrawDynamicAniTiles(this, tileID); }
 #endif
 };
-} // namespace RSDK
+} // namespace GameAPI::RSDK

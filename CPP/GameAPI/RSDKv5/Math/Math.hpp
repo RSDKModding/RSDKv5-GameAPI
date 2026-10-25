@@ -27,7 +27,7 @@
 
 #define RSDK_PI (3.1415927f)
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 namespace Math
@@ -57,4 +57,4 @@ RSDK_FORCE_INLINE uint8 ATan2(int32 x, int32 y) { return RSDKTable->ATan2(x, y);
 
 } // namespace Math
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

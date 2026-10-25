@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 struct Matrix {
@@ -43,4 +43,4 @@ struct Matrix {
     }
 };
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

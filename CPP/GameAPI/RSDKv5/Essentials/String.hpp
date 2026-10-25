@@ -4,7 +4,7 @@
 #include "../EngineAPI.hpp"
 #include "../Graphics/Sprite.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 struct String {
 public:
@@ -75,4 +75,4 @@ public:
     uint16 size   = 0;
 };
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK

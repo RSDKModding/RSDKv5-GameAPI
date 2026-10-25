@@ -3,7 +3,7 @@
 #include "../Types.hpp"
 #include "../EngineAPI.hpp"
 
-namespace RSDK
+namespace GameAPI::RSDK
 {
 
 namespace Video
@@ -20,4 +20,4 @@ RSDK_FORCE_INLINE bool32 LoadImage(const char *filename, double displayLength, d
 
 } // namespace Video
 
-} // namespace RSDK
+} // namespace GameAPI::RSDK
