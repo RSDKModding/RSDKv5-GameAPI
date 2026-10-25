@@ -1,5 +1,5 @@
-#ifndef GAMEOBJECTS_H
-#define GAMEOBJECTS_H
+#ifndef GAMEOBJECTS_HPP
+#define GAMEOBJECTS_HPP
 
 #ifdef _MSC_VER
 #define DLLExport __declspec(dllexport)
@@ -28,4 +28,4 @@ DLLExport bool32 LinkModLogic(RSDK::EngineInfo *info, const char *id);
 #endif
 }
 
-#endif //! GAMEOBJECTS_H
+#endif //! GAMEOBJECTS_HPP
