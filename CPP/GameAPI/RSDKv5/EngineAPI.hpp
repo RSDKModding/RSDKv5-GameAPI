@@ -17,7 +17,7 @@
 #endif
 
 #ifdef _MSC_VER
-#define RSDK_FORCE_INLINE __forceinline inline
+#define RSDK_FORCE_INLINE inline __forceinline
 #else /* GCC/Clang/others */
 #define RSDK_FORCE_INLINE __attribute__((always_inline)) inline
 #endif
