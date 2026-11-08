@@ -1426,6 +1426,9 @@ typedef struct {
 
     // Mod Menu
     void (*OpenModMenu)(void);
+
+    // Game Speed
+    void (*SetGameSpeed)(int32 speed);
 #endif
 } ModFunctionTable;
 #endif
