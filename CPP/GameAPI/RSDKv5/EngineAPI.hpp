@@ -292,6 +292,9 @@ struct ModFunctionTable {
 
     // Mod Menu
     void (*OpenModMenu)(void);
+
+    // Game Speed
+    void (*SetGameSpeed)(int32 speed);
 #endif
 };
 #endif

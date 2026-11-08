@@ -154,6 +154,8 @@ template <typename T> RSDK_FORCE_INLINE T *GetGlobals() { return (T *)modTable->
 
 #if RETRO_MOD_LOADER_VER >= 3
 RSDK_FORCE_INLINE void OpenModMenu() { modTable->OpenModMenu(); }
+
+RSDK_FORCE_INLINE void SetGameSpeed(int32 speed) { modTable->SetGameSpeed(speed); }
 #endif
 
 namespace List
