@@ -81,26 +81,6 @@ RSDK_FORCE_INLINE void AddModCallback(int32 callbackID, std::function<void(void 
 
 namespace PublicFunctions
 {
-struct FunctionObject {
-    const char *id;
-    const char *functionName;
-
-    template <typename T> RSDK_FORCE_INLINE operator T() const
-    {
-        if constexpr (std::is_member_function_pointer_v<T>) {
-            union {
-                void *in;
-                T out;
-            } u;
-            u.in = modTable->GetPublicFunction(id, functionName);
-            return u.out;
-        }
-        else {
-            return reinterpret_cast<T>(modTable->GetPublicFunction(id, functionName));
-        }
-    }
-};
-
 template <typename obj, typename R> RSDK_FORCE_INLINE void Add(const char *functionName, R(obj::*functionPtr))
 {
     modTable->AddPublicFunction(functionName, reinterpret_cast<void *&>(functionPtr));
@@ -111,7 +91,22 @@ template <typename R> RSDK_FORCE_INLINE void Add(const char *functionName, R(*fu
     modTable->AddPublicFunction(functionName, reinterpret_cast<void *&>(functionPtr));
 }
 
-RSDK_FORCE_INLINE FunctionObject Get(const char *id, const char *functionName) { return { id, functionName }; }
+struct FunctionStruct {
+    const char *id;
+    const char *name;
+    template <typename T> RSDK_FORCE_INLINE operator T() const
+    {
+        static_assert(std::is_pointer_v<T> || std::is_member_function_pointer_v<T>);
+        void *functionPtr = modTable->GetPublicFunction(id, name);
+
+        T out = {};
+        memcpy(&out, &functionPtr, sizeof(functionPtr));
+        return out;
+    }
+};
+
+RSDK_FORCE_INLINE FunctionStruct Get(const char *functionName) { return { nullptr, functionName }; }
+RSDK_FORCE_INLINE FunctionStruct Get(const char *id, const char *functionName) { return { id, functionName }; }
 
 #if RETRO_MOD_LOADER_VER >= 3
 RSDK_FORCE_INLINE void Hook(const char *id, const char *functionName, void *functionPtr, void **originalPtr)
@@ -119,29 +114,27 @@ RSDK_FORCE_INLINE void Hook(const char *id, const char *functionName, void *func
     modTable->HookPublicFunction(id, functionName, functionPtr, originalPtr);
 }
 
-template <typename Derived> class HookContainer
+template <typename HookType> class HookContainer
 {
 public:
-    constexpr HookContainer(const char *name, const char *modID = nullptr) : name__(name), modID__(modID) {}
+    constexpr HookContainer(const char *name, const char *modID = nullptr) : name_(name), modID_(modID) {}
 
     static void Register()
     {
-        Derived instance = {};
-        PublicFunctions::Hook(instance.modID__, instance.name__, reinterpret_cast<void *>(&Derived::Impl), reinterpret_cast<void **>(&instance.original__));
+        HookType hook = {};
+        PublicFunctions::Hook(hook.modID_, hook.name_, (void *)(&HookType::Impl), (void **)(&hook.original));
     }
 
     template <typename... Args> static decltype(auto) Original(Args &&...args)
     {
-        using T = decltype(&std::remove_reference_t<Derived>::Impl);
-
-        T _original = reinterpret_cast<T>(original__);
-        return _original(std::forward<Args>(args)...);
+        using T = decltype(&std::remove_reference_t<HookType>::Impl);
+        return reinterpret_cast<T>(original)(std::forward<Args>(args)...);
     }
 
 protected:
-    const char *modID__;
-    const char *name__;
-    inline static void *original__ = nullptr;
+    const char *modID_;
+    const char *name_;
+    inline static void *original = nullptr;
 };
 #endif
 } // namespace PublicFunctions
